@@ -18,7 +18,7 @@ export default function Footer() {
           <div>
             <div className="flex items-center gap-2.5 mb-4">
               <img
-                src="/assets/uploads/IMG-20260307-WA0014-1.jpg"
+                src="/assets/Logo.png"
                 alt="HireNest Workforce"
                 className="h-12 w-auto object-contain brightness-0 invert"
               />
