@@ -25,29 +25,12 @@ const values = [
 
 const team = [
   {
-    name: "Alexandra Reed",
+    name: "Gopala Krishna",
     title: "CEO & Co-Founder",
-    initials: "AR",
+    initials: "GK",
     color: "oklch(0.50 0.20 262)",
   },
-  {
-    name: "James Thornton",
-    title: "CTO",
-    initials: "JT",
-    color: "oklch(0.45 0.15 195)",
-  },
-  {
-    name: "Meera Patel",
-    title: "Head of Partnerships",
-    initials: "MP",
-    color: "oklch(0.55 0.18 330)",
-  },
-  {
-    name: "David Kim",
-    title: "VP of Talent Operations",
-    initials: "DK",
-    color: "oklch(0.50 0.16 145)",
-  },
+ 
 ];
 
 export default function About() {
