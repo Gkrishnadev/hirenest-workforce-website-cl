@@ -1,0 +1,123 @@
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url("/assets/fonts/PlusJakartaSans.woff2") format("woff2");
+  font-weight: 300 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DM Sans";
+  src: url("/assets/fonts/DMSans.woff2") format("woff2");
+  font-weight: 400 700;
+  font-display: swap;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 1 0 0;
+    --foreground: 0.14 0.035 265;
+    --card: 1 0 0;
+    --card-foreground: 0.14 0.035 265;
+    --popover: 1 0 0;
+    --popover-foreground: 0.14 0.035 265;
+    --primary: 0.14 0.035 265;
+    --primary-foreground: 1 0 0;
+    --secondary: 0.97 0.005 248;
+    --secondary-foreground: 0.14 0.035 265;
+    --muted: 0.96 0.008 248;
+    --muted-foreground: 0.55 0.02 255;
+    --accent: 0.50 0.20 262;
+    --accent-foreground: 1 0 0;
+    --destructive: 0.55 0.22 27;
+    --destructive-foreground: 1 0 0;
+    --border: 0.91 0.008 248;
+    --input: 0.91 0.008 248;
+    --ring: 0.50 0.20 262;
+    --radius: 0.5rem;
+
+    /* Brand custom tokens */
+    --navy: 0.14 0.035 265;
+    --navy-mid: 0.20 0.045 265;
+    --navy-light: 0.28 0.05 265;
+    --electric: 0.50 0.20 262;
+    --electric-light: 0.62 0.18 262;
+    --surface: 0.975 0.004 248;
+    --surface-card: 1 0 0;
+    --text-body: 0.38 0.025 260;
+    --text-muted: 0.58 0.015 260;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    font-family: "DM Sans", sans-serif;
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: "DM Sans", sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-accent text-accent-foreground font-semibold px-7 py-3 rounded-md transition-all duration-200 hover:opacity-90 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0;
+    background-color: oklch(var(--electric));
+  }
+
+  .btn-outlined {
+    @apply font-semibold px-7 py-3 rounded-md border-2 transition-all duration-200 hover:bg-white/10 hover:-translate-y-0.5 active:translate-y-0;
+    border-color: rgba(255,255,255,0.7);
+    color: white;
+  }
+
+  .btn-outlined-navy {
+    @apply font-semibold px-7 py-3 rounded-md border-2 transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0;
+    border-color: oklch(var(--electric));
+    color: oklch(var(--electric));
+  }
+
+  .btn-outlined-navy:hover {
+    background-color: oklch(var(--electric) / 0.05);
+  }
+
+  .section-heading {
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: oklch(var(--navy));
+  }
+
+  .section-subtext {
+    color: oklch(var(--text-body));
+    line-height: 1.75;
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-xl;
+  }
+}
+
+/* Dashed connector line for steps */
+.step-connector {
+  position: absolute;
+  top: 28px;
+  left: calc(50% + 28px);
+  width: calc(100% - 56px);
+  border-top: 2px dashed oklch(var(--electric) / 0.35);
+}
