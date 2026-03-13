@@ -61,6 +61,30 @@ export default function Vendors() {
   };
 
   return (
+    const handleVendorSubmit = async (e) => {
+  e.preventDefault()
+
+  const formData = new FormData(e.target)
+
+  const data = {
+    name: formData.get("name"),
+    email: formData.get("email"),
+    company: formData.get("company"),
+    phone: formData.get("phone"),
+    technologies: formData.get("technologies"),
+    bench_size: formData.get("bench_size")
+  }
+
+  await fetch("/api/vendor", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  })
+
+  alert("Vendor registration submitted!")
+}
     <div className="pt-[72px]">
       {/* Hero */}
       <section
