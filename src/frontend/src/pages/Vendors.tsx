@@ -87,7 +87,7 @@ export default function Vendors() {
         bench_size: form.benchSize,
       }
     ])
-
+console.log("Supabase response:", data, error)
   if (error) {
     console.log(error)
     alert("Error saving vendor")
