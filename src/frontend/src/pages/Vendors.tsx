@@ -1,4 +1,5 @@
-
+import { useState, useEffect } from "react"
+import { supabase } from "@/lib/supabase"
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -50,7 +51,21 @@ export default function Vendors() {
     technologies: "",
     benchSize: ""
   })
-
+useEffect(() => {
+    supabase.from("vendors").insert([
+      {
+        company_name: "TEST COMPANY",
+        contact_person: "TEST USER",
+        email: "test@test.com"
+      }
+    ])
+  }, [])
+    return (
+    <div>
+      Vendor page
+    </div>
+  )
+}
   const handleVendorSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
