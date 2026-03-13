@@ -96,7 +96,6 @@ useEffect(() => {
       {/* your form UI */}
     </form>
   )
-}
 
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
