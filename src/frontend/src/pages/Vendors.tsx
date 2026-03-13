@@ -60,11 +60,44 @@ export default function Vendors() {
     );
   };
 export default function Vendors() {
+  const [form, setForm] = useState({
+    companyName: "",
+    contactPerson: "",
+    email: "",
+    phone: "",
+    technologies: "",
+    benchSize: "",
+  });
 
-  const handleVendorSubmit = async (e) => {
-    e.preventDefault()
-    console.log("Vendor submitted")
-  }
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleVendorSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+
+    const data = {
+      companyName: form.companyName,
+      contactPerson: form.contactPerson,
+      email: form.email,
+      phone: form.phone,
+      technologies: form.technologies,
+      benchSize: form.benchSize
+    };
+
+    await fetch("/api/vendor", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    });
+
+    setSubmitting(false);
+    setSubmitted(true);
+
+    toast.success("Vendor registration submitted!");
+  };
 
   return (
     <div>
@@ -72,28 +105,7 @@ export default function Vendors() {
         <button type="submit">Submit</button>
       </form>
     </div>
-  )
-}
-  const formData = new FormData(e.target)
-
-  const data = {
-    name: formData.get("name"),
-    email: formData.get("email"),
-    company: formData.get("company"),
-    phone: formData.get("phone"),
-    technologies: formData.get("technologies"),
-    bench_size: formData.get("bench_size")
-  }
-
-  await fetch("/api/vendor", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(data)
-  })
-
-  alert("Vendor registration submitted!")
+  );
 }
     <div className="pt-[72px]">
       {/* Hero */}
