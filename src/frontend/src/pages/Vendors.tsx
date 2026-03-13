@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabase";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -37,37 +37,51 @@ const benefits = [
   },
 ];
 
-export default function Vendors() {
-  const [form, setForm] = useState({
-    companyName: "",
-    contactPerson: "",
-    email: "",
-    phone: "",
-    technologies: "",
-    benchSize: "",
-  });
-  const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+import { useState } from "react"
+import { supabase } from "@/lib/supabase"
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitting(true);
-    // Simulate async operation
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    setSubmitting(false);
-    setSubmitted(true);
-    toast.success(
-      "Application submitted! We'll reach out within 24 hours to complete your onboarding.",
-    );
 export default function Vendors() {
+
   const [form, setForm] = useState({
     companyName: "",
     contactPerson: "",
     email: "",
     phone: "",
     technologies: "",
-    benchSize: "",
-  });
+    benchSize: ""
+  })
+
+  const handleVendorSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    const { data, error } = await supabase
+      .from("vendors")
+      .insert([
+        {
+          company_name: form.companyName,
+          contact_person: form.contactPerson,
+          email: form.email,
+          phone: form.phone,
+          technologies: form.technologies,
+          bench_size: form.benchSize
+        }
+      ])
+
+    console.log(data, error)
+
+    if(error){
+      alert("Error saving vendor")
+    } else {
+      alert("Vendor registered successfully")
+    }
+  }
+
+  return (
+    <form onSubmit={handleVendorSubmit}>
+      {/* your form UI */}
+    </form>
+  )
+}
 
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
