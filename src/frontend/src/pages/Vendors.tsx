@@ -193,7 +193,7 @@ export default function Vendors() {
             </div>
           ) : (
             <form
-              onSubmit={handleSubmit}
+              onSubmit={handleVendorSubmit}
               className="space-y-6 rounded-2xl p-8 border"
               style={{
                 borderColor: "oklch(var(--border))",
