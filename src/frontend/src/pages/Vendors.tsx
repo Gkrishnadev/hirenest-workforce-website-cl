@@ -73,9 +73,10 @@ export default function Vendors() {
   const [submitted, setSubmitted] = useState(false);
 
   const handleVendorSubmit = async (e: React.FormEvent) => {
-  e.preventDefault()
+  e.preventDefault();
+  setSubmitting(true);
 
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("vendors")
     .insert([
       {
@@ -84,17 +85,22 @@ export default function Vendors() {
         email: form.email,
         phone: form.phone,
         technologies: form.technologies,
-        bench_size: form.benchSize,
+        bench_size: form.benchSize
       }
-    ])
-console.log("Supabase response:", data, error)
+    ]);
+
+  console.log("Supabase result:", data, error);
+
   if (error) {
-    console.log(error)
-    alert("Error saving vendor")
+    console.error(error);
+    alert("Error saving vendor");
   } else {
-    alert("Vendor registered successfully")
+    setSubmitted(true);
+    toast.success("Application submitted!");
   }
-}
+
+  setSubmitting(false);
+};
 
     await fetch("/api/vendor", {
       method: "POST",
