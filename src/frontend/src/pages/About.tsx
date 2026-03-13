@@ -252,7 +252,7 @@ export default function About() {
             className="text-sm font-semibold uppercase tracking-widest"
             style={{ color: "oklch(var(--electric-light))" }}
           >
-            — Gopal Krishna, Founder &amp; CEO, HireNest Workforce
+            — Gopala Krishna, Founder &amp; CEO, HireNest Workforce
           </p>
         </div>
       </section>
