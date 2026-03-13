@@ -59,12 +59,21 @@ export default function Vendors() {
       "Application submitted! We'll reach out within 24 hours to complete your onboarding.",
     );
   };
+export default function Vendors() {
+
+  const handleVendorSubmit = async (e) => {
+    e.preventDefault()
+    console.log("Vendor submitted")
+  }
 
   return (
-    const handleVendorSubmit = async (e) => {
-  e.preventDefault()
-  }
+    <div>
+      <form onSubmit={handleVendorSubmit}>
+        <button type="submit">Submit</button>
+      </form>
+    </div>
   )
+}
   const formData = new FormData(e.target)
 
   const data = {
