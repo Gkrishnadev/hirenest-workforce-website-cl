@@ -73,17 +73,28 @@ export default function Vendors() {
   const [submitted, setSubmitted] = useState(false);
 
   const handleVendorSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitting(true);
+  e.preventDefault()
 
-    const data = {
-      companyName: form.companyName,
-      contactPerson: form.contactPerson,
-      email: form.email,
-      phone: form.phone,
-      technologies: form.technologies,
-      benchSize: form.benchSize
-    };
+  const { error } = await supabase
+    .from("vendors")
+    .insert([
+      {
+        company_name: form.companyName,
+        contact_person: form.contactPerson,
+        email: form.email,
+        phone: form.phone,
+        technologies: form.technologies,
+        bench_size: form.benchSize,
+      }
+    ])
+
+  if (error) {
+    console.log(error)
+    alert("Error saving vendor")
+  } else {
+    alert("Vendor registered successfully")
+  }
+}
 
     await fetch("/api/vendor", {
       method: "POST",
