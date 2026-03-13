@@ -39,7 +39,7 @@ export default function Header() {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2.5 group">
             <img
-              src="/assets/uploads/Logo-1.png"
+              src="/assets/uploads/Logo.png"
               alt="HireNest Workforce"
               className="h-12 w-auto object-contain transition-all duration-200 group-hover:scale-105"
             />
