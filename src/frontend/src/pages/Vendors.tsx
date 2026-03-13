@@ -63,7 +63,8 @@ export default function Vendors() {
   return (
     const handleVendorSubmit = async (e) => {
   e.preventDefault()
-
+  }
+  )
   const formData = new FormData(e.target)
 
   const data = {
