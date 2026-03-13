@@ -58,7 +58,6 @@ export default function Vendors() {
     toast.success(
       "Application submitted! We'll reach out within 24 hours to complete your onboarding.",
     );
-  };
 export default function Vendors() {
   const [form, setForm] = useState({
     companyName: "",
