@@ -106,15 +106,17 @@ export default function Admin() {
       .finally(() => setCheckingAdmin(false));
   }, [actor, isFetching, isLoggedIn]);
 
-  useEffect(() => {
-    if (!actor || !isAdmin) return;
-    setLoadingData(true);
-    Promise.all([
-      actor.getAllVendorApplications(),
-      actor.getAllPartnerApplications(),
-      actor.getAllRequirementSubmissions(),
-      actor.getAllContactForms(),
-    ])
+useEffect(() => {
+  if (!actor || !isAdmin) return;
+
+  setLoadingData(true);
+
+  Promise.all([
+    actor.getAllVendorApplications(),
+    actor.getAllPartnerApplications(),
+    actor.getAllRequirementSubmissions(),
+    actor.getAllContactForms(),
+  ])
       .then(([v, p, r, m]) => {
         setVendors(v);
         setPartners(p);
