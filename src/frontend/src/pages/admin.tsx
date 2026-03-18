@@ -1,3 +1,10 @@
+import { createClient } from '@supabase/supabase-js'
+
+const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_ANON_KEY
+)
+
 import Admin from "./pages/admin"
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -85,26 +92,42 @@ export default function Admin() {
 
   const isLoggedIn = loginStatus === "success" && !!identity;
   const isLoggingIn = loginStatus === "logging-in";
+useEffect(() => {
+  const fetchData = async () => {
+    setLoadingData(true);
 
-  useEffect(() => {
-    if (!actor || isFetching || !isLoggedIn) return;
-    setCheckingAdmin(true);
-    // Use any cast for new backend methods not yet in generated types
-    const a = actor as any;
-    Promise.all([
-      actor.isCallerAdmin() as Promise<boolean>,
-      a.isAdminAssigned() as Promise<boolean>,
-    ])
-      .then(([adminResult, assignedResult]) => {
-        setIsAdmin(adminResult);
-        setAdminAssigned(assignedResult);
-      })
-      .catch(() => {
-        setIsAdmin(false);
-        setAdminAssigned(true);
-      })
-      .finally(() => setCheckingAdmin(false));
-  }, [actor, isFetching, isLoggedIn]);
+    try {
+      const { data: vendors } = await supabase
+        .from('vendors')
+        .select('*');
+
+      const { data: requirements } = await supabase
+        .from('requirements')
+        .select('*');
+
+      const { data: consultants } = await supabase
+        .from('consultants')
+        .select('*');
+
+      const { data: messages } = await supabase
+        .from('leads')
+        .select('*');
+
+      setVendors(vendors || []);
+      setRequirements(requirements || []);
+      setMessages(messages || []);
+      setPartners([]); // optional
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoadingData(false);
+    }
+  };
+
+  fetchData();
+}, []);
+  
+
 
 useEffect(() => {
   if (!actor || !isAdmin) return;
