@@ -94,39 +94,17 @@ export default function Admin() {
   const isLoggingIn = loginStatus === "logging-in";
 useEffect(() => {
   const fetchData = async () => {
-    setLoadingData(true);
+    const { data: vendors } = await supabase.from('vendors').select('*')
+    const { data: requirements } = await supabase.from('requirements').select('*')
+    const { data: leads } = await supabase.from('leads').select('*')
 
-    try {
-      const { data: vendors } = await supabase
-        .from('vendors')
-        .select('*');
+    setVendors(vendors || [])
+    setRequirements(requirements || [])
+    setMessages(leads || [])
+  }
 
-      const { data: requirements } = await supabase
-        .from('requirements')
-        .select('*');
-
-      const { data: consultants } = await supabase
-        .from('consultants')
-        .select('*');
-
-      const { data: messages } = await supabase
-        .from('leads')
-        .select('*');
-
-      setVendors(vendors || []);
-      setRequirements(requirements || []);
-      setMessages(messages || []);
-      setPartners([]); // optional
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoadingData(false);
-    }
-  };
-
-  fetchData();
-}, []);
-  
+  fetchData()
+}, [])
 
 
 useEffect(() => {
