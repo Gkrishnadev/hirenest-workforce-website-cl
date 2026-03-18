@@ -1,5 +1,17 @@
-const { name, vendor_company, primary_skill, experience, location, contact_email } = req.body
+import { createClient } from '@supabase/supabase-js'
 
-await supabase
-  .from('consultants')
-  .insert([{ name, vendor_company, primary_skill, experience, location, contact_email }])
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_ANON_KEY
+)
+
+export default async function handler(req, res) {
+  const { name, email, skills, experience } = req.body
+
+  const { error } = await supabase.from('consultants').insert([
+    { name, email, skills, experience }
+  ])
+
+  if (error) return res.status(500).json({ error })
+  res.status(200).json({ success: true })
+}
