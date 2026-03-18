@@ -53,11 +53,9 @@ export default function Contact() {
   }
 };
     if (!res.ok) throw new Error();
-
     setSuccess(true);
     toast.success("Message sent! We'll be in touch within 24 hours.");
     setForm({ name: "", email: "", company: "", message: "" });
-
   } catch {
     setError(true);
     toast.error("Something went wrong. Please try again.");
