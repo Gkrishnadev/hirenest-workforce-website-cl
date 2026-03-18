@@ -5,7 +5,7 @@ import { Outlet } from "@tanstack/react-router";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import About from "./pages/About";
-import Admin from "./pages/admin";
+import Admin from "./pages/Admin";
 import Contact from "./pages/Contact";
 import Home from "./pages/Home";
 import Partner from "./pages/Partner";
