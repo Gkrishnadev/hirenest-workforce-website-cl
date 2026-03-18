@@ -25,9 +25,7 @@ export default function Contact() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
- const handleSubmit = async (e: React.FormEvent) => {
+const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
   setSubmitting(true);
   setError(false);
@@ -36,7 +34,7 @@ export default function Contact() {
     const res = await fetch('/api/lead', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form)
+      body: JSON.stringify(form),
     });
 
     if (!res.ok) throw new Error();
@@ -45,18 +43,8 @@ export default function Contact() {
     toast.success("Message sent! We'll be in touch within 24 hours.");
     setForm({ name: "", email: "", company: "", message: "" });
 
-  } catch {
-    setError(true);
-    toast.error("Something went wrong. Please try again.");
-  } finally {
-    setSubmitting(false);
-  }
-};
-    if (!res.ok) throw new Error();
-    setSuccess(true);
-    toast.success("Message sent! We'll be in touch within 24 hours.");
-    setForm({ name: "", email: "", company: "", message: "" });
-  } catch {
+  } catch (err) {
+    console.error(err);
     setError(true);
     toast.error("Something went wrong. Please try again.");
   } finally {
