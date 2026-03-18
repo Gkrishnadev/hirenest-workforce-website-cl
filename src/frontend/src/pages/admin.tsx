@@ -1,4 +1,4 @@
-import {admin} from "./pages/admin"
+import Admin from "./pages/admin"
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
