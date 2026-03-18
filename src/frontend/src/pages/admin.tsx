@@ -18,8 +18,8 @@ import type {
   RequirementSubmission,
   VendorApplication,
 } from "../backend.d";
-import { useActor } from "../hooks/useActor";
-import { useInternetIdentity } from "../hooks/useInternetIdentity";
+
+
 
 function formatDate(timestamp: bigint): string {
   const ms = Number(timestamp / BigInt(1_000_000));
