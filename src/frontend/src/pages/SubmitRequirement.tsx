@@ -12,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Briefcase, CheckCircle2, Clock, Users } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useActor } from "../hooks/useActor";
 
 const highlights = [
   {
@@ -32,6 +33,7 @@ const highlights = [
 ];
 
 export default function SubmitRequirement() {
+  const { actor } = useActor();
   const [form, setForm] = useState({
     company: "",
     role: "",
@@ -45,13 +47,30 @@ export default function SubmitRequirement() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!actor) {
+      toast.error("Not connected. Please try again.");
+      return;
+    }
     setSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    setSubmitting(false);
-    setSubmitted(true);
-    toast.success(
-      "Requirement submitted! Our vendor network will respond within 48 hours.",
-    );
+    try {
+      await actor.submitRequirementSubmission(
+        form.company,
+        form.role,
+        form.skills,
+        form.location,
+        form.engagementType,
+        form.startDate,
+      );
+      setSubmitted(true);
+      toast.success(
+        "Requirement submitted! Our vendor network will respond within 48 hours.",
+      );
+    } catch (err) {
+      console.error(err);
+      toast.error("Submission failed. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (

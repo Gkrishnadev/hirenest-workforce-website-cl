@@ -5,6 +5,7 @@ import { Outlet } from "@tanstack/react-router";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import About from "./pages/About";
+import Admin from "./pages/Admin";
 import Contact from "./pages/Contact";
 import Home from "./pages/Home";
 import Partner from "./pages/Partner";
@@ -66,6 +67,11 @@ const submitRequirementRoute = createRoute({
   path: "/submit-requirement",
   component: SubmitRequirement,
 });
+const adminRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/admin",
+  component: Admin,
+});
 
 const routeTree = rootRoute.addChildren([
   homeRoute,
@@ -76,6 +82,7 @@ const routeTree = rootRoute.addChildren([
   partnerRoute,
   vendorsRoute,
   submitRequirementRoute,
+  adminRoute,
 ]);
 
 const router = createRouter({ routeTree });

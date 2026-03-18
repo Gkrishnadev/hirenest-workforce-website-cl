@@ -191,8 +191,8 @@ export default function About() {
           </h2>
           <div className="flex flex-col items-center gap-4">
             <img
-              src="/assets/uploads/founder.png"
-              alt="Gopala Krishna"
+              src="/assets/uploads/founder-2.png"
+              alt="Gopal Krishna"
               className="w-32 h-32 rounded-full object-cover"
               onError={(e) => {
                 const target = e.currentTarget as HTMLImageElement;
@@ -200,7 +200,7 @@ export default function About() {
               }}
             />
             <h3 className="text-xl font-semibold section-heading">
-              Gopala Krishna
+              Gopal Krishna
             </h3>
             <p
               className="text-sm"
@@ -209,7 +209,7 @@ export default function About() {
               Founder &amp; CEO
             </p>
             <p className="text-sm max-w-xl leading-relaxed section-subtext">
-              HireNest was founded by Gopala Krishna with the vision of improving
+              HireNest was founded by Gopal Krishna with the vision of improving
               how companies access and collaborate with technology talent.
             </p>
             <p className="text-sm max-w-xl leading-relaxed section-subtext">
@@ -252,7 +252,7 @@ export default function About() {
             className="text-sm font-semibold uppercase tracking-widest"
             style={{ color: "oklch(var(--electric-light))" }}
           >
-            — Gopala Krishna, Founder &amp; CEO, HireNest Workforce
+            — Gopal Krishna, Founder &amp; CEO, HireNest Workforce
           </p>
         </div>
       </section>

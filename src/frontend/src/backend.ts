@@ -98,6 +98,15 @@ export interface PartnerApplication {
     message: string;
     timestamp: Time;
 }
+export interface VendorApplication {
+    contactPerson: string;
+    email: string;
+    timestamp: Time;
+    technologies: string;
+    companyName: string;
+    phone: string;
+    benchSize: bigint;
+}
 export type Time = bigint;
 export interface ContactForm {
     name: string;
@@ -106,14 +115,133 @@ export interface ContactForm {
     message: string;
     timestamp: Time;
 }
+export interface RequirementSubmission {
+    role: string;
+    engagementType: string;
+    company: string;
+    timestamp: Time;
+    skills: string;
+    location: string;
+    startDate: string;
+}
+export interface UserProfile {
+    name: string;
+    email: string;
+    company: string;
+}
+export enum UserRole {
+    admin = "admin",
+    user = "user",
+    guest = "guest"
+}
 export interface backendInterface {
+    _initializeAccessControlWithSecret(userSecret: string): Promise<void>;
+    assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
+    deleteContactForm(): Promise<void>;
+    deletePartnerApplication(): Promise<void>;
+    deleteRequirementSubmission(): Promise<void>;
+    deleteVendorApplication(): Promise<void>;
     getAllContactForms(): Promise<Array<ContactForm>>;
     getAllPartnerApplications(): Promise<Array<PartnerApplication>>;
+    getAllRequirementSubmissions(): Promise<Array<RequirementSubmission>>;
+    getAllVendorApplications(): Promise<Array<VendorApplication>>;
+    getCallerUserProfile(): Promise<UserProfile | null>;
+    getCallerUserRole(): Promise<UserRole>;
+    getUserProfile(user: Principal): Promise<UserProfile | null>;
+    isCallerAdmin(): Promise<boolean>;
+    saveCallerUserProfile(profile: UserProfile): Promise<void>;
     submitContactForm(name: string, email: string, company: string, message: string): Promise<void>;
     submitPartnerApplication(name: string, email: string, company: string, role: string, partnerType: string, message: string): Promise<void>;
+    submitRequirementSubmission(company: string, role: string, skills: string, location: string, engagementType: string, startDate: string): Promise<void>;
+    submitVendorApplication(companyName: string, contactPerson: string, email: string, phone: string, technologies: string, benchSize: bigint): Promise<void>;
 }
+import type { UserProfile as _UserProfile, UserRole as _UserRole } from "./declarations/backend.did.d.ts";
 export class Backend implements backendInterface {
     constructor(private actor: ActorSubclass<_SERVICE>, private _uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, private _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, private processError?: (error: unknown) => never){}
+    async _initializeAccessControlWithSecret(arg0: string): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor._initializeAccessControlWithSecret(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor._initializeAccessControlWithSecret(arg0);
+            return result;
+        }
+    }
+    async assignCallerUserRole(arg0: Principal, arg1: UserRole): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.assignCallerUserRole(arg0, to_candid_UserRole_n1(this._uploadFile, this._downloadFile, arg1));
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.assignCallerUserRole(arg0, to_candid_UserRole_n1(this._uploadFile, this._downloadFile, arg1));
+            return result;
+        }
+    }
+    async deleteContactForm(): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.deleteContactForm();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.deleteContactForm();
+            return result;
+        }
+    }
+    async deletePartnerApplication(): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.deletePartnerApplication();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.deletePartnerApplication();
+            return result;
+        }
+    }
+    async deleteRequirementSubmission(): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.deleteRequirementSubmission();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.deleteRequirementSubmission();
+            return result;
+        }
+    }
+    async deleteVendorApplication(): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.deleteVendorApplication();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.deleteVendorApplication();
+            return result;
+        }
+    }
     async getAllContactForms(): Promise<Array<ContactForm>> {
         if (this.processError) {
             try {
@@ -139,6 +267,104 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.getAllPartnerApplications();
+            return result;
+        }
+    }
+    async getAllRequirementSubmissions(): Promise<Array<RequirementSubmission>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getAllRequirementSubmissions();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getAllRequirementSubmissions();
+            return result;
+        }
+    }
+    async getAllVendorApplications(): Promise<Array<VendorApplication>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getAllVendorApplications();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getAllVendorApplications();
+            return result;
+        }
+    }
+    async getCallerUserProfile(): Promise<UserProfile | null> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getCallerUserProfile();
+                return from_candid_opt_n3(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getCallerUserProfile();
+            return from_candid_opt_n3(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getCallerUserRole(): Promise<UserRole> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getCallerUserRole();
+                return from_candid_UserRole_n4(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getCallerUserRole();
+            return from_candid_UserRole_n4(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getUserProfile(arg0: Principal): Promise<UserProfile | null> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getUserProfile(arg0);
+                return from_candid_opt_n3(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getUserProfile(arg0);
+            return from_candid_opt_n3(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async isCallerAdmin(): Promise<boolean> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.isCallerAdmin();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.isCallerAdmin();
+            return result;
+        }
+    }
+    async saveCallerUserProfile(arg0: UserProfile): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.saveCallerUserProfile(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.saveCallerUserProfile(arg0);
             return result;
         }
     }
@@ -170,6 +396,67 @@ export class Backend implements backendInterface {
             return result;
         }
     }
+    async submitRequirementSubmission(arg0: string, arg1: string, arg2: string, arg3: string, arg4: string, arg5: string): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.submitRequirementSubmission(arg0, arg1, arg2, arg3, arg4, arg5);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.submitRequirementSubmission(arg0, arg1, arg2, arg3, arg4, arg5);
+            return result;
+        }
+    }
+    async submitVendorApplication(arg0: string, arg1: string, arg2: string, arg3: string, arg4: string, arg5: bigint): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.submitVendorApplication(arg0, arg1, arg2, arg3, arg4, arg5);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.submitVendorApplication(arg0, arg1, arg2, arg3, arg4, arg5);
+            return result;
+        }
+    }
+}
+function from_candid_UserRole_n4(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _UserRole): UserRole {
+    return from_candid_variant_n5(_uploadFile, _downloadFile, value);
+}
+function from_candid_opt_n3(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_UserProfile]): UserProfile | null {
+    return value.length === 0 ? null : value[0];
+}
+function from_candid_variant_n5(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    admin: null;
+} | {
+    user: null;
+} | {
+    guest: null;
+}): UserRole {
+    return "admin" in value ? UserRole.admin : "user" in value ? UserRole.user : "guest" in value ? UserRole.guest : value;
+}
+function to_candid_UserRole_n1(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: UserRole): _UserRole {
+    return to_candid_variant_n2(_uploadFile, _downloadFile, value);
+}
+function to_candid_variant_n2(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: UserRole): {
+    admin: null;
+} | {
+    user: null;
+} | {
+    guest: null;
+} {
+    return value == UserRole.admin ? {
+        admin: null
+    } : value == UserRole.user ? {
+        user: null
+    } : value == UserRole.guest ? {
+        guest: null
+    } : value;
 }
 export interface CreateActorOptions {
     agent?: Agent;

@@ -1,5 +1,3 @@
-
-import { supabase } from "@/lib/supabase"
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { CheckCircle2, Network, Shield, TrendingUp, Users } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useActor } from "../hooks/useActor";
 
 const benefits = [
   {
@@ -38,105 +37,48 @@ const benefits = [
   },
 ];
 
-import { useState } from "react"
-import { supabase } from "@/lib/supabase"
-
 export default function Vendors() {
-
+  const { actor } = useActor();
   const [form, setForm] = useState({
     companyName: "",
     contactPerson: "",
     email: "",
     phone: "",
     technologies: "",
-    benchSize: ""
-  })
-  const handleVendorSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    const { data, error } = await supabase
-      .from("vendors")
-      .insert([
-        {
-          company_name: form.companyName,
-          contact_person: form.contactPerson,
-          email: form.email,
-          phone: form.phone,
-          technologies: form.technologies,
-          bench_size: form.benchSize
-        }
-      ])
-
-    console.log(data, error)
-
-    if(error){
-      alert("Error saving vendor")
-    } else {
-      alert("Vendor registered successfully")
-    }
-  }
-
-  return (
-    <form onSubmit={handleVendorSubmit}>
-      {/* your form UI */}
-    </form>
-  )
-
+    benchSize: "",
+  });
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  const handleVendorSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setSubmitting(true);
-
-  const { data, error } = await supabase
-    .from("vendors")
-    .insert([
-      {
-        company_name: form.companyName,
-        contact_person: form.contactPerson,
-        email: form.email,
-        phone: form.phone,
-        technologies: form.technologies,
-        bench_size: form.benchSize
-      }
-    ]);
-
-  console.log("Supabase result:", data, error);
-
-  if (error) {
-    console.error(error);
-    alert("Error saving vendor");
-  } else {
-    setSubmitted(true);
-    toast.success("Application submitted!");
-  }
-
-  setSubmitting(false);
-};
-
-    await fetch("/api/vendor", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(data)
-    });
-
-    setSubmitting(false);
-    setSubmitted(true);
-
-    toast.success("Vendor registration submitted!");
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!actor) {
+      toast.error("Not connected. Please try again.");
+      return;
+    }
+    setSubmitting(true);
+    try {
+      await actor.submitVendorApplication(
+        form.companyName,
+        form.contactPerson,
+        form.email,
+        form.phone,
+        form.technologies,
+        BigInt(0),
+      );
+      setSubmitted(true);
+      toast.success(
+        "Application submitted! We'll reach out within 24 hours to complete your onboarding.",
+      );
+    } catch (err) {
+      console.error(err);
+      toast.error("Submission failed. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
-    <div>
-      <form onSubmit={handleVendorSubmit}>
-        <button type="submit">Submit</button>
-      </form>
-    </div>
-  );
-}
     <div className="pt-[72px]">
       {/* Hero */}
       <section
@@ -245,7 +187,7 @@ export default function Vendors() {
             </div>
           ) : (
             <form
-              onSubmit={handleVendorSubmit}
+              onSubmit={handleSubmit}
               className="space-y-6 rounded-2xl p-8 border"
               style={{
                 borderColor: "oklch(var(--border))",

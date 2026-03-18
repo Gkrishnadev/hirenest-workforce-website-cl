@@ -1,0 +1,70 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Navy palette — deep navy blue */
+    --navy: 0.18 0.06 258;
+    --navy-mid: 0.22 0.07 258;
+
+    /* Electric blue accent */
+    --electric: 0.55 0.22 258;
+    --electric-light: 0.75 0.18 250;
+
+    /* Surfaces */
+    --surface: 0.97 0.01 258;
+    --border: 0.88 0.02 258;
+
+    /* shadcn tokens */
+    --background: 1 0 0;
+    --foreground: 0.15 0.04 258;
+
+    --card: 1 0 0;
+    --card-foreground: 0.15 0.04 258;
+
+    --popover: 1 0 0;
+    --popover-foreground: 0.15 0.04 258;
+
+    --primary: 0.55 0.22 258;
+    --primary-foreground: 1 0 0;
+
+    --secondary: 0.97 0.01 258;
+    --secondary-foreground: 0.18 0.06 258;
+
+    --muted: 0.96 0.01 258;
+    --muted-foreground: 0.5 0.03 258;
+
+    --accent: 0.97 0.01 258;
+    --accent-foreground: 0.18 0.06 258;
+
+    --destructive: 0.55 0.2 27;
+    --destructive-foreground: 1 0 0;
+
+    --border: 0.88 0.02 258;
+    --input: 0.88 0.02 258;
+    --ring: 0.55 0.22 258;
+
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: "DM Sans", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer utilities {
+  .section-subtext {
+    color: oklch(0.5 0.03 258);
+  }
+}

@@ -26,16 +26,66 @@ export interface PartnerApplication {
   'message' : string,
   'timestamp' : Time,
 }
+export interface RequirementSubmission {
+  'role' : string,
+  'engagementType' : string,
+  'company' : string,
+  'timestamp' : Time,
+  'skills' : string,
+  'location' : string,
+  'startDate' : string,
+}
 export type Time = bigint;
+export interface UserProfile {
+  'name' : string,
+  'email' : string,
+  'company' : string,
+}
+export type UserRole = { 'admin' : null } |
+  { 'user' : null } |
+  { 'guest' : null };
+export interface VendorApplication {
+  'contactPerson' : string,
+  'email' : string,
+  'timestamp' : Time,
+  'technologies' : string,
+  'companyName' : string,
+  'phone' : string,
+  'benchSize' : bigint,
+}
 export interface _SERVICE {
+  '_initializeAccessControlWithSecret' : ActorMethod<[string], undefined>,
+  'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
+  'deleteContactForm' : ActorMethod<[], undefined>,
+  'deletePartnerApplication' : ActorMethod<[], undefined>,
+  'deleteRequirementSubmission' : ActorMethod<[], undefined>,
+  'deleteVendorApplication' : ActorMethod<[], undefined>,
   'getAllContactForms' : ActorMethod<[], Array<ContactForm>>,
   'getAllPartnerApplications' : ActorMethod<[], Array<PartnerApplication>>,
+  'getAllRequirementSubmissions' : ActorMethod<
+    [],
+    Array<RequirementSubmission>
+  >,
+  'getAllVendorApplications' : ActorMethod<[], Array<VendorApplication>>,
+  'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
+  'getCallerUserRole' : ActorMethod<[], UserRole>,
+  'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
+  'isCallerAdmin' : ActorMethod<[], boolean>,
+  'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,
   'submitContactForm' : ActorMethod<
     [string, string, string, string],
     undefined
   >,
   'submitPartnerApplication' : ActorMethod<
     [string, string, string, string, string, string],
+    undefined
+  >,
+  'submitRequirementSubmission' : ActorMethod<
+    [string, string, string, string, string, string],
+    undefined
+  >,
+  'submitVendorApplication' : ActorMethod<
+    [string, string, string, string, string, bigint],
     undefined
   >,
 }

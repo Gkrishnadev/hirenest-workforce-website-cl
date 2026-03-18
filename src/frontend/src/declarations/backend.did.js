@@ -8,6 +8,11 @@
 
 import { IDL } from '@icp-sdk/core/candid';
 
+export const UserRole = IDL.Variant({
+  'admin' : IDL.Null,
+  'user' : IDL.Null,
+  'guest' : IDL.Null,
+});
 export const Time = IDL.Int;
 export const ContactForm = IDL.Record({
   'name' : IDL.Text,
@@ -25,14 +30,62 @@ export const PartnerApplication = IDL.Record({
   'message' : IDL.Text,
   'timestamp' : Time,
 });
+export const RequirementSubmission = IDL.Record({
+  'role' : IDL.Text,
+  'engagementType' : IDL.Text,
+  'company' : IDL.Text,
+  'timestamp' : Time,
+  'skills' : IDL.Text,
+  'location' : IDL.Text,
+  'startDate' : IDL.Text,
+});
+export const VendorApplication = IDL.Record({
+  'contactPerson' : IDL.Text,
+  'email' : IDL.Text,
+  'timestamp' : Time,
+  'technologies' : IDL.Text,
+  'companyName' : IDL.Text,
+  'phone' : IDL.Text,
+  'benchSize' : IDL.Nat,
+});
+export const UserProfile = IDL.Record({
+  'name' : IDL.Text,
+  'email' : IDL.Text,
+  'company' : IDL.Text,
+});
 
 export const idlService = IDL.Service({
+  '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
+  'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+  'deleteContactForm' : IDL.Func([], [], []),
+  'deletePartnerApplication' : IDL.Func([], [], []),
+  'deleteRequirementSubmission' : IDL.Func([], [], []),
+  'deleteVendorApplication' : IDL.Func([], [], []),
   'getAllContactForms' : IDL.Func([], [IDL.Vec(ContactForm)], ['query']),
   'getAllPartnerApplications' : IDL.Func(
       [],
       [IDL.Vec(PartnerApplication)],
       ['query'],
     ),
+  'getAllRequirementSubmissions' : IDL.Func(
+      [],
+      [IDL.Vec(RequirementSubmission)],
+      ['query'],
+    ),
+  'getAllVendorApplications' : IDL.Func(
+      [],
+      [IDL.Vec(VendorApplication)],
+      ['query'],
+    ),
+  'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
+  'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+  'getUserProfile' : IDL.Func(
+      [IDL.Principal],
+      [IDL.Opt(UserProfile)],
+      ['query'],
+    ),
+  'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+  'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
   'submitContactForm' : IDL.Func(
       [IDL.Text, IDL.Text, IDL.Text, IDL.Text],
       [],
@@ -43,11 +96,26 @@ export const idlService = IDL.Service({
       [],
       [],
     ),
+  'submitRequirementSubmission' : IDL.Func(
+      [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text],
+      [],
+      [],
+    ),
+  'submitVendorApplication' : IDL.Func(
+      [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Nat],
+      [],
+      [],
+    ),
 });
 
 export const idlInitArgs = [];
 
 export const idlFactory = ({ IDL }) => {
+  const UserRole = IDL.Variant({
+    'admin' : IDL.Null,
+    'user' : IDL.Null,
+    'guest' : IDL.Null,
+  });
   const Time = IDL.Int;
   const ContactForm = IDL.Record({
     'name' : IDL.Text,
@@ -65,14 +133,62 @@ export const idlFactory = ({ IDL }) => {
     'message' : IDL.Text,
     'timestamp' : Time,
   });
+  const RequirementSubmission = IDL.Record({
+    'role' : IDL.Text,
+    'engagementType' : IDL.Text,
+    'company' : IDL.Text,
+    'timestamp' : Time,
+    'skills' : IDL.Text,
+    'location' : IDL.Text,
+    'startDate' : IDL.Text,
+  });
+  const VendorApplication = IDL.Record({
+    'contactPerson' : IDL.Text,
+    'email' : IDL.Text,
+    'timestamp' : Time,
+    'technologies' : IDL.Text,
+    'companyName' : IDL.Text,
+    'phone' : IDL.Text,
+    'benchSize' : IDL.Nat,
+  });
+  const UserProfile = IDL.Record({
+    'name' : IDL.Text,
+    'email' : IDL.Text,
+    'company' : IDL.Text,
+  });
   
   return IDL.Service({
+    '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
+    'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+    'deleteContactForm' : IDL.Func([], [], []),
+    'deletePartnerApplication' : IDL.Func([], [], []),
+    'deleteRequirementSubmission' : IDL.Func([], [], []),
+    'deleteVendorApplication' : IDL.Func([], [], []),
     'getAllContactForms' : IDL.Func([], [IDL.Vec(ContactForm)], ['query']),
     'getAllPartnerApplications' : IDL.Func(
         [],
         [IDL.Vec(PartnerApplication)],
         ['query'],
       ),
+    'getAllRequirementSubmissions' : IDL.Func(
+        [],
+        [IDL.Vec(RequirementSubmission)],
+        ['query'],
+      ),
+    'getAllVendorApplications' : IDL.Func(
+        [],
+        [IDL.Vec(VendorApplication)],
+        ['query'],
+      ),
+    'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
+    'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+    'getUserProfile' : IDL.Func(
+        [IDL.Principal],
+        [IDL.Opt(UserProfile)],
+        ['query'],
+      ),
+    'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+    'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
     'submitContactForm' : IDL.Func(
         [IDL.Text, IDL.Text, IDL.Text, IDL.Text],
         [],
@@ -80,6 +196,16 @@ export const idlFactory = ({ IDL }) => {
       ),
     'submitPartnerApplication' : IDL.Func(
         [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text],
+        [],
+        [],
+      ),
+    'submitRequirementSubmission' : IDL.Func(
+        [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text],
+        [],
+        [],
+      ),
+    'submitVendorApplication' : IDL.Func(
+        [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Nat],
         [],
         [],
       ),
