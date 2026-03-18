@@ -161,7 +161,7 @@ export default function Home() {
                   <button
                     type="button"
                     data-ocid="hero.join_vendor.button"
-                    className="btn-primary text-base"
+                    className="text-white px-7 py-3 rounded-md font-semibold shadow-md hover:opacity-90 transition border-2 border-black text-base"
                     style={{ backgroundColor: "oklch(var(--electric))" }}
                   >
                     Join as Vendor
@@ -171,7 +171,8 @@ export default function Home() {
                   <button
                     type="button"
                     data-ocid="hero.post_requirement.button"
-                    className="btn-outlined text-base"
+                    className="text-white px-7 py-3 rounded-md font-semibold shadow-md hover:opacity-90 transition border-2 border-black text-base"
+                    style={{ backgroundColor: "oklch(var(--electric))" }}
                   >
                     Post IT Requirement
                   </button>
@@ -366,7 +367,7 @@ export default function Home() {
                 <button
                   type="button"
                   data-ocid="vendor.join_network.button"
-                  className="btn-primary"
+                  className="text-white px-7 py-3 rounded-md font-semibold shadow-md hover:opacity-90 transition border-2 border-black"
                   style={{ backgroundColor: "oklch(var(--electric))" }}
                 >
                   Join as Vendor
@@ -448,8 +449,8 @@ export default function Home() {
                 <button
                   type="button"
                   data-ocid="client.submit_requirement.button"
-                  className="btn-primary"
-                  style={{ backgroundColor: "oklch(var(--navy))" }}
+                  className="text-white px-7 py-3 rounded-md font-semibold shadow-md hover:opacity-90 transition border-2 border-black"
+                  style={{ backgroundColor: "oklch(var(--electric))" }}
                 >
                   Submit IT Requirement
                 </button>
@@ -493,7 +494,7 @@ export default function Home() {
                 <button
                   type="button"
                   data-ocid="bench.submit_consultant.button"
-                  className="btn-primary"
+                  className="text-white px-7 py-3 rounded-md font-semibold shadow-md hover:opacity-90 transition border-2 border-black"
                   style={{ backgroundColor: "oklch(var(--electric))" }}
                 >
                   Submit Bench Consultant
