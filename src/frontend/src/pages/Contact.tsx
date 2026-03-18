@@ -51,16 +51,7 @@ const handleSubmit = async (e: React.FormEvent) => {
     setSubmitting(false);
   }
 };
-      setSuccess(true);
-      toast.success("Message sent! We'll be in touch within 24 hours.");
-      setForm({ name: "", email: "", company: "", message: "" });
-    } catch {
-      setError(true);
-      toast.error("Something went wrong. Please try again.");
-    } finally {
-      setSubmitting(false);
-    }
-  };
+  
 
   return (
     <div className="pt-[72px]">
@@ -231,15 +222,12 @@ const handleSubmit = async (e: React.FormEvent) => {
                     </div>
                   )}
 
-                  <button
-                    type="submit"
-                    data-ocid="contact.submit.button"
-                    disabled={submitting}
-                    className="w-full btn-primary flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
-                    style={{ backgroundColor: "oklch(var(--electric))" }}
-                  >
-                    {submitting ? "Sending..." : "Send Message"}
-                  </button>
+             <button
+  type="submit"
+  disabled={submitting}
+>
+  {submitting ? "Sending..." : "Send Message"}
+</button>
                 </form>
               )}
             </div>
