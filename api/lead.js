@@ -2,13 +2,17 @@ import { createClient } from '@supabase/supabase-js'
 
 export default async function handler(req, res) {
   try {
-    // ✅ Check method
-    if (req.method !== 'POST') {
-      return res.status(405).json({ message: 'Only POST allowed' })
+    console.log("ENV:", process.env.SUPABASE_URL)
+
+    if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      return res.status(500).json({
+        error: "Missing ENV variables"
+      })
     }
 
-    // ✅ Debug logs
-    console.log("BODY:", req.body)
+    if (req.method !== 'POST') {
+      return res.status(200).json({ message: 'API working ✅' })
+    }
 
     const supabase = createClient(
       process.env.SUPABASE_URL,
@@ -17,20 +21,18 @@ export default async function handler(req, res) {
 
     const { name, email, company, message } = req.body
 
-    // ✅ Insert into DB
-    const { data, error } = await supabase.from('leads').insert([
+    const { error } = await supabase.from('leads').insert([
       { name, email, company, message }
     ])
 
     if (error) {
-      console.error("SUPABASE ERROR:", error)
       return res.status(500).json({ error: error.message })
     }
 
-    return res.status(200).json({ success: true, data })
+    return res.status(200).json({ success: true })
 
   } catch (err) {
-    console.error("SERVER ERROR:", err)
+    console.error(err)
     return res.status(500).json({ error: err.message })
   }
 }
