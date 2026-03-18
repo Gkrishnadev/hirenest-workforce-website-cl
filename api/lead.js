@@ -1,15 +1,13 @@
-import { createClient } from '@supabase/supabase-js'
+const { createClient } = require('@supabase/supabase-js')
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   try {
-    console.log("ENV:", process.env.SUPABASE_URL)
-
+    // ✅ Check env first
     if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
-      return res.status(500).json({
-        error: "Missing ENV variables"
-      })
+      return res.status(500).json({ error: 'Missing env variables' })
     }
 
+    // ✅ Allow GET test
     if (req.method !== 'POST') {
       return res.status(200).json({ message: 'API working ✅' })
     }
@@ -26,6 +24,7 @@ export default async function handler(req, res) {
     ])
 
     if (error) {
+      console.error(error)
       return res.status(500).json({ error: error.message })
     }
 
