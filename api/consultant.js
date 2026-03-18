@@ -11,7 +11,8 @@ export default async function handler(req, res) {
       process.env.SUPABASE_SERVICE_ROLE_KEY
     );
 
-    const { name, email, skills, experience } = req.body;
+    const body = req.body || {};
+    const { name, email, skills, experience } = body;
 
     const { error } = await supabase
       .from('consultants')
