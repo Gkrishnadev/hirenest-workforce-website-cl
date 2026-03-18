@@ -11,10 +11,10 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { useActor } from "../hooks/useActor";
+
 
 export default function Contact() {
-  const { actor } = useActor();
+  
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -25,28 +25,31 @@ export default function Contact() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!actor) return;
-    setSubmitting(true);
-    setError(false);
-    try {
-      await actor.submitContactForm(
-        form.name,
-        form.email,
-        form.company,
-        form.message,
-      );
-      setSuccess(true);
-      toast.success("Message sent! We'll be in touch within 24 hours.");
-      setForm({ name: "", email: "", company: "", message: "" });
-    } catch {
-      setError(true);
-      toast.error("Something went wrong. Please try again.");
-    } finally {
-      setSubmitting(false);
-    }
-  };
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setSubmitting(true);
+  setError(false);
+
+  try {
+    const res = await fetch('/api/lead', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(form)
+    });
+
+    if (!res.ok) throw new Error();
+
+    setSuccess(true);
+    toast.success("Message sent! We'll be in touch within 24 hours.");
+    setForm({ name: "", email: "", company: "", message: "" });
+
+  } catch {
+    setError(true);
+    toast.error("Something went wrong. Please try again.");
+  } finally {
+    setSubmitting(false);
+  }
+};
 
   return (
     <div className="pt-[72px]">
