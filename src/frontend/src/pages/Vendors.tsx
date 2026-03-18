@@ -12,7 +12,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { CheckCircle2, Network, Shield, TrendingUp, Users } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { useActor } from "../hooks/useActor";
 
 const benefits = [
   {
@@ -58,14 +57,11 @@ export default function Vendors() {
     }
     setSubmitting(true);
     try {
-      await actor.submitVendorApplication(
-        form.companyName,
-        form.contactPerson,
-        form.email,
-        form.phone,
-        form.technologies,
-        BigInt(0),
-      );
+      await fetch('/api/vendor', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(data)
+})
       setSubmitted(true);
       toast.success(
         "Application submitted! We'll reach out within 24 hours to complete your onboarding.",
