@@ -238,7 +238,6 @@ const handleSubmit = async (e: React.FormEvent) => {
                     className="w-full btn-primary flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
                     style={{ backgroundColor: "oklch(var(--electric))" }}
                   >
-                    {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
                     {submitting ? "Sending..." : "Send Message"}
                   </button>
                 </form>
