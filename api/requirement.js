@@ -10,7 +10,21 @@ export default async function handler(req, res) {
       process.env.SUPABASE_URL,
       process.env.SUPABASE_SERVICE_ROLE_KEY
     );
+const body = await new Promise((resolve) => {
+      let data = '';
 
+      req.on('data', chunk => {
+        data += chunk;
+      });
+
+      req.on('end', () => {
+        try {
+          resolve(JSON.parse(data || '{}'));
+        } catch {
+          resolve({});
+        }
+      });
+    });
     const body = req.body || {};
     const { company, role, skills, location } = body;
 
