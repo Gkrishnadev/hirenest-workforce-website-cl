@@ -12,12 +12,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Bell, Loader2, LogOut, ShieldCheck } from "lucide-react";
 import { useEffect, useState } from "react";
-import type {
-  ContactForm,
-  PartnerApplication,
-  RequirementSubmission,
-  VendorApplication,
-} from "../backend.d";
+
 
 
 
@@ -62,8 +57,7 @@ function LoadingSpinner() {
 }
 
 export default function Admin() {
-  const { actor, isFetching } = useActor();
-  const { login, clear, loginStatus, identity } = useInternetIdentity();
+  
 
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [checkingAdmin, setCheckingAdmin] = useState(false);
@@ -191,49 +185,7 @@ export default function Admin() {
       "linear-gradient(135deg, oklch(var(--navy)) 0%, oklch(0.15 0.05 258) 100%)",
   };
 
-  if (!isLoggedIn) {
-    return (
-      <div
-        className="min-h-screen flex items-center justify-center"
-        style={bgStyle}
-      >
-        <div
-          className="rounded-2xl p-10 text-center max-w-sm w-full mx-4"
-          style={cardStyle}
-          data-ocid="admin.panel"
-        >
-          <div
-            className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-6"
-            style={{ backgroundColor: "oklch(var(--electric) / 0.15)" }}
-          >
-            <ShieldCheck
-              className="w-7 h-7"
-              style={{ color: "oklch(var(--electric))" }}
-            />
-          </div>
-          <h1 className="text-2xl font-bold text-white mb-2">Admin Login</h1>
-          <p className="text-sm mb-8" style={{ color: "oklch(0.65 0.03 258)" }}>
-            Sign in with Internet Identity to access the admin dashboard.
-          </p>
-          <Button
-            onClick={login}
-            disabled={isLoggingIn}
-            data-ocid="admin.primary_button"
-            className="w-full font-semibold text-white"
-            style={{ backgroundColor: "oklch(var(--electric))" }}
-          >
-            {isLoggingIn ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Signing in...
-              </>
-            ) : (
-              "Login with Internet Identity"
-            )}
-          </Button>
-        </div>
-      </div>
-    );
-  }
+  
 
   if (checkingAdmin || isAdmin === null) {
     return (
@@ -246,105 +198,7 @@ export default function Admin() {
     );
   }
 
-  if (!isAdmin) {
-    if (adminAssigned === false) {
-      return (
-        <div
-          className="min-h-screen flex items-center justify-center"
-          style={bgStyle}
-        >
-          <div
-            className="rounded-2xl p-10 text-center max-w-sm w-full mx-4"
-            style={cardStyle}
-            data-ocid="admin.panel"
-          >
-            <div
-              className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-6"
-              style={{ backgroundColor: "oklch(0.55 0.18 145 / 0.15)" }}
-            >
-              <ShieldCheck
-                className="w-7 h-7"
-                style={{ color: "oklch(0.75 0.18 145)" }}
-              />
-            </div>
-            <h1 className="text-xl font-bold text-white mb-3">
-              Setup Admin Access
-            </h1>
-            <p
-              className="text-sm mb-6"
-              style={{ color: "oklch(0.65 0.03 258)" }}
-            >
-              No admin has been set up yet. Click below to claim admin access
-              for your account. This can only be done once.
-            </p>
-            {claimError && (
-              <p
-                className="text-sm mb-4 p-3 rounded-lg"
-                style={{
-                  color: "oklch(0.75 0.18 25)",
-                  backgroundColor: "oklch(0.75 0.18 25 / 0.1)",
-                  border: "1px solid oklch(0.75 0.18 25 / 0.3)",
-                }}
-                data-ocid="admin.error_state"
-              >
-                {claimError}
-              </p>
-            )}
-            <Button
-              onClick={handleClaimAdmin}
-              disabled={claiming}
-              data-ocid="admin.primary_button"
-              className="w-full font-semibold text-white mb-3"
-              style={{ backgroundColor: "oklch(0.55 0.18 145)" }}
-            >
-              {claiming ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Claiming...
-                </>
-              ) : (
-                "Claim Admin Access"
-              )}
-            </Button>
-            <Button
-              onClick={handleLogout}
-              variant="outline"
-              data-ocid="admin.secondary_button"
-              className="w-full"
-            >
-              <LogOut className="mr-2 h-4 w-4" /> Logout
-            </Button>
-          </div>
-        </div>
-      );
-    }
 
-    return (
-      <div
-        className="min-h-screen flex items-center justify-center"
-        style={bgStyle}
-      >
-        <div
-          className="rounded-2xl p-10 text-center max-w-sm w-full mx-4"
-          style={cardStyle}
-          data-ocid="admin.panel"
-        >
-          <h1 className="text-xl font-bold text-white mb-3">Access Denied</h1>
-          <p className="text-sm mb-6" style={{ color: "oklch(0.65 0.03 258)" }}>
-            Your account does not have admin privileges. Please log in with the
-            admin account.
-          </p>
-          <Button
-            onClick={handleLogout}
-            variant="outline"
-            data-ocid="admin.secondary_button"
-            className="w-full"
-          >
-            <LogOut className="mr-2 h-4 w-4" /> Logout
-          </Button>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div
