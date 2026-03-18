@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Loader2, LogOut, ShieldCheck } from "lucide-react";
+import { Bell, Loader2, LogOut, ShieldCheck } from "lucide-react";
 import { useEffect, useState } from "react";
 import type {
   ContactForm,
@@ -66,6 +66,9 @@ export default function Admin() {
 
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [checkingAdmin, setCheckingAdmin] = useState(false);
+  const [adminAssigned, setAdminAssigned] = useState<boolean | null>(null);
+  const [claiming, setClaiming] = useState(false);
+  const [claimError, setClaimError] = useState("");
 
   const [vendors, setVendors] = useState<VendorApplication[]>([]);
   const [partners, setPartners] = useState<PartnerApplication[]>([]);
@@ -73,18 +76,38 @@ export default function Admin() {
   const [messages, setMessages] = useState<ContactForm[]>([]);
   const [loadingData, setLoadingData] = useState(false);
 
+  const [lastSeenCounts, setLastSeenCounts] = useState(() => {
+    try {
+      const stored = localStorage.getItem("hn_admin_last_seen");
+      return stored
+        ? JSON.parse(stored)
+        : { vendors: 0, partners: 0, requirements: 0, messages: 0 };
+    } catch {
+      return { vendors: 0, partners: 0, requirements: 0, messages: 0 };
+    }
+  });
+  const [showNewAlert, setShowNewAlert] = useState(false);
+
   const isLoggedIn = loginStatus === "success" && !!identity;
   const isLoggingIn = loginStatus === "logging-in";
 
   useEffect(() => {
     if (!actor || isFetching || !isLoggedIn) return;
     setCheckingAdmin(true);
-    actor
-      .isCallerAdmin()
-      .then((result) => {
-        setIsAdmin(result);
+    // Use any cast for new backend methods not yet in generated types
+    const a = actor as any;
+    Promise.all([
+      actor.isCallerAdmin() as Promise<boolean>,
+      a.isAdminAssigned() as Promise<boolean>,
+    ])
+      .then(([adminResult, assignedResult]) => {
+        setIsAdmin(adminResult);
+        setAdminAssigned(assignedResult);
       })
-      .catch(() => setIsAdmin(false))
+      .catch(() => {
+        setIsAdmin(false);
+        setAdminAssigned(true);
+      })
       .finally(() => setCheckingAdmin(false));
   }, [actor, isFetching, isLoggedIn]);
 
@@ -102,35 +125,80 @@ export default function Admin() {
         setPartners(p);
         setRequirements(r);
         setMessages(m);
+        const prev = lastSeenCounts;
+        const hasNew =
+          v.length > prev.vendors ||
+          p.length > prev.partners ||
+          r.length > prev.requirements ||
+          m.length > prev.messages;
+        if (hasNew) setShowNewAlert(true);
       })
       .catch(console.error)
       .finally(() => setLoadingData(false));
-  }, [actor, isAdmin]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [actor, isAdmin, lastSeenCounts]);
+
+  const markAllSeen = () => {
+    const counts = {
+      vendors: vendors.length,
+      partners: partners.length,
+      requirements: requirements.length,
+      messages: messages.length,
+    };
+    setLastSeenCounts(counts);
+    localStorage.setItem("hn_admin_last_seen", JSON.stringify(counts));
+    setShowNewAlert(false);
+  };
 
   const handleLogout = () => {
     clear();
     setIsAdmin(null);
+    setAdminAssigned(null);
     setVendors([]);
     setPartners([]);
     setRequirements([]);
     setMessages([]);
   };
 
+  const handleClaimAdmin = async () => {
+    if (!actor) return;
+    setClaiming(true);
+    setClaimError("");
+    try {
+      const a = actor as any;
+      const success: boolean = await a.claimFirstAdmin();
+      if (success) {
+        setIsAdmin(true);
+        setAdminAssigned(true);
+      } else {
+        setClaimError("Admin has already been claimed by another account.");
+      }
+    } catch {
+      setClaimError("Something went wrong. Please try again.");
+    } finally {
+      setClaiming(false);
+    }
+  };
+
+  const cardStyle = {
+    backgroundColor: "oklch(0.18 0.04 258)",
+    border: "1px solid oklch(0.28 0.05 258)",
+  };
+
+  const bgStyle = {
+    background:
+      "linear-gradient(135deg, oklch(var(--navy)) 0%, oklch(0.15 0.05 258) 100%)",
+  };
+
   if (!isLoggedIn) {
     return (
       <div
         className="min-h-screen flex items-center justify-center"
-        style={{
-          background:
-            "linear-gradient(135deg, oklch(var(--navy)) 0%, oklch(0.15 0.05 258) 100%)",
-        }}
+        style={bgStyle}
       >
         <div
           className="rounded-2xl p-10 text-center max-w-sm w-full mx-4"
-          style={{
-            backgroundColor: "oklch(0.18 0.04 258)",
-            border: "1px solid oklch(0.28 0.05 258)",
-          }}
+          style={cardStyle}
           data-ocid="admin.panel"
         >
           <div
@@ -170,10 +238,7 @@ export default function Admin() {
     return (
       <div
         className="min-h-screen flex items-center justify-center"
-        style={{
-          background:
-            "linear-gradient(135deg, oklch(var(--navy)) 0%, oklch(0.15 0.05 258) 100%)",
-        }}
+        style={bgStyle}
       >
         <LoadingSpinner />
       </div>
@@ -181,25 +246,91 @@ export default function Admin() {
   }
 
   if (!isAdmin) {
+    if (adminAssigned === false) {
+      return (
+        <div
+          className="min-h-screen flex items-center justify-center"
+          style={bgStyle}
+        >
+          <div
+            className="rounded-2xl p-10 text-center max-w-sm w-full mx-4"
+            style={cardStyle}
+            data-ocid="admin.panel"
+          >
+            <div
+              className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-6"
+              style={{ backgroundColor: "oklch(0.55 0.18 145 / 0.15)" }}
+            >
+              <ShieldCheck
+                className="w-7 h-7"
+                style={{ color: "oklch(0.75 0.18 145)" }}
+              />
+            </div>
+            <h1 className="text-xl font-bold text-white mb-3">
+              Setup Admin Access
+            </h1>
+            <p
+              className="text-sm mb-6"
+              style={{ color: "oklch(0.65 0.03 258)" }}
+            >
+              No admin has been set up yet. Click below to claim admin access
+              for your account. This can only be done once.
+            </p>
+            {claimError && (
+              <p
+                className="text-sm mb-4 p-3 rounded-lg"
+                style={{
+                  color: "oklch(0.75 0.18 25)",
+                  backgroundColor: "oklch(0.75 0.18 25 / 0.1)",
+                  border: "1px solid oklch(0.75 0.18 25 / 0.3)",
+                }}
+                data-ocid="admin.error_state"
+              >
+                {claimError}
+              </p>
+            )}
+            <Button
+              onClick={handleClaimAdmin}
+              disabled={claiming}
+              data-ocid="admin.primary_button"
+              className="w-full font-semibold text-white mb-3"
+              style={{ backgroundColor: "oklch(0.55 0.18 145)" }}
+            >
+              {claiming ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Claiming...
+                </>
+              ) : (
+                "Claim Admin Access"
+              )}
+            </Button>
+            <Button
+              onClick={handleLogout}
+              variant="outline"
+              data-ocid="admin.secondary_button"
+              className="w-full"
+            >
+              <LogOut className="mr-2 h-4 w-4" /> Logout
+            </Button>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div
         className="min-h-screen flex items-center justify-center"
-        style={{
-          background:
-            "linear-gradient(135deg, oklch(var(--navy)) 0%, oklch(0.15 0.05 258) 100%)",
-        }}
+        style={bgStyle}
       >
         <div
           className="rounded-2xl p-10 text-center max-w-sm w-full mx-4"
-          style={{
-            backgroundColor: "oklch(0.18 0.04 258)",
-            border: "1px solid oklch(0.28 0.05 258)",
-          }}
+          style={cardStyle}
           data-ocid="admin.panel"
         >
           <h1 className="text-xl font-bold text-white mb-3">Access Denied</h1>
           <p className="text-sm mb-6" style={{ color: "oklch(0.65 0.03 258)" }}>
-            Your account does not have admin privileges.
+            Your account does not have admin privileges. Please log in with the
+            admin account.
           </p>
           <Button
             onClick={handleLogout}
@@ -255,6 +386,41 @@ export default function Admin() {
           </p>
         </div>
 
+        {showNewAlert && (
+          <div
+            className="flex items-center justify-between rounded-xl px-5 py-4 mb-6 gap-4"
+            style={{
+              backgroundColor: "oklch(0.55 0.18 145 / 0.15)",
+              border: "1px solid oklch(0.65 0.18 145 / 0.4)",
+            }}
+            data-ocid="admin.alert"
+          >
+            <div className="flex items-center gap-3">
+              <Bell
+                className="w-5 h-5"
+                style={{ color: "oklch(0.75 0.18 145)" }}
+              />
+              <span
+                className="text-sm font-semibold"
+                style={{ color: "oklch(0.85 0.1 145)" }}
+              >
+                You have new form submissions since your last visit!
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={markAllSeen}
+              className="text-xs font-semibold px-4 py-2 rounded-lg transition hover:opacity-80"
+              style={{
+                backgroundColor: "oklch(0.55 0.18 145)",
+                color: "white",
+              }}
+            >
+              Mark all seen
+            </button>
+          </div>
+        )}
+
         {loadingData ? (
           <LoadingSpinner />
         ) : (
@@ -275,6 +441,14 @@ export default function Admin() {
                 >
                   {vendors.length}
                 </Badge>
+                {vendors.length > lastSeenCounts.vendors && (
+                  <Badge
+                    className="ml-1 text-white"
+                    style={{ backgroundColor: "oklch(0.55 0.18 145)" }}
+                  >
+                    +{vendors.length - lastSeenCounts.vendors} new
+                  </Badge>
+                )}
               </TabsTrigger>
               <TabsTrigger
                 value="partners"
@@ -288,6 +462,14 @@ export default function Admin() {
                 >
                   {partners.length}
                 </Badge>
+                {partners.length > lastSeenCounts.partners && (
+                  <Badge
+                    className="ml-1 text-white"
+                    style={{ backgroundColor: "oklch(0.55 0.18 145)" }}
+                  >
+                    +{partners.length - lastSeenCounts.partners} new
+                  </Badge>
+                )}
               </TabsTrigger>
               <TabsTrigger
                 value="requirements"
@@ -301,6 +483,14 @@ export default function Admin() {
                 >
                   {requirements.length}
                 </Badge>
+                {requirements.length > lastSeenCounts.requirements && (
+                  <Badge
+                    className="ml-1 text-white"
+                    style={{ backgroundColor: "oklch(0.55 0.18 145)" }}
+                  >
+                    +{requirements.length - lastSeenCounts.requirements} new
+                  </Badge>
+                )}
               </TabsTrigger>
               <TabsTrigger
                 value="messages"
@@ -314,6 +504,14 @@ export default function Admin() {
                 >
                   {messages.length}
                 </Badge>
+                {messages.length > lastSeenCounts.messages && (
+                  <Badge
+                    className="ml-1 text-white"
+                    style={{ backgroundColor: "oklch(0.55 0.18 145)" }}
+                  >
+                    +{messages.length - lastSeenCounts.messages} new
+                  </Badge>
+                )}
               </TabsTrigger>
             </TabsList>
 

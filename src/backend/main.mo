@@ -60,6 +60,20 @@ actor {
   let contactForms = List.empty<ContactForm>();
   let userProfiles = Map.empty<Principal, UserProfile>();
 
+  // Check if admin has been assigned yet
+  public query func isAdminAssigned() : async Bool {
+    accessControlState.adminAssigned;
+  };
+
+  // First logged-in caller becomes admin if none assigned yet
+  public shared ({ caller }) func claimFirstAdmin() : async Bool {
+    if (caller.isAnonymous()) { return false };
+    if (accessControlState.adminAssigned) { return false };
+    accessControlState.userRoles.add(caller, #admin);
+    accessControlState.adminAssigned := true;
+    true;
+  };
+
   // User Profile Management Functions
   public query ({ caller }) func getCallerUserProfile() : async ?UserProfile {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
@@ -82,7 +96,6 @@ actor {
     userProfiles.add(caller, profile);
   };
 
-  // Public Form Submission Functions (accessible to all users including guests)
   public shared ({ caller }) func submitVendorApplication(
     companyName : Text,
     contactPerson : Text,
@@ -159,7 +172,6 @@ actor {
     contactForms.add(form);
   };
 
-  // Admin-only Retrieval Functions
   public query ({ caller }) func getAllVendorApplications() : async [VendorApplication] {
     if (not (AccessControl.isAdmin(accessControlState, caller))) {
       Runtime.trap("Unauthorized: Only admins can retrieve vendor applications");
@@ -188,7 +200,6 @@ actor {
     contactForms.toArray();
   };
 
-  // Admin-only Delete Functions
   public shared ({ caller }) func deleteVendorApplication() : async () {
     if (not (AccessControl.isAdmin(accessControlState, caller))) {
       Runtime.trap("Unauthorized: Only admins can delete vendor applications");

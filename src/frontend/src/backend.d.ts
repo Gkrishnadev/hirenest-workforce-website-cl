@@ -54,6 +54,7 @@ export enum UserRole {
 }
 export interface backendInterface {
     assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
+    claimFirstAdmin(): Promise<boolean>;
     deleteContactForm(): Promise<void>;
     deletePartnerApplication(): Promise<void>;
     deleteRequirementSubmission(): Promise<void>;
@@ -65,6 +66,7 @@ export interface backendInterface {
     getCallerUserProfile(): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
     getUserProfile(user: Principal): Promise<UserProfile | null>;
+    isAdminAssigned(): Promise<boolean>;
     isCallerAdmin(): Promise<boolean>;
     saveCallerUserProfile(profile: UserProfile): Promise<void>;
     submitContactForm(name: string, email: string, company: string, message: string): Promise<void>;

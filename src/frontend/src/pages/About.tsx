@@ -296,27 +296,113 @@ export default function About() {
             "linear-gradient(135deg, oklch(var(--navy)) 0%, oklch(0.16 0.06 250) 100%)",
         }}
       >
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-display font-bold text-white mb-6">
-            Join the HireNest Network
-          </h2>
-          <p className="text-lg mb-8" style={{ color: "oklch(0.80 0.02 255)" }}>
-            Whether you are a company seeking exceptional technology talent, a
-            staffing partner looking to collaborate and expand opportunities, or
-            a consultant exploring new career possibilities — HireNest provides
-            a platform designed to support meaningful connections across the
-            workforce ecosystem.
-          </p>
-          <Link to="/vendors">
-            <button
-              type="button"
-              data-ocid="about.join_network.button"
-              className="font-semibold px-8 py-3 rounded-md bg-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
-              style={{ color: "oklch(var(--navy))" }}
-            >
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-display font-bold text-white mb-4">
               Join the HireNest Network
-            </button>
-          </Link>
+            </h2>
+            <p
+              className="text-lg max-w-3xl mx-auto"
+              style={{ color: "oklch(0.80 0.02 255)" }}
+            >
+              Whether you are a company seeking exceptional technology talent, a
+              staffing partner looking to collaborate and expand opportunities,
+              or a consultant exploring new career possibilities — HireNest
+              provides a platform designed to support meaningful connections
+              across the workforce ecosystem.
+            </p>
+          </div>
+
+          {/* Two-column card layout */}
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Card 1: IT Staffing Collaboration Network & Vendor Network */}
+            <div
+              className="bg-white rounded-2xl p-8 shadow-xl flex flex-col gap-6"
+              data-ocid="about.vendor_network.card"
+            >
+              <div>
+                <p
+                  className="text-xs font-semibold uppercase tracking-widest mb-2"
+                  style={{ color: "oklch(var(--electric))" }}
+                >
+                  For Vendors & Partners
+                </p>
+                <h3
+                  className="text-xl font-display font-bold leading-snug"
+                  style={{ color: "oklch(var(--navy))" }}
+                >
+                  IT Staffing Collaboration Network &amp; Vendor Network
+                </h3>
+              </div>
+              <p
+                className="text-sm leading-relaxed"
+                style={{ color: "oklch(var(--text-muted))" }}
+              >
+                Join our growing network of IT staffing vendors and collaborate
+                with companies to place qualified technology consultants faster.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3 mt-auto">
+                <Link to="/vendors" className="flex-1">
+                  <button
+                    type="button"
+                    style={{ backgroundColor: "white" }}
+                    className="w-full text-black px-6 py-3 rounded-xl font-semibold shadow-md hover:opacity-90 transition border border-gray-200"
+                  >
+                    Join as Vendor
+                  </button>
+                </Link>
+                <Link to="/submit-requirement" className="flex-1">
+                  <button
+                    type="button"
+                    style={{ backgroundColor: "white" }}
+                    className="w-full text-black px-6 py-3 rounded-xl font-semibold shadow-md hover:opacity-90 transition border border-gray-200"
+                  >
+                    Post IT Requirement
+                  </button>
+                </Link>
+              </div>
+            </div>
+
+            {/* Card 2: For Clients */}
+            <div
+              className="bg-white rounded-2xl p-8 shadow-xl flex flex-col gap-6"
+              data-ocid="about.clients.card"
+            >
+              <div>
+                <p
+                  className="text-xs font-semibold uppercase tracking-widest mb-2"
+                  style={{ color: "oklch(var(--electric))" }}
+                >
+                  For Clients
+                </p>
+                <h3
+                  className="text-xl font-display font-bold leading-snug"
+                  style={{ color: "oklch(var(--navy))" }}
+                >
+                  For Clients
+                </h3>
+              </div>
+              <p
+                className="text-sm leading-relaxed"
+                style={{ color: "oklch(var(--text-muted))" }}
+              >
+                Submit your IT staffing requirement and get connected with
+                qualified vendors who can deliver the right technology talent
+                for your projects.
+              </p>
+              <div className="flex flex-col gap-3 mt-auto">
+                <Link to="/submit-requirement">
+                  <button
+                    type="button"
+                    style={{ backgroundColor: "white" }}
+                    className="w-full text-black px-6 py-3 rounded-xl font-semibold shadow-md hover:opacity-90 transition border border-gray-200"
+                  >
+                    Submit IT Requirement
+                  </button>
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </div>
