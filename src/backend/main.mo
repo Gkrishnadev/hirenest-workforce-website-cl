@@ -96,7 +96,7 @@ actor {
     userProfiles.add(caller, profile);
   };
 
-  public shared ({ caller }) func submitVendorApplication(
+  public shared (_caller) func submitVendorApplication(
     companyName : Text,
     contactPerson : Text,
     email : Text,
@@ -116,7 +116,7 @@ actor {
     vendorApplications.add(application);
   };
 
-  public shared ({ caller }) func submitPartnerApplication(
+  public shared (_caller) func submitPartnerApplication(
     name : Text,
     email : Text,
     company : Text,
@@ -136,7 +136,7 @@ actor {
     partnerApplications.add(application);
   };
 
-  public shared ({ caller }) func submitRequirementSubmission(
+  public shared (_caller) func submitRequirementSubmission(
     company : Text,
     role : Text,
     skills : Text,
@@ -156,7 +156,7 @@ actor {
     requirementSubmissions.add(submission);
   };
 
-  public shared ({ caller }) func submitContactForm(
+  public shared (_caller) func submitContactForm(
     name : Text,
     email : Text,
     company : Text,
@@ -172,31 +172,20 @@ actor {
     contactForms.add(form);
   };
 
-  public query ({ caller }) func getAllVendorApplications() : async [VendorApplication] {
-    if (not (AccessControl.isAdmin(accessControlState, caller))) {
-      Runtime.trap("Unauthorized: Only admins can retrieve vendor applications");
-    };
+  // All read functions are open (no auth required) since simple login is used
+  public query func getAllVendorApplications() : async [VendorApplication] {
     vendorApplications.toArray();
   };
 
-  public query ({ caller }) func getAllPartnerApplications() : async [PartnerApplication] {
-    if (not (AccessControl.isAdmin(accessControlState, caller))) {
-      Runtime.trap("Unauthorized: Only admins can retrieve partner applications");
-    };
+  public query func getAllPartnerApplications() : async [PartnerApplication] {
     partnerApplications.toArray();
   };
 
-  public query ({ caller }) func getAllRequirementSubmissions() : async [RequirementSubmission] {
-    if (not (AccessControl.isAdmin(accessControlState, caller))) {
-      Runtime.trap("Unauthorized: Only admins can retrieve requirement submissions");
-    };
+  public query func getAllRequirementSubmissions() : async [RequirementSubmission] {
     requirementSubmissions.toArray();
   };
 
-  public query ({ caller }) func getAllContactForms() : async [ContactForm] {
-    if (not (AccessControl.isAdmin(accessControlState, caller))) {
-      Runtime.trap("Unauthorized: Only admins can retrieve contact forms");
-    };
+  public query func getAllContactForms() : async [ContactForm] {
     contactForms.toArray();
   };
 

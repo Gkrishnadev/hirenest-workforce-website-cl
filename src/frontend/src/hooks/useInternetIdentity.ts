@@ -68,21 +68,11 @@ const InternetIdentityReactContext = createContext<ProviderValue | undefined>(
 
 /**
  * Create the auth client with default options or options provided by the user.
- * Gracefully handles config load failures — derivation origin is optional.
  */
 async function createAuthClient(
   createOptions?: AuthClientCreateOptions,
 ): Promise<AuthClient> {
-  // Try to load derivation origin from config, but don't fail if config is unavailable
-  let derivationOrigin: string | undefined;
-  try {
-    const config = await loadConfig();
-    derivationOrigin = config.ii_derivation_origin;
-  } catch {
-    // Config may not be available in all environments; proceed without derivation origin
-    derivationOrigin = undefined;
-  }
-
+  const config = await loadConfig();
   const options: AuthClientCreateOptions = {
     idleOptions: {
       // Default behaviour of this hook is not to logout and reload window on identity expiration
@@ -91,7 +81,7 @@ async function createAuthClient(
       ...createOptions?.idleOptions,
     },
     loginOptions: {
-      derivationOrigin,
+      derivationOrigin: config.ii_derivation_origin,
     },
     ...createOptions,
   };

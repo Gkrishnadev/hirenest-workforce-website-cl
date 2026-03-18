@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Bell, Loader2, LogOut, ShieldCheck } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type {
   ContactForm,
   PartnerApplication,
@@ -18,7 +18,6 @@ import type {
   VendorApplication,
 } from "../backend.d";
 import { useActor } from "../hooks/useActor";
-import { useInternetIdentity } from "../hooks/useInternetIdentity";
 
 function formatDate(timestamp: bigint): string {
   const ms = Number(timestamp / BigInt(1_000_000));
@@ -61,20 +60,17 @@ function LoadingSpinner() {
 }
 
 export default function Admin() {
-  const { actor, isFetching } = useActor();
-  const { login, clear, loginStatus, identity } = useInternetIdentity();
+  const { actor } = useActor();
 
-  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
-  const [checkingAdmin, setCheckingAdmin] = useState(false);
-  const [adminAssigned, setAdminAssigned] = useState<boolean | null>(null);
-  const [claiming, setClaiming] = useState(false);
-  const [claimError, setClaimError] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const [vendors, setVendors] = useState<VendorApplication[]>([]);
   const [partners, setPartners] = useState<PartnerApplication[]>([]);
   const [requirements, setRequirements] = useState<RequirementSubmission[]>([]);
   const [messages, setMessages] = useState<ContactForm[]>([]);
   const [loadingData, setLoadingData] = useState(false);
+  const retryTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const retryCountRef = useRef(0);
 
   const [lastSeenCounts, setLastSeenCounts] = useState(() => {
     try {
@@ -88,55 +84,78 @@ export default function Admin() {
   });
   const [showNewAlert, setShowNewAlert] = useState(false);
 
-  const isLoggedIn = loginStatus === "success" && !!identity;
-  const isLoggingIn = loginStatus === "logging-in";
+  const handleLogin = () => {
+    retryCountRef.current = 0;
+    setIsLoggedIn(true);
+  };
 
-  useEffect(() => {
-    if (!actor || isFetching || !isLoggedIn) return;
-    setCheckingAdmin(true);
-    // Use any cast for new backend methods not yet in generated types
-    const a = actor as any;
-    Promise.all([
-      actor.isCallerAdmin() as Promise<boolean>,
-      a.isAdminAssigned() as Promise<boolean>,
-    ])
-      .then(([adminResult, assignedResult]) => {
-        setIsAdmin(adminResult);
-        setAdminAssigned(assignedResult);
-      })
-      .catch(() => {
-        setIsAdmin(false);
-        setAdminAssigned(true);
-      })
-      .finally(() => setCheckingAdmin(false));
-  }, [actor, isFetching, isLoggedIn]);
+  const handleLogout = () => {
+    if (retryTimerRef.current) clearTimeout(retryTimerRef.current);
+    setIsLoggedIn(false);
+    setVendors([]);
+    setPartners([]);
+    setRequirements([]);
+    setMessages([]);
+  };
 
-  useEffect(() => {
-    if (!actor || !isAdmin) return;
+  const fetchData = (
+    currentActor: typeof actor,
+    prevCounts: typeof lastSeenCounts,
+  ) => {
+    if (!currentActor) return;
     setLoadingData(true);
     Promise.all([
-      actor.getAllVendorApplications(),
-      actor.getAllPartnerApplications(),
-      actor.getAllRequirementSubmissions(),
-      actor.getAllContactForms(),
+      currentActor.getAllVendorApplications(),
+      currentActor.getAllPartnerApplications(),
+      currentActor.getAllRequirementSubmissions(),
+      currentActor.getAllContactForms(),
     ])
       .then(([v, p, r, m]) => {
         setVendors(v);
         setPartners(p);
         setRequirements(r);
         setMessages(m);
-        const prev = lastSeenCounts;
         const hasNew =
-          v.length > prev.vendors ||
-          p.length > prev.partners ||
-          r.length > prev.requirements ||
-          m.length > prev.messages;
+          v.length > prevCounts.vendors ||
+          p.length > prevCounts.partners ||
+          r.length > prevCounts.requirements ||
+          m.length > prevCounts.messages;
         if (hasNew) setShowNewAlert(true);
       })
-      .catch(console.error)
+      .catch((err) => {
+        console.error("[Admin] Failed to fetch dashboard data:", err);
+      })
       .finally(() => setLoadingData(false));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [actor, isAdmin, lastSeenCounts]);
+  };
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: lastSeenCounts intentionally excluded
+  useEffect(() => {
+    if (!isLoggedIn) return;
+
+    if (actor) {
+      // Actor is available — fetch immediately
+      retryCountRef.current = 0;
+      if (retryTimerRef.current) clearTimeout(retryTimerRef.current);
+      fetchData(actor, lastSeenCounts);
+    } else {
+      // Actor not yet ready — poll every 500ms up to 5 seconds (10 retries)
+      if (retryCountRef.current >= 10) {
+        console.warn("[Admin] Actor not available after 5s, giving up.");
+        return;
+      }
+      retryTimerRef.current = setTimeout(() => {
+        retryCountRef.current += 1;
+        // The effect will re-run when actor changes; this just logs progress
+        console.log(
+          `[Admin] Waiting for actor... attempt ${retryCountRef.current}`,
+        );
+      }, 500);
+    }
+
+    return () => {
+      if (retryTimerRef.current) clearTimeout(retryTimerRef.current);
+    };
+  }, [actor, isLoggedIn]);
 
   const markAllSeen = () => {
     const counts = {
@@ -150,36 +169,6 @@ export default function Admin() {
     setShowNewAlert(false);
   };
 
-  const handleLogout = () => {
-    clear();
-    setIsAdmin(null);
-    setAdminAssigned(null);
-    setVendors([]);
-    setPartners([]);
-    setRequirements([]);
-    setMessages([]);
-  };
-
-  const handleClaimAdmin = async () => {
-    if (!actor) return;
-    setClaiming(true);
-    setClaimError("");
-    try {
-      const a = actor as any;
-      const success: boolean = await a.claimFirstAdmin();
-      if (success) {
-        setIsAdmin(true);
-        setAdminAssigned(true);
-      } else {
-        setClaimError("Admin has already been claimed by another account.");
-      }
-    } catch {
-      setClaimError("Something went wrong. Please try again.");
-    } finally {
-      setClaiming(false);
-    }
-  };
-
   const cardStyle = {
     backgroundColor: "oklch(0.18 0.04 258)",
     border: "1px solid oklch(0.28 0.05 258)",
@@ -189,6 +178,10 @@ export default function Admin() {
     background:
       "linear-gradient(135deg, oklch(var(--navy)) 0%, oklch(0.15 0.05 258) 100%)",
   };
+
+  const triggerClass =
+    "gap-2 data-[state=active]:text-white data-[state=inactive]:text-gray-400";
+  const triggerStyle = { color: "oklch(0.85 0.05 258)" };
 
   if (!isLoggedIn) {
     return (
@@ -212,133 +205,15 @@ export default function Admin() {
           </div>
           <h1 className="text-2xl font-bold text-white mb-2">Admin Login</h1>
           <p className="text-sm mb-8" style={{ color: "oklch(0.65 0.03 258)" }}>
-            Sign in with Internet Identity to access the admin dashboard.
+            Access the HireNest admin dashboard.
           </p>
           <Button
-            onClick={login}
-            disabled={isLoggingIn}
+            onClick={handleLogin}
             data-ocid="admin.primary_button"
             className="w-full font-semibold text-white"
             style={{ backgroundColor: "oklch(var(--electric))" }}
           >
-            {isLoggingIn ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Signing in...
-              </>
-            ) : (
-              "Login with Internet Identity"
-            )}
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
-  if (checkingAdmin || isAdmin === null) {
-    return (
-      <div
-        className="min-h-screen flex items-center justify-center"
-        style={bgStyle}
-      >
-        <LoadingSpinner />
-      </div>
-    );
-  }
-
-  if (!isAdmin) {
-    if (adminAssigned === false) {
-      return (
-        <div
-          className="min-h-screen flex items-center justify-center"
-          style={bgStyle}
-        >
-          <div
-            className="rounded-2xl p-10 text-center max-w-sm w-full mx-4"
-            style={cardStyle}
-            data-ocid="admin.panel"
-          >
-            <div
-              className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-6"
-              style={{ backgroundColor: "oklch(0.55 0.18 145 / 0.15)" }}
-            >
-              <ShieldCheck
-                className="w-7 h-7"
-                style={{ color: "oklch(0.75 0.18 145)" }}
-              />
-            </div>
-            <h1 className="text-xl font-bold text-white mb-3">
-              Setup Admin Access
-            </h1>
-            <p
-              className="text-sm mb-6"
-              style={{ color: "oklch(0.65 0.03 258)" }}
-            >
-              No admin has been set up yet. Click below to claim admin access
-              for your account. This can only be done once.
-            </p>
-            {claimError && (
-              <p
-                className="text-sm mb-4 p-3 rounded-lg"
-                style={{
-                  color: "oklch(0.75 0.18 25)",
-                  backgroundColor: "oklch(0.75 0.18 25 / 0.1)",
-                  border: "1px solid oklch(0.75 0.18 25 / 0.3)",
-                }}
-                data-ocid="admin.error_state"
-              >
-                {claimError}
-              </p>
-            )}
-            <Button
-              onClick={handleClaimAdmin}
-              disabled={claiming}
-              data-ocid="admin.primary_button"
-              className="w-full font-semibold text-white mb-3"
-              style={{ backgroundColor: "oklch(0.55 0.18 145)" }}
-            >
-              {claiming ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Claiming...
-                </>
-              ) : (
-                "Claim Admin Access"
-              )}
-            </Button>
-            <Button
-              onClick={handleLogout}
-              variant="outline"
-              data-ocid="admin.secondary_button"
-              className="w-full"
-            >
-              <LogOut className="mr-2 h-4 w-4" /> Logout
-            </Button>
-          </div>
-        </div>
-      );
-    }
-
-    return (
-      <div
-        className="min-h-screen flex items-center justify-center"
-        style={bgStyle}
-      >
-        <div
-          className="rounded-2xl p-10 text-center max-w-sm w-full mx-4"
-          style={cardStyle}
-          data-ocid="admin.panel"
-        >
-          <h1 className="text-xl font-bold text-white mb-3">Access Denied</h1>
-          <p className="text-sm mb-6" style={{ color: "oklch(0.65 0.03 258)" }}>
-            Your account does not have admin privileges. Please log in with the
-            admin account.
-          </p>
-          <Button
-            onClick={handleLogout}
-            variant="outline"
-            data-ocid="admin.secondary_button"
-            className="w-full"
-          >
-            <LogOut className="mr-2 h-4 w-4" /> Logout
+            Login to Dashboard
           </Button>
         </div>
       </div>
@@ -426,13 +301,14 @@ export default function Admin() {
         ) : (
           <Tabs defaultValue="vendors" data-ocid="admin.panel">
             <TabsList
-              className="mb-6"
+              className="mb-6 flex-wrap h-auto gap-1"
               style={{ backgroundColor: "oklch(0.18 0.04 258)" }}
             >
               <TabsTrigger
                 value="vendors"
                 data-ocid="admin.tab"
-                className="gap-2"
+                className={triggerClass}
+                style={triggerStyle}
               >
                 Vendor Applications
                 <Badge
@@ -453,7 +329,8 @@ export default function Admin() {
               <TabsTrigger
                 value="partners"
                 data-ocid="admin.tab"
-                className="gap-2"
+                className={triggerClass}
+                style={triggerStyle}
               >
                 Partner Applications
                 <Badge
@@ -474,7 +351,8 @@ export default function Admin() {
               <TabsTrigger
                 value="requirements"
                 data-ocid="admin.tab"
-                className="gap-2"
+                className={triggerClass}
+                style={triggerStyle}
               >
                 Requirement Details
                 <Badge
@@ -495,9 +373,10 @@ export default function Admin() {
               <TabsTrigger
                 value="messages"
                 data-ocid="admin.tab"
-                className="gap-2"
+                className={triggerClass}
+                style={triggerStyle}
               >
-                Messages
+                Contact Messages
                 <Badge
                   className="ml-1 text-white"
                   style={{ backgroundColor: "oklch(var(--electric))" }}
@@ -729,7 +608,7 @@ export default function Admin() {
 
             <TabsContent value="messages">
               {messages.length === 0 ? (
-                <EmptyState message="No messages yet." />
+                <EmptyState message="No contact messages yet." />
               ) : (
                 <div
                   className="rounded-xl overflow-hidden border"
