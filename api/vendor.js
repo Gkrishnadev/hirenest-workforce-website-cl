@@ -40,7 +40,7 @@ export default async function handler(req, res) {
 
     // ✅ 2. CALL EDGE FUNCTION (EMAIL TRIGGER)
     try {
-      await fetch("https://YOUR-SUPABASE-PROJECT.supabase.co/functions/v1/send-email", {
+      await fetch("https://hjeukduwzdginoqjjgod.supabase.co/functions/v1/send-email", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
