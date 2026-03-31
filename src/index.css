@@ -1,0 +1,144 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 🎨 DESIGN SYSTEM (OKLCH FIXED) */
+:root {
+  --navy: 0.20 0.04 260;
+  --navy-mid: 0.30 0.05 260;
+  --navy-light: 0.40 0.05 260;
+
+  --electric: 0.65 0.25 260;
+  --electric-light: 0.75 0.18 260;
+
+  --surface: 0.98 0.01 255;
+  --background: 1 0 0;
+  --foreground: 0.20 0.04 260;
+  --border: 0.85 0.02 255;
+
+  --text-muted: 0.55 0.02 255;
+
+  --radius: 0.75rem;
+}
+
+/* 🌐 Base */
+body {
+  background: oklch(var(--surface));
+  color: oklch(var(--foreground));
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* ✨ Headings */
+.font-display {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* ✨ Subtext */
+.section-subtext {
+  @apply text-sm leading-relaxed;
+  color: oklch(var(--text-muted));
+}
+
+/* ✨ Buttons */
+.btn-primary {
+  @apply text-white font-semibold py-3 px-6 rounded-md;
+  background: oklch(var(--electric));
+}
+
+/* ✨ Inputs */
+input, textarea, select {
+  @apply rounded-md px-3 py-2 text-sm outline-none;
+  background: oklch(var(--surface));
+  border: 1px solid oklch(var(--border));
+  color: oklch(var(--foreground));
+}
+/* 🔥 PREMIUM FORM UI */
+
+.form-card {
+  background: oklch(var(--surface));
+  border: 1px solid oklch(var(--border));
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+/* Labels */
+.form-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: block;
+  color: oklch(var(--foreground));
+}
+
+/* Inputs */
+.form-input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid oklch(var(--border));
+  background: oklch(var(--surface));
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+/* Focus effect (premium glow) */
+.form-input:focus {
+  border-color: oklch(var(--electric));
+  box-shadow: 0 0 0 3px oklch(var(--electric) / 0.15);
+}
+
+/* Placeholder */
+.form-input::placeholder {
+  color: oklch(var(--text-muted));
+}
+
+/* Button upgrade */
+.btn-primary {
+  background: linear-gradient(
+    135deg,
+    oklch(var(--electric)) 0%,
+    oklch(var(--electric-light)) 100%
+  );
+  box-shadow: 0 6px 20px oklch(var(--electric) / 0.25);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 25px oklch(var(--electric) / 0.35);
+}
+/* 📱 MOBILE SIDEBAR FIX */
+.mobile-sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 80%;
+  height: 100vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  background: oklch(var(--surface));
+  z-index: 1000;
+  transition: transform 0.3s ease;
+}
+
+/* Hidden state */
+.mobile-sidebar.closed {
+  transform: translateX(100%);
+}
+
+/* Open state */
+.mobile-sidebar.open {
+  transform: translateX(0);
+}
+
+/* Overlay background */
+.mobile-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 999;
+}
+/* Fix scroll position when clicking menu */
+section {
+  scroll-margin-top: 80px;
+}
