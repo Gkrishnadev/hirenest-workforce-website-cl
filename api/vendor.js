@@ -40,24 +40,24 @@ export default async function handler(req, res) {
 
     // ✅ 2. CALL EDGE FUNCTION (EMAIL TRIGGER)
     try {
-      await fetch("https://hjeukduwzdginoqjjgod.supabase.co/functions/v1/send-email", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-api-key": "hirenest-secure-key-2026", // same as your edge function
-        },
-        body: JSON.stringify({
-          type: "Vendor Submission",
-          data: {
-            name,
-            email,
-            phone,
-            role: "Vendor",
-            resumeUrl: "N/A",
-            message: `Company: ${company}, Tech: ${technologies}`,
-          },
-        }),
-      });
+     await fetch("https://hjeukduwzdginoqjjgod.supabase.co/functions/v1/send-email", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "x-api-key": "hirenest-secure-key-2026",
+  },
+  body: JSON.stringify({
+    type: "Vendor Submission",
+    data: {
+      name,
+      email,
+      phone,
+      role: "Vendor",
+      resumeUrl: "N/A",
+      message: `Company: ${company}, Tech: ${technologies}`,
+    },
+  }),
+});
     } catch (err) {
       console.error("Email trigger failed:", err);
     }
