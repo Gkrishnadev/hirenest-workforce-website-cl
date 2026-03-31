@@ -22,7 +22,7 @@ export default function Apply() {
     let resumeUrl = "";
 
     // =====================================================
-    // ✅ 1. UPLOAD RESUME TO SUPABASE (FIXED)
+    // ✅ 1. UPLOAD RESUME TO SUPABASE (UNCHANGED)
     // =====================================================
     if (resume) {
       const fileName = `${Date.now()}-${resume.name}`;
@@ -32,13 +32,12 @@ export default function Apply() {
         .upload(fileName, resume);
 
       if (uploadError) {
-        console.error(uploadError); // ✅ FIXED
+        console.error(uploadError);
         alert("Resume upload failed ❌");
         setLoading(false);
         return;
       }
 
-      // ✅ GET PUBLIC URL
       const { data } = await supabase.storage
         .from("Resumes")
         .getPublicUrl(fileName);
@@ -47,7 +46,7 @@ export default function Apply() {
     }
 
     // =====================================================
-    // ✅ 2. SAVE TO DATABASE
+    // ✅ 2. SAVE TO DATABASE (UNCHANGED)
     // =====================================================
     const { error: dbError } = await supabase
       .from("job_applications")
@@ -69,7 +68,7 @@ export default function Apply() {
     }
 
     // =====================================================
-    // ✅ 3. SEND EMAIL
+    // ✅ 3. SEND EMAIL (UPDATED - INTERNAL + CANDIDATE)
     // =====================================================
     try {
       await fetch(
@@ -91,11 +90,34 @@ export default function Apply() {
           }),
         }
       );
+
+      // ✅ NEW: Candidate Professional Email Trigger
+      await fetch(
+        "https://hjeukduwzdginoqjjgod.supabase.co/functions/v1/send-email",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            type: "Candidate Confirmation",
+            data: {
+              name: form.name,
+              email: form.email,
+              role: role,
+            },
+          }),
+        }
+      );
+
     } catch (err) {
       console.error("Email error:", err);
     }
 
-    alert("Application submitted 🚀");
+    // =====================================================
+    // ✅ 4. SUCCESS UX (IMPROVED)
+    // =====================================================
+    alert("Application submitted 🚀 Check your email for next steps");
 
     setForm({ name: "", email: "", phone: "" });
     setResume(null);
@@ -167,7 +189,7 @@ export default function Apply() {
 
         <button
           type="submit"
-          className="w-full py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+          className="w-full py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition shadow-lg"
           disabled={loading}
         >
           {loading ? "Submitting..." : "Apply Now"}
