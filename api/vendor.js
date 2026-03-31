@@ -40,13 +40,13 @@ export default async function handler(req, res) {
 
     // ✅ 2. CALL EDGE FUNCTION (EMAIL TRIGGER)
     try {
-     await fetch("https://hjeukduwzdginoqjjgod.supabase.co/functions/v1/send-email", {
+     await fetch("/api/vendor", {
   method: "POST",
   headers: {
     "Content-Type": "application/json",
-    "x-api-key": "hirenest-secure-key-2026",
   },
-  body: JSON.stringify({
+  body: JSON.stringify(formData),
+       ({
     type: "Vendor Submission",
     data: {
       name,
