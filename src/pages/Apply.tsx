@@ -71,25 +71,27 @@ export default function Apply() {
     // ✅ 3. SEND EMAIL (UPDATED - INTERNAL + CANDIDATE)
     // =====================================================
     try {
-      await fetch(
-        "https://hjeukduwzdginoqjjgod.supabase.co/functions/v1/send-email",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            type: "Job Application",
-            data: {
-              name: form.name,
-              email: form.email,
-              phone: form.phone,
-              role: role,
-              resumeUrl: resumeUrl,
-            },
-          }),
-        }
-      );
+     await fetch(
+  "https://hjeukduwzdginoqjjgod.supabase.co/functions/v1/send-email",
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-api-key": "hirenest-secure-key-2026", // 🔥 ADD THIS
+    },
+    body: JSON.stringify({
+      type: "Job Application",
+      data: {
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        role: role,
+        resumeUrl: resumeUrl,
+        whyFit: whyFit,
+      },
+    }),
+  }
+);
 
       // ✅ NEW: Candidate Professional Email Trigger
       await fetch(
