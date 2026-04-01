@@ -1,5 +1,6 @@
 import SEO from "../components/SEO";
 import { Link } from "@tanstack/react-router";
+import { useState } from "react";
 import {
   ArrowRight,
   Brain,
@@ -17,199 +18,166 @@ import {
   Zap,
 } from "lucide-react";
 
-/* ================= DATA ================= */
-
-const services = [
-  {
-    icon: Code2,
-    title: "IT Staffing",
-    desc: "HireNest provides highly skilled software engineers and developers for business needs.",
-  },
-  {
-    icon: Brain,
-    title: "AI & Data Talent",
-    desc: "Connect with experts in AI, ML, and Data Engineering.",
-  },
-  {
-    icon: FileText,
-    title: "Contract Staffing",
-    desc: "Scale teams quickly with flexible workforce solutions.",
-  },
-  {
-    icon: Users,
-    title: "Permanent Hiring",
-    desc: "Hire long-term employees aligned with your business goals.",
-  },
-];
-
-const steps = [
-  {
-    n: "01",
-    title: "Join the Network",
-    desc: "Register as a client, vendor, or recruiter.",
-  },
-  {
-    n: "02",
-    title: "Share Requirements",
-    desc: "Post requirements or showcase talent.",
-  },
-  {
-    n: "03",
-    title: "Collaborate & Close",
-    desc: "Work together and close positions faster.",
-  },
-];
-
-const stats = [
-  { number: "120+", label: "Vendors" },
-  { number: "500+", label: "Consultants" },
-  { number: "40+", label: "Requirements" },
-];
-
-/* ================= COMPONENT ================= */
-
 export default function Home() {
+  const [showEarlyAccess, setShowEarlyAccess] = useState(false);
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    company: "",
+    code: "",
+  });
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+
+    // 🔐 Keep your existing logic here (API / Supabase etc)
+    console.log("Early Access Request:", form);
+
+    alert("Request submitted. We will contact you soon.");
+    setShowEarlyAccess(false);
+  };
+
   return (
     <div>
-
       <SEO
-        title="HireNest Workforce | Hire Faster"
-        description="HireNest OS connects clients, vendors, and recruiters into one hiring system."
+        title="HireNest Workforce | Hire Faster with HireNest OS"
+        description="HireNest Workforce is a structured hiring platform powered by HireNest OS connecting clients, vendors, and recruiters."
         path="/"
       />
 
       <div className="pt-[72px]">
 
-        {/* HERO */}
-        <section className="py-28 text-center bg-black text-white">
-          <h1 className="text-5xl font-bold mb-6">
-            HireNest Workforce
-          </h1>
-          <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-            A Workforce Operating System built to simplify hiring through structured collaboration.
-          </p>
+        {/* 🔥 PREMIUM HERO */}
+        <section className="relative overflow-hidden bg-[#0B0F1A] text-white">
+          <div className="max-w-7xl mx-auto px-6 py-28">
 
-          <div className="mt-8 flex justify-center gap-4">
-            <Link to="/vendors">
-              <button className="bg-blue-600 px-6 py-3 rounded">
-                Join as Vendor
-              </button>
-            </Link>
+            <p className="text-sm text-cyan-400 mb-4">
+              Workforce Operating System
+            </p>
 
-            <Link to="/submit-requirement">
-              <button className="border px-6 py-3 rounded">
-                Post Requirement
+            <h1 className="text-5xl font-bold leading-tight mb-6">
+              Hire Faster with <span className="text-cyan-400">HireNest OS</span>
+            </h1>
+
+            <p className="text-lg text-gray-300 max-w-xl mb-8">
+              HireNest Workforce is not just a staffing company.  
+              It is a <b>Workforce Operating System</b> that connects clients,
+              vendors, and recruiters into one structured hiring pipeline.
+            </p>
+
+            <div className="flex gap-4 flex-wrap">
+              <Link to="/vendors">
+                <button className="bg-cyan-500 px-6 py-3 rounded-lg font-semibold">
+                  Join as Vendor
+                </button>
+              </Link>
+
+              <button
+                onClick={() => setShowEarlyAccess(true)}
+                className="border border-white/30 px-6 py-3 rounded-lg"
+              >
+                Get Early Access 🚀
               </button>
-            </Link>
+            </div>
+
           </div>
         </section>
 
-        {/* WHAT IS HIRENEST */}
-        <section className="py-20 bg-white text-center">
-          <h2 className="text-4xl font-bold mb-6">
+        {/* 🔥 WHAT IS HIRENEST */}
+        <section className="py-20 text-center">
+          <h2 className="text-3xl font-bold mb-4">
             What is HireNest Workforce?
           </h2>
 
           <p className="max-w-3xl mx-auto text-gray-600">
-            HireNest Workforce is not just a staffing platform — it is a structured workforce operating system.
-            It connects clients, vendors, and recruiters into one unified hiring pipeline powered by HireNest OS.
+            HireNest Workforce is a structured hiring ecosystem powered by
+            <b> HireNest OS</b>.  
+            It enables seamless collaboration between companies, staffing vendors,
+            and recruiters — transforming fragmented hiring into a unified pipeline.
           </p>
         </section>
 
-        {/* HOW HIRENEST OS WORKS */}
-        <section className="py-20 bg-gray-100 text-center">
-          <h2 className="text-4xl font-bold mb-10">
-            How HireNest OS Works
-          </h2>
-
+        {/* 🔥 HOW OS WORKS */}
+        <section className="py-20 bg-gray-50">
           <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
 
-            <div className="p-6 bg-white rounded shadow">
+            <div className="p-6 bg-white rounded-xl shadow">
               <h3 className="font-bold mb-2">Clients</h3>
-              <p className="text-sm text-gray-600">
-                Post requirements once and reach multiple vendors instantly.
-              </p>
+              <p>Post requirements once and reach multiple vendors instantly.</p>
             </div>
 
-            <div className="p-6 bg-white rounded shadow">
+            <div className="p-6 bg-white rounded-xl shadow">
               <h3 className="font-bold mb-2">Vendors</h3>
-              <p className="text-sm text-gray-600">
-                Get real-time requirements and submit candidates faster.
-              </p>
+              <p>Get real-time requirements and submit candidates faster.</p>
             </div>
 
-            <div className="p-6 bg-white rounded shadow">
+            <div className="p-6 bg-white rounded-xl shadow">
               <h3 className="font-bold mb-2">Recruiters</h3>
-              <p className="text-sm text-gray-600">
-                Track pipeline and improve closures efficiently.
-              </p>
+              <p>Track pipeline and improve closures efficiently.</p>
             </div>
 
           </div>
         </section>
 
-        {/* STATS */}
-        <section className="py-16 text-center bg-white">
-          <div className="grid grid-cols-3 gap-6 max-w-3xl mx-auto">
-            {stats.map((s) => (
-              <div key={s.label}>
-                <h3 className="text-3xl font-bold">{s.number}</h3>
-                <p className="text-gray-500">{s.label}</p>
-              </div>
-            ))}
+        {/* 🔥 EARLY ACCESS MODAL */}
+        {showEarlyAccess && (
+          <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+            <div className="bg-white p-8 rounded-xl w-full max-w-md">
+
+              <h2 className="text-xl font-bold mb-4">
+                Get Early Access to HireNest OS 🚀
+              </h2>
+
+              <form onSubmit={handleSubmit} className="space-y-4">
+
+                <input
+                  placeholder="Name"
+                  className="w-full border p-3 rounded"
+                  onChange={(e) =>
+                    setForm({ ...form, name: e.target.value })
+                  }
+                />
+
+                <input
+                  placeholder="Email"
+                  className="w-full border p-3 rounded"
+                  onChange={(e) =>
+                    setForm({ ...form, email: e.target.value })
+                  }
+                />
+
+                <input
+                  placeholder="Company"
+                  className="w-full border p-3 rounded"
+                  onChange={(e) =>
+                    setForm({ ...form, company: e.target.value })
+                  }
+                />
+
+                <input
+                  placeholder="Early Access Code"
+                  className="w-full border p-3 rounded"
+                  onChange={(e) =>
+                    setForm({ ...form, code: e.target.value })
+                  }
+                />
+
+                <button className="w-full bg-cyan-500 text-white py-3 rounded">
+                  Request Access
+                </button>
+
+              </form>
+
+              <button
+                className="mt-4 text-sm text-gray-500"
+                onClick={() => setShowEarlyAccess(false)}
+              >
+                Close
+              </button>
+
+            </div>
           </div>
-        </section>
-
-        {/* SERVICES */}
-        <section className="py-20 bg-gray-50 text-center">
-          <h2 className="text-4xl font-bold mb-10">Services</h2>
-
-          <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-            {services.map((s) => (
-              <div key={s.title} className="p-6 bg-white rounded shadow">
-                <s.icon className="mx-auto mb-4" />
-                <h3 className="font-bold">{s.title}</h3>
-                <p className="text-sm text-gray-600">{s.desc}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* HOW IT WORKS */}
-        <section className="py-20 bg-white text-center">
-          <h2 className="text-4xl font-bold mb-10">Process</h2>
-
-          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {steps.map((s) => (
-              <div key={s.n}>
-                <h3 className="text-xl font-bold">{s.n}</h3>
-                <p>{s.title}</p>
-                <p className="text-sm text-gray-500">{s.desc}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* 🚀 EARLY ACCESS CTA */}
-        <section className="py-24 text-center bg-black text-white">
-          <h2 className="text-4xl font-bold mb-6">
-            Get Early Access to HireNest OS 🚀
-          </h2>
-
-          <p className="mb-8 text-gray-300">
-            Experience structured hiring before public launch.
-          </p>
-
-          <Link to="/early-access">
-            <button className="bg-white text-black px-8 py-4 rounded font-semibold">
-              Request Early Access
-            </button>
-          </Link>
-
-          <p className="text-xs mt-4 text-gray-400">
-            Limited access • Priority onboarding
-          </p>
-        </section>
+        )}
 
       </div>
     </div>
