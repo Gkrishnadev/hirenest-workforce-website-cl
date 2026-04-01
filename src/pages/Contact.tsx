@@ -46,18 +46,23 @@ ${form.message}
     } else {
       try {
         await fetch(
-          "https://hjeukduwzdginoqjjgod.supabase.co/functions/v1/send-email",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              type: "Contact Form",
-              data: form,
-            }),
-          }
-        );
+  "https://hjeukduwzdginoqjjgod.supabase.co/functions/v1/send-email",
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-api-key": "hirenest-secure-key-2026", // 🔥 FIX
+    },
+    body: JSON.stringify({
+      type: "Contact Form",
+      data: {
+        name,
+        email,
+        message,
+      },
+    }),
+  }
+);
       } catch (err) {
         console.error("Email failed:", err);
       }
