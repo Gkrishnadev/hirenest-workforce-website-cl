@@ -1,7 +1,8 @@
 import { useSearch } from "@tanstack/react-router";
 import { useState } from "react";
 import { supabase } from "../lib/supabase";
-import { sendEmail} from "../lib/api";
+import { sendEmail } from "../lib/api";
+
 export default function Apply() {
   const { role } = useSearch({ from: "/apply" });
 
@@ -21,73 +22,77 @@ export default function Apply() {
 
     let resumeUrl = "";
 
-    // =====================================================
-    // ✅ 1. UPLOAD RESUME TO SUPABASE (UNCHANGED)
-    // =====================================================
-    if (resume) {
-      const fileName = `${Date.now()}-${resume.name}`;
+    try {
+      // =====================================================
+      // ✅ 1. UPLOAD RESUME
+      // =====================================================
+      if (resume) {
+        const fileName = `${Date.now()}-${resume.name}`;
 
-      const { error: uploadError } = await supabase.storage
-        .from("Resumes")
-        .upload(fileName, resume);
+        const { error: uploadError } = await supabase.storage
+          .from("Resumes")
+          .upload(fileName, resume);
 
-      if (uploadError) {
-        console.error(uploadError);
-        alert("Resume upload failed ❌");
+        if (uploadError) {
+          console.error(uploadError);
+          alert("Resume upload failed ❌");
+          setLoading(false);
+          return;
+        }
+
+        const { data } = supabase.storage
+          .from("Resumes")
+          .getPublicUrl(fileName);
+
+        resumeUrl = data.publicUrl;
+      }
+
+      // =====================================================
+      // ✅ 2. SAVE TO DB
+      // =====================================================
+      const { error: dbError } = await supabase
+        .from("job_applications")
+        .insert([
+          {
+            name: form.name,
+            email: form.email,
+            phone: form.phone,
+            role: role,
+            resume_url: resumeUrl,
+          },
+        ]);
+
+      if (dbError) {
+        console.error(dbError);
+        alert("Error saving application ❌");
         setLoading(false);
         return;
       }
 
-      const { data } = await supabase.storage
-        .from("Resumes")
-        .getPublicUrl(fileName);
-
-      resumeUrl = data.publicUrl;
-    }
-
-    // =====================================================
-    // ✅ 2. SAVE TO DATABASE (UNCHANGED)
-    // =====================================================
-    const { error: dbError } = await supabase
-      .from("job_applications")
-      .insert([
-        {
+      // =====================================================
+      // ✅ 3. SEND EMAIL (FIXED)
+      // =====================================================
+      const res = await sendEmail({
+        type: "Job Application",
+        data: {
           name: form.name,
           email: form.email,
           phone: form.phone,
           role: role,
-          resume_url: resumeUrl,
+          resumeUrl: resumeUrl,
+          whyFit: "", // ✅ SAFE FIX (removed undefined error)
         },
-      ]);
+      });
 
-    if (dbError) {
-      console.error(dbError);
-      alert("Error saving application ❌");
-      setLoading(false);
-      return;
-    }
+      if (!res.ok) {
+        alert("Email failed ❌");
+        setLoading(false);
+        return;
+      }
 
-    // =====================================================
-    // ✅ 3. SEND EMAIL (UPDATED - INTERNAL + CANDIDATE)
-    // =====================================================
-const res = await sendEmail({
-  type: "Job Application",
-  data: {
-    name: form.name,
-    email: form.email,
-    phone: form.phone,
-    role: role,
-    resumeUrl: resumeUrl,
-    whyFit: whyFit,
-  },
-});
-
-if (!res.ok) {
-  alert("Email failed ❌");
-  return;
-}
-
-      // ✅ NEW: Candidate Professional Email Trigger
+      // =====================================================
+      // ✅ 4. CANDIDATE CONFIRMATION EMAIL
+      // =====================================================
       await fetch(
         "https://hjeukduwzdginoqjjgod.supabase.co/functions/v1/send-email",
         {
@@ -106,18 +111,20 @@ if (!res.ok) {
         }
       );
 
+      // =====================================================
+      // ✅ 5. SUCCESS
+      // =====================================================
+      alert("Application submitted 🚀 Check your email");
+
+      setForm({ name: "", email: "", phone: "" });
+      setResume(null);
+      setFileName("");
+
     } catch (err) {
-      console.error("Email error:", err);
+      console.error("Submission error:", err);
+      alert("Something went wrong ❌");
     }
 
-    // =====================================================
-    // ✅ 4. SUCCESS UX (IMPROVED)
-    // =====================================================
-    alert("Application submitted 🚀 Check your email for next steps");
-
-    setForm({ name: "", email: "", phone: "" });
-    setResume(null);
-    setFileName("");
     setLoading(false);
   };
 
@@ -161,7 +168,7 @@ if (!res.ok) {
           required
         />
 
-        {/* ✅ FILE INPUT */}
+        {/* FILE INPUT */}
         <div className="border p-3 rounded-md">
           <input
             type="file"
