@@ -4,6 +4,8 @@ import { Link } from "@tanstack/react-router";
 import SEO from "../components/SEO";
 
 export default function Careers() {
+  const [showInstructions,setShowInstructions]=useSrate(false);
+  const [showInstructions,setShowInstructions]=useSrate("");
   const [jobs, setJobs] = useState<any[]>([]);
 
   useEffect(() => {
@@ -85,14 +87,15 @@ export default function Careers() {
                 <div className="flex flex-wrap items-center gap-4">
 
                   {/* APPLY BUTTON */}
-                  <Link
-                    to="/apply"
-                    search={{ role: job.title }}
-                  >
-                    <button className="px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-lg font-semibold shadow-lg hover:scale-105 transition">
-                      Apply Now
-                    </button>
-                  </Link>
+                 <button
+  onClick={() => {
+    setSelectedRole(job.title);
+    setShowInstruction(true);
+  }}
+  className="px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-lg font-semibold shadow-lg hover:scale-105 transition"
+>
+  Apply Now
+</button>
 
                   {/* ✅ LINKEDIN SHARE */}
                   <a
@@ -120,6 +123,75 @@ ${jobUrl}`
                   >
                     WhatsApp
                   </a>
+{showInstruction && (
+  <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center px-4">
+    <div className="bg-white rounded-xl max-w-lg w-full p-6">
+
+      <h2 className="text-xl font-bold mb-3">
+        🚨 Before You Apply — Read This Carefully
+      </h2>
+
+      <p className="text-sm text-gray-600 mb-4">
+        This is a high ownership role at HireNest. We shortlist only serious candidates.
+      </p>
+
+      <div className="space-y-3 text-sm">
+
+        <div>
+          <b>🎯 Role Expectation:</b>
+          <ul className="list-disc ml-5 mt-1 text-gray-600">
+            <li>Work directly with founders</li>
+            <li>Own outcomes, not just tasks</li>
+            <li>High accountability role</li>
+          </ul>
+        </div>
+
+        <div>
+          <b>⚠️ CV Requirements:</b>
+          <ul className="list-disc ml-5 mt-1 text-gray-600">
+            <li>Only relevant experience</li>
+            <li>No fake / inflated roles</li>
+            <li>Clear proof of work</li>
+          </ul>
+        </div>
+
+        <div>
+          <b>❌ Auto Rejection If:</b>
+          <ul className="list-disc ml-5 mt-1 text-red-500">
+            <li>Generic resume</li>
+            <li>Unrelated skills</li>
+            <li>No clarity on role fit</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <p className="text-xs text-gray-400 mt-3">
+        ⚡ Less than 20% applicants pass this stage
+      </p>
+
+      <div className="mt-6 flex gap-3">
+
+        <button
+          onClick={() => setShowInstruction(false)}
+          className="w-full border rounded-lg py-2"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={() => {
+            setShowInstruction(false);
+
+            // 🔥 REDIRECT AFTER ACCEPT
+            window.location.href = /apply?role=${encodeURIComponent(selectedRole)};
+          }}
+          className="w-full bg-blue-600 text-white rounded-lg py-2"
+        >
+          I Understand — Continue
+        </button>
+
+      </div>
 
                 </div>
               </div>
