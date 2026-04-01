@@ -1,7 +1,7 @@
 import { useSearch } from "@tanstack/react-router";
 import { useState } from "react";
 import { supabase } from "../lib/supabase";
-
+import { sendEmail} from "../lib/api";
 export default function Apply() {
   const { role } = useSearch({ from: "/apply" });
 
@@ -70,28 +70,22 @@ export default function Apply() {
     // =====================================================
     // ✅ 3. SEND EMAIL (UPDATED - INTERNAL + CANDIDATE)
     // =====================================================
-    try {
-     await fetch(
-  "https://hjeukduwzdginoqjjgod.supabase.co/functions/v1/send-email",
-  {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": "hirenest-secure-key-2026", // 🔥 ADD THIS
-    },
-    body: JSON.stringify({
-      type: "Job Application",
-      data: {
-        name: form.name,
-        email: form.email,
-        phone: form.phone,
-        role: role,
-        resumeUrl: resumeUrl,
-        whyFit: whyFit,
-      },
-    }),
-  }
-);
+const res = await sendEmail({
+  type: "Job Application",
+  data: {
+    name: form.name,
+    email: form.email,
+    phone: form.phone,
+    role: role,
+    resumeUrl: resumeUrl,
+    whyFit: whyFit,
+  },
+});
+
+if (!res.ok) {
+  alert("Email failed ❌");
+  return;
+}
 
       // ✅ NEW: Candidate Professional Email Trigger
       await fetch(
