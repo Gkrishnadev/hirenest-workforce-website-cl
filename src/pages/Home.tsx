@@ -1,5 +1,4 @@
 import SEO from "../components/SEO";
-import { Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabase";
 import {
@@ -24,7 +23,6 @@ import {
   Globe,
   Network,
   TrendingUp,
-  Shield,
   Star,
   Quote,
   Target,
@@ -36,152 +34,13 @@ import {
   Loader2,
   AlertCircle,
   User,
-  Briefcase,
 } from "lucide-react";
-
-const services = [
-  {
-    icon: Code2,
-    title: "IT Staffing",
-    desc: "Highly skilled software engineers, developers, and technical specialists for short-term and long-term needs.",
-    color: "from-cyan-500 to-blue-600",
-  },
-  {
-    icon: Brain,
-    title: "AI & Data Talent",
-    desc: "Connect with professionals specializing in Artificial Intelligence, Machine Learning, and Data Engineering.",
-    color: "from-purple-500 to-pink-600",
-  },
-  {
-    icon: FileText,
-    title: "Contract Staffing",
-    desc: "Flexible workforce solutions that allow businesses to scale teams quickly without long-term commitments.",
-    color: "from-orange-500 to-red-600",
-  },
-  {
-    icon: Users,
-    title: "Permanent Hiring",
-    desc: "Find long-term employees who match both technical and cultural requirements perfectly.",
-    color: "from-green-500 to-emerald-600",
-  },
-];
-
-const steps = [
-  {
-    n: "01",
-    title: "Join the Network",
-    desc: "Register as a staffing vendor, consultant, or client on the HireNest collaboration platform.",
-  },
-  {
-    n: "02",
-    title: "Share & Connect",
-    desc: "Post your open IT requirements or showcase your bench consultants to the partner network.",
-  },
-  {
-    n: "03",
-    title: "Collaborate & Grow",
-    desc: "Connect with verified staffing vendors to accelerate placements and grow together.",
-  },
-];
-
-const osFeatures = [
-  {
-    icon: Cpu,
-    title: "AI-Powered Matching",
-    desc: "Smart algorithms that match requirements to candidates with 95% accuracy",
-    stat: "95%",
-    statLabel: "Match Rate",
-  },
-  {
-    icon: Layers,
-    title: "Unified Pipeline",
-    desc: "Single dashboard for clients, vendors, and recruiters to collaborate seamlessly",
-    stat: "3x",
-    statLabel: "Faster Hiring",
-  },
-  {
-    icon: Workflow,
-    title: "Automated Workflows",
-    desc: "From requirement posting to candidate onboarding, fully automated",
-    stat: "60%",
-    statLabel: "Time Saved",
-  },
-  {
-    icon: BarChart3,
-    title: "Real-time Analytics",
-    desc: "Track hiring metrics, vendor performance, and market trends live",
-    stat: "24/7",
-    statLabel: "Live Data",
-  },
-];
-
-const whyCards = [
-  {
-    icon: Zap,
-    title: "AI-Powered Matching",
-    desc: "Our AI engine matches requirements to the best candidates with precision.",
-  },
-  {
-    icon: Network,
-    title: "Curated Vendor Ecosystem",
-    desc: "A hand-picked network of top staffing partners across every domain.",
-  },
-  {
-    icon: TrendingUp,
-    title: "Faster Hiring",
-    desc: "Cut your time-to-hire by up to 60% with our streamlined workflow.",
-  },
-  {
-    icon: Globe,
-    title: "Global Talent Access",
-    desc: "Access world-class talent from every corner of the globe, on-demand.",
-  },
-];
-
-const testimonials = [
-  {
-    quote: "HireNest delivered a senior ML engineer within 10 days. Absolutely phenomenal speed and quality.",
-    name: "Sarah Chen",
-    title: "VP of Engineering",
-    company: "Arcline AI",
-    image: "SC",
-    color: "bg-gradient-to-br from-purple-500 to-pink-600",
-  },
-  {
-    quote: "Their vendor network gave us access to talent we couldn't find anywhere else. Game-changer for our fintech build-out.",
-    name: "Marcus O'Brien",
-    title: "CTO",
-    company: "NovaPay Financial",
-    image: "MO",
-    color: "bg-gradient-to-br from-blue-500 to-cyan-600",
-  },
-  {
-    quote: "The whole process was seamless. We hired 3 contract developers in under 2 weeks.",
-    name: "Priya Nair",
-    title: "Head of Talent",
-    company: "MedCore Health",
-    image: "PN",
-    color: "bg-gradient-to-br from-green-500 to-emerald-600",
-  },
-];
-
-const stats = [
-  { number: "120+", label: "Staffing Vendors", suffix: "" },
-  { number: "500+", label: "Bench Consultants", suffix: "" },
-  { number: "40+", label: "Active Requirements", suffix: "" },
-  { number: "95%", label: "Match Accuracy", suffix: "" },
-];
 
 export default function Home() {
   const [showEarlyAccess, setShowEarlyAccess] = useState(false);
-  const [showVendorSignup, setShowVendorSignup] = useState(false);
-  const [showClientSignup, setShowClientSignup] = useState(false);
-  const [activeTab, setActiveTab] = useState("clients");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
-  const [scrolled, setScrolled] = useState(false);
 
-  // Lead capture forms state
   const [earlyAccessForm, setEarlyAccessForm] = useState({
     name: "",
     email: "",
@@ -191,1495 +50,162 @@ export default function Home() {
     code: "",
   });
 
-  const [vendorForm, setVendorForm] = useState({
-    company_name: "",
-    contact_name: "",
-    email: "",
-    phone: "",
-    website: "",
-    specialization: "",
-    team_size: "",
-  });
-
-  const [clientForm, setClientForm] = useState({
-    company_name: "",
-    contact_name: "",
-    email: "",
-    phone: "",
-    industry: "",
-    hiring_needs: "",
-    company_size: "",
-  });
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  // Supabase lead capture functions
   const captureEarlyAccessLead = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setSubmitStatus("idle");
 
     try {
-      const { data, error } = await supabase
-        .from("early_access_leads")
-        .insert([
-          {
-           ...earlyAccessForm,
-            source: "homepage_early_access_modal",
-            utm_source: new URLSearchParams(window.location.search).get("utm_source") || "organic",
-            created_at: new Date().toISOString(),
-            status: "new",
-          },
-        ])
-        .select();
+      const { error } = await supabase.from("early_access_leads").insert([
+        {
+          ...earlyAccessForm,
+          created_at: new Date().toISOString(),
+        },
+      ]);
 
       if (error) throw error;
-
-      // Also trigger email notification via edge function
-      await supabase.functions.invoke("notify-new-lead", {
-        body: { type: "early_access", data: earlyAccessForm },
-      });
 
       setSubmitStatus("success");
       setTimeout(() => {
         setShowEarlyAccess(false);
-        setEarlyAccessForm({ name: "", email: "", company: "", phone: "", role: "", code: "" });
         setSubmitStatus("idle");
       }, 2000);
-    } catch (error) {
-      console.error("Lead capture error:", error);
+    } catch (err) {
       setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
     }
-  };
-
-  const captureVendorLead = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setSubmitStatus("idle");
-
-    try {
-      const { data, error } = await supabase
-        .from("vendor_leads")
-        .insert([
-          {
-           ...vendorForm,
-            source: "homepage_vendor_signup",
-            utm_source: new URLSearchParams(window.location.search).get("utm_source") || "organic",
-            created_at: new Date().toISOString(),
-            status: "pending_verification",
-            lead_score: calculateLeadScore(vendorForm),
-          },
-        ])
-        .select();
-
-      if (error) throw error;
-
-      await supabase.functions.invoke("notify-new-lead", {
-        body: { type: "vendor", data: vendorForm },
-      });
-
-      setSubmitStatus("success");
-      setTimeout(() => {
-        setShowVendorSignup(false);
-        setVendorForm({
-          company_name: "",
-          contact_name: "",
-          email: "",
-          phone: "",
-          website: "",
-          specialization: "",
-          team_size: "",
-        });
-        setSubmitStatus("idle");
-      }, 2000);
-    } catch (error) {
-      console.error("Vendor lead capture error:", error);
-      setSubmitStatus("error");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const captureClientLead = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setSubmitStatus("idle");
-
-    try {
-      const { data, error } = await supabase
-        .from("client_leads")
-        .insert([
-          {
-           ...clientForm,
-            source: "homepage_client_signup",
-            utm_source: new URLSearchParams(window.location.search).get("utm_source") || "organic",
-            created_at: new Date().toISOString(),
-            status: "qualified",
-            lead_score: calculateClientLeadScore(clientForm),
-          },
-        ])
-        .select();
-
-      if (error) throw error;
-
-      await supabase.functions.invoke("notify-new-lead", {
-        body: { type: "client", data: clientForm },
-      });
-
-      setSubmitStatus("success");
-      setTimeout(() => {
-        setShowClientSignup(false);
-        setClientForm({
-          company_name: "",
-          contact_name: "",
-          email: "",
-          phone: "",
-          industry: "",
-          hiring_needs: "",
-          company_size: "",
-        });
-        setSubmitStatus("idle");
-      }, 2000);
-    } catch (error) {
-      console.error("Client lead capture error:", error);
-      setSubmitStatus("error");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  // Lead scoring functions
-  const calculateLeadScore = (form: any) => {
-    let score = 0;
-    if (form.team_size && parseInt(form.team_size) > 10) score += 20;
-    if (form.website) score += 15;
-    if (form.specialization?.includes("AI") || form.specialization?.includes("Data")) score += 25;
-    if (form.email?.includes("gmail") || form.email?.includes("yahoo")) score -= 10;
-    return Math.min(100, score + 50); // Base 50 points
-  };
-
-  const calculateClientLeadScore = (form: any) => {
-    let score = 0;
-    if (form.company_size && parseInt(form.company_size) > 100) score += 30;
-    if (form.hiring_needs && parseInt(form.hiring_needs) > 5) score += 25;
-    if (form.industry?.includes("Technology") || form.industry?.includes("Finance")) score += 20;
-    if (form.email?.includes("gmail") || form.email?.includes("yahoo")) score -= 10;
-    return Math.min(100, score + 50);
   };
 
   return (
-    <div className="min-h-screen bg-[#0B0F1A] font-sans selection:bg-cyan-500/30">
-      <SEO
-        title="HireNest Workforce | Hire Faster with HireNest OS"
-        description="HireNest Workforce is a structured hiring platform powered by HireNest OS connecting clients, vendors, and recruiters."
-        path="/"
-      />
+    <div className="min-h-screen bg-[#0B0F1A] text-white">
+      <SEO title="HireNest Workforce" description="Hire faster with HireNest OS" path="/" />
 
-      {/* Floating OS Badge */}
-      <div className="fixed top-24 right-6 z-40 hidden lg:block animate-bounce-slow">
+      {/* HERO */}
+      <section className="pt-32 pb-20 text-center">
+        <h1 className="text-6xl font-bold">
+          Hire Faster with{" "}
+          <span className="text-cyan-400">HireNest OS</span>
+        </h1>
+        <p className="text-gray-400 mt-6 max-w-xl mx-auto">
+          Workforce Operating System connecting clients, vendors, and recruiters in one intelligent hiring pipeline.
+        </p>
+
         <button
           onClick={() => setShowEarlyAccess(true)}
-          className="group bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-5 py-3 rounded-full shadow-2xl border border-cyan-400/30 backdrop-blur-md flex items-center gap-2 hover:shadow-cyan-500/50 transition-all hover:scale-105"
+          className="mt-8 px-8 py-4 bg-cyan-500 rounded-xl font-semibold hover:bg-cyan-600"
         >
-          <Sparkles className="w-4 h-4 animate-pulse" />
-          <span className="text-sm font-bold">OS 2.0 Early Access</span>
-          <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          Get Early Access
         </button>
-      </div>
-
-      {/* Navigation Spacer */}
-      <div className="pt-[72px]" />
-
-      {/* HERO SECTION */}
-      <section className="relative min-h-[95vh] flex items-center overflow-hidden">
-        {/* Dynamic Background */}
-        <div className="absolute inset-0 bg-[#0B0F1A]">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(6,182,212,0.15),_transparent_50%)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(59,130,246,0.1),_transparent_50%)]" />
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-cyan-500/20 rounded-full blur-[120px]" />
-        </div>
-
-        {/* Animated Grid */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-20" />
-
-        <div className="relative max-w-7xl mx-auto px-6 lg:px-8 py-20 w-full">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            
-            {/* Left Content */}
-            <div className="space-y-8 z-10">
-              {/* Status Badge */}
-              <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm hover:border-cyan-500/30 transition-colors cursor-pointer group">
-                <span className="relative flex h-2.5 w-2.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-500"></span>
-                </span>
-                <span className="text-cyan-400 text-sm font-semibold tracking-wide uppercase">
-                  Workforce Operating System
-                </span>
-                <ArrowRight className="w-4 h-4 text-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </div>
-
-              <h1 className="text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-[0.9] tracking-tight">
-                Hire{" "}
-                <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
-                  Faster
-                </span>
-                <br />
-                <span className="text-5xl lg:text-6xl xl:text-7xl text-gray-400 font-light">
-                  with HireNest
-                </span>
-                <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent"> OS</span>
-              </h1>
-
-              <p className="text-xl text-gray-400 max-w-xl leading-relaxed font-light">
-                The world's first <span className="text-cyan-400 font-semibold">Workforce Operating System</span> that unifies clients, vendors, and recruiters into one intelligent hiring pipeline powered by AI.
-              </p>
-
-              {/* Trust Badges */}
-              <div className="flex flex-wrap gap-3">
-                {[
-                  { icon: Brain, text: "AI Matching" },
-                  { icon: Workflow, text: "Real-time Pipeline" },
-                  { icon: Globe, text: "Global Network" },
-                  { icon: Clock, text: "24h Delivery" },
-                ].map((feature) => (
-                  <div key={feature.text} className="group px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 hover:border-cyan-500/30 hover:bg-white/10 transition-all duration-300 flex items-center gap-2 cursor-default">
-                    <feature.icon className="w-4 h-4 text-cyan-400 group-hover:scale-110 transition-transform" />
-                    <span className="text-gray-300 text-sm font-medium">{feature.text}</span>
-                  </div>
-                ))}
-              </div>
-
-              {/* CTA Buttons */}
-              <div className="flex flex-wrap gap-4 pt-4">
-                <button
-                  onClick={() => setShowEarlyAccess(true)}
-                  className="group relative px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl font-semibold text-white shadow-2xl shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all duration-300 hover:-translate-y-1 overflow-hidden"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
-                  <span className="relative flex items-center gap-2">
-                    <Rocket className="w-5 h-5" />
-                    Get Early Access
-                    <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                  </span>
-                </button>
-
-                <button
-                  onClick={() => setShowVendorSignup(true)}
-                  className="px-8 py-4 rounded-2xl font-semibold text-white border-2 border-white/20 hover:bg-white/10 hover:border-white/40 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 flex items-center gap-2 group"
-                >
-                  <Network className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-                  Join as Vendor
-                </button>
-              </div>
-
-              {/* Social Proof */}
-              <div className="flex items-center gap-6 pt-6 border-t border-white/10">
-                <div className="flex -space-x-3">
-                  {[1, 2, 3, 4, 5].map((i) => (
-                    <div
-                      key={i}
-                      className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 border-2 border-[#0B0F1A] flex items-center justify-center text-xs text-white font-bold shadow-lg"
-                    >
-                      {String.fromCharCode(64 + i)}
-                    </div>
-                  ))}
-                </div>
-                <div className="text-sm">
-                  <span className="text-white font-semibold">500+ companies</span>
-                  <span className="text-gray-500"> trust HireNest</span>
-                  <div className="flex items-center gap-1 mt-1">
-                    {[1, 2, 3, 4, 5].map((i) => (
-                      <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                    ))}
-                    <span className="text-gray-400 text-xs ml-1">4.9/5 rating</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Visual - OS Interface */}
-            <div className="relative hidden lg:block perspective-1000">
-              <div className="absolute -inset-8 bg-gradient-to-r from-cyan-500/30 to-blue-600/30 rounded-[3rem] blur-3xl animate-pulse" />
-              
-              <div className="relative bg-[#0f1623]/80 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl overflow-hidden transform rotate-y-12 hover:rotate-y-0 transition-transform duration-700">
-                {/* Header */}
-                <div className="flex items-center gap-3 px-6 py-4 border-b border-white/10 bg-white/5">
-                  <div className="flex gap-2">
-                    <div className="w-3 h-3 rounded-full bg-red-500/80" />
-                    <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-                    <div className="w-3 h-3 rounded-full bg-green-500/80" />
-                  </div>
-                  <div className="flex-1 text-center">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/20 border border-cyan-500/30">
-                      <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-                      <span className="text-cyan-400 text-xs font-mono">SYSTEM ONLINE</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="p-6 space-y-5">
-                  {/* Stats Grid */}
-                  <div className="grid grid-cols-3 gap-3">
-                    {[
-                      { label: "Active Jobs", val: "24", trend: "+12%", color: "cyan" },
-                      { label: "Candidates", val: "156", trend: "+8%", color: "blue" },
-                      { label: "Matches", val: "89%", trend: "+5%", color: "purple" },
-                    ].map((stat) => (
-                      <div key={stat.label} className="bg-white/5 rounded-xl p-3 border border-white/5 hover:border-cyan-500/20 transition-colors">
-                        <div className={`text-2xl font-bold text-${stat.color}-400`}>{stat.val}</div>
-                        <div className="flex items-center justify-between mt-1">
-                          <span className="text-[10px] text-gray-500 uppercase">{stat.label}</span>
-                          <span className="text-[10px] text-green-400">{stat.trend}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Live Pipeline */}
-                  <div className="space-y-3">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-xs text-gray-400 uppercase tracking-wider font-semibold">Live Pipeline</span>
-                      <span className="text-[10px] text-cyan-400 flex items-center gap-1">
-                        <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-                        REAL-TIME
-                      </span>
-                    </div>
-                    {[
-                      { stage: "Sourcing", count: 45, width: "100%", color: "from-cyan-500 to-cyan-400" },
-                      { stage: "Screening", count: 28, width: "65%", color: "from-blue-500 to-blue-400" },
-                      { stage: "Interview", count: 12, width: "35%", color: "from-purple-500 to-purple-400" },
-                      { stage: "Offer", count: 5, width: "15%", color: "from-green-500 to-green-400" },
-                    ].map((item) => (
-                      <div key={item.stage} className="flex items-center gap-3 group">
-                        <span className="text-xs text-gray-500 w-20 font-medium">{item.stage}</span>
-                        <div className="flex-1 h-2 bg-white/10 rounded-full overflow-hidden">
-                          <div className={`h-full bg-gradient-to-r ${item.color} rounded-full relative`} style={{ width: item.width }}>
-                            <div className="absolute inset-0 bg-white/20 animate-shimmer" />
-                          </div>
-                        </div>
-                        <span className="text-xs text-white w-8 text-right font-semibold">{item.count}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Recent Matches */}
-                  <div className="bg-gradient-to-br from-cyan-500/10 to-blue-600/10 rounded-xl p-4 border border-cyan-500/20">
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                      <span className="text-xs text-cyan-400 font-semibold uppercase">Just Matched</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center text-white font-bold text-sm">
-                        RS
-                      </div>
-                      <div className="flex-1">
-                        <div className="text-sm text-white font-semibold">Senior React Developer</div>
-                        <div className="text-xs text-gray-400">matched with TechCorp • 98% score</div>
-                      </div>
-                      <div className="text-green-400 text-xs font-semibold">2m ago</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Floating Elements */}
-              <div className="absolute -top-6 -right-6 bg-cyan-500 text-white p-4 rounded-2xl shadow-2xl animate-bounce-slow z-20">
-                <Zap className="w-6 h-6" />
-              </div>
-              <div className="absolute -bottom-4 -left-4 bg-purple-500 text-white p-4 rounded-2xl shadow-2xl animate-bounce-slow z-20" style={{ animationDelay: "0.5s" }}>
-                <Brain className="w-6 h-6" />
-              </div>
-            </div>
-                   </div>
-        </div> {/* ✅ ADD THIS MISSING DIV */}
-
-        {/* Bottom Gradient */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0B0F1A] to-transparent" />
       </section>
 
-      {/* STATS BAR */}
-      <section className="relative py-16 bg-white border-y border-gray-100">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
-            {stats.map((stat, idx) => (
-              <div key={stat.label} className="text-center group cursor-default">
-                <div className="relative inline-block">
-                  <span className="text-5xl lg:text-6xl font-bold bg-gradient-to-br from-[#0B0F1A] to-gray-600 bg-clip-text text-transparent group-hover:scale-110 transition-transform duration-300 inline-block">
-                    {stat.number}
-                  </span>
-                  {idx === 3 && (
-                    <span className="absolute -top-2 -right-4 text-green-500 text-sm font-bold">↑</span>
-                  )}
-                </div>
-                <div className="text-sm text-gray-500 mt-2 font-medium uppercase tracking-wider">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* OS PREVIEW SECTION */}
-      <section className="py-24 bg-[#0B0F1A] relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(6,182,212,0.08),transparent_50%)]" />
-        
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative">
-          <div className="text-center mb-20">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/30 mb-8 hover:bg-cyan-500/20 transition-colors cursor-pointer" onClick={() => setShowEarlyAccess(true)}>
-              <Lock className="w-4 h-4 text-cyan-400" />
-              <span className="text-cyan-400 text-sm font-semibold tracking-wide uppercase">Coming Q2 2026</span>
-            </div>
+      {/* EARLY ACCESS MODAL */}
+      {showEarlyAccess && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
+          <div className="bg-[#0f1623] p-8 rounded-2xl w-full max-w-lg relative">
             
-            <h2 className="text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight">
-              Introducing <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">HireNest OS</span>
-            </h2>
-            
-            <p className="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
-              The world's first operating system built specifically for workforce management. 
-              Unify your hiring pipeline, vendors, and analytics in one powerful platform.
-            </p>
-          </div>
+            <button
+              onClick={() => setShowEarlyAccess(false)}
+              className="absolute top-4 right-4"
+            >
+              <X />
+            </button>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {osFeatures.map((feature, idx) => (
-              <div
-                key={feature.title}
-                className="group relative p-8 rounded-3xl bg-white/5 border border-white/10 hover:border-cyan-500/50 hover:bg-white/10 transition-all duration-500 hover:-translate-y-3 overflow-hidden"
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-blue-600/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                
-                <div className="relative">
-                  <div className="flex justify-between items-start mb-6">
-                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-blue-600/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                      <feature.icon className="w-7 h-7 text-cyan-400" />
-                    </div>
-                    <div className="text-right">
-                      <div className="text-3xl font-bold text-cyan-400">{feature.stat}</div>
-                      <div className="text-xs text-gray-500 uppercase">{feature.statLabel}</div>
-                    </div>
-                  </div>
-                  
-                  <h3 className="text-xl font-bold text-white mb-3">{feature.title}</h3>
-                  <p className="text-gray-400 leading-relaxed text-sm">{feature.desc}</p>
-                </div>
+            {submitStatus === "success" ? (
+              <div className="text-center">
+                <CheckCircle className="text-green-400 mx-auto mb-4" />
+                <p>You're on the list!</p>
               </div>
-            ))}
+            ) : (
+              <form onSubmit={captureEarlyAccessLead} className="space-y-4">
+
+                <input
+                  type="text"
+                  placeholder="Full Name"
+                  required
+                  className="w-full p-3 bg-white/5 rounded-lg"
+                  value={earlyAccessForm.name}
+                  onChange={(e) =>
+                    setEarlyAccessForm({ ...earlyAccessForm, name: e.target.value })
+                  }
+                />
+
+                <input
+                  type="email"
+                  placeholder="Work Email"
+                  required
+                  className="w-full p-3 bg-white/5 rounded-lg"
+                  value={earlyAccessForm.email}
+                  onChange={(e) =>
+                    setEarlyAccessForm({ ...earlyAccessForm, email: e.target.value })
+                  }
+                />
+
+                <input
+                  type="text"
+                  placeholder="Company"
+                  required
+                  className="w-full p-3 bg-white/5 rounded-lg"
+                  value={earlyAccessForm.company}
+                  onChange={(e) =>
+                    setEarlyAccessForm({ ...earlyAccessForm, company: e.target.value })
+                  }
+                />
+
+                <input
+                  type="tel"
+                  placeholder="Phone"
+                  className="w-full p-3 bg-white/5 rounded-lg"
+                  value={earlyAccessForm.phone}
+                  onChange={(e) =>
+                    setEarlyAccessForm({ ...earlyAccessForm, phone: e.target.value })
+                  }
+                />
+
+                <select
+                  required
+                  className="w-full p-3 bg-white/5 rounded-lg"
+                  value={earlyAccessForm.role}
+                  onChange={(e) =>
+                    setEarlyAccessForm({ ...earlyAccessForm, role: e.target.value })
+                  }
+                >
+                  <option value="">Select Role</option>
+                  <option value="client">Client</option>
+                  <option value="vendor">Vendor</option>
+                  <option value="recruiter">Recruiter</option>
+                </select>
+
+                <input
+                  type="text"
+                  placeholder="Early Access Code"
+                  className="w-full p-3 bg-white/5 rounded-lg"
+                  value={earlyAccessForm.code}
+                  onChange={(e) =>
+                    setEarlyAccessForm({ ...earlyAccessForm, code: e.target.value })
+                  }
+                />
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full py-3 bg-cyan-500 rounded-lg"
+                >
+                  {isSubmitting ? "Submitting..." : "Request Access"}
+                </button>
+
+                {submitStatus === "error" && (
+                  <p className="text-red-400 text-sm">Something went wrong</p>
+                )}
+              </form>
+            )}
           </div>
- {/* Early Access CTA */}
-{/* Early Access CTA */}
-<div className="mt-16 max-w-3xl mx-auto">
-  <form onSubmit={captureEarlyAccessLead} className="space-y-6">
-
-    <div className="grid grid-cols-2 gap-4">
-      <div>
-        <label className="block text-sm font-medium text-gray-300 mb-2">
-          Company *
-        </label>
-        <div className="relative">
-          <Building2 className="absolute left-3 top-3.5 w-5 h-5 text-gray-500" />
-          <input
-            type="text"
-            required
-            placeholder="Acme Inc"
-            className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white"
-            value={earlyAccessForm.company}
-            onChange={(e) =>
-              setEarlyAccessForm({
-                ...earlyAccessForm,
-                company: e.target.value,
-              })
-            }
-          />
         </div>
-      </div>
-
-  <div>
-        <label className="block text-sm font-medium text-gray-300 mb-2">
-          Phone
-        </label>
-        <div className="relative">
-          <Phone className="absolute left-3 top-3.5 w-5 h-5 text-gray-500" />
-          <input
-            type="tel"
-            placeholder="+91 98765 43210"
-            className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white"
-            value={earlyAccessForm.phone}
-            onChange={(e) =>
-              setEarlyAccessForm({
-                ...earlyAccessForm,
-                phone: e.target.value,
-              })
-            }
-          />
-        </div>
-      </div>
-    </div>
-
-    <button
-      type="submit"
-      disabled={isSubmitting}
-      className="w-full py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl text-white font-semibold flex items-center justify-center gap-2"
-    >
-      {isSubmitting ? (
-        <>
-          <Loader2 className="w-5 h-5 animate-spin" />
-          Submitting...
-        </>
-      ) : (
-        "Request Early Access"
       )}
-    </button>
-
-  </form>
-</div>
-      </section>
-
-      {/* SERVICES SECTION */}
-      <section className="py-24 bg-gray-50 relative">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <span className="text-cyan-600 font-semibold text-sm uppercase tracking-[0.2em]">What We Do</span>
-            <h2 className="text-5xl font-bold text-gray-900 mt-4 mb-6 tracking-tight">Our Services</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Comprehensive talent solutions built for the speed and scale of modern business.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8">
-            {services.map((service, idx) => (
-              <div
-                key={service.title}
-                className="group relative p-8 bg-white rounded-3xl border border-gray-200 hover:border-transparent transition-all duration-500 overflow-hidden"
-              >
-                <div className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-0 group-hover:opacity-5 transition-opacity duration-500`} />
-                
-                <div className="relative flex gap-6">
-                  <div className={`flex-shrink-0 w-16 h-16 rounded-2xl bg-gradient-to-br ${service.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-                    <service.icon className="w-8 h-8 text-white" />
-                  </div>
-                  
-                  <div className="flex-1">
-                    <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-cyan-600 transition-colors">
-                      {service.title}
-                    </h3>
-                    <p className="text-gray-600 leading-relaxed mb-4">{service.desc}</p>
-                    <button
-                      onClick={() => setShowClientSignup(true)}
-                      className="inline-flex items-center text-cyan-600 font-semibold group-hover:gap-3 transition-all gap-2"
-                    >
-                      Get Started <ArrowRight className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-16 text-center">
-            <button
-              onClick={() => setShowClientSignup(true)}
-              className="inline-flex items-center gap-3 px-8 py-4 border-2 border-gray-900 rounded-2xl font-semibold text-gray-900 hover:bg-gray-900 hover:text-white transition-all duration-300"
-            >
-              View All Services <ArrowRight className="w-5 h-5" />
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* HOW IT WORKS */}
-      <section className="py-24 bg-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(6,182,212,0.05),transparent_50%)]" />
-        
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative">
-          <div className="text-center mb-20">
-            <span className="text-cyan-600 font-semibold text-sm uppercase tracking-[0.2em]">Process</span>
-            <h2 className="text-5xl font-bold text-gray-900 mt-4 mb-6 tracking-tight">How HireNest Works</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Three simple steps to start collaborating on the HireNest network.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-12 relative">
-            {/* Connection Line */}
-            <div className="hidden md:block absolute top-24 left-[16%] right-[16%] h-1 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 rounded-full">
-              <div className="absolute inset-0 bg-white/20 animate-shimmer" />
-            </div>
-
-            {steps.map((step, idx) => (
-              <div key={step.n} className="relative text-center group">
-                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 text-white flex items-center justify-center text-2xl font-bold mx-auto mb-8 shadow-2xl shadow-cyan-500/30 relative z-10 group-hover:scale-110 transition-transform duration-300">
-                  {step.n}
-                  <div className="absolute inset-0 rounded-full bg-cyan-500 animate-ping opacity-20" />
-                </div>
-                
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">{step.title}</h3>
-                <p className="text-gray-600 leading-relaxed max-w-sm mx-auto">{step.desc}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-20 flex justify-center gap-4">
-            <button
-              onClick={() => setShowVendorSignup(true)}
-              className="px-8 py-4 bg-gray-900 text-white rounded-2xl font-semibold hover:bg-gray-800 transition-all flex items-center gap-2"
-            >
-              <Network className="w-5 h-5" />
-              Join as Vendor
-            </button>
-            <button
-              onClick={() => setShowClientSignup(true)}
-              className="px-8 py-4 border-2 border-gray-900 text-gray-900 rounded-2xl font-semibold hover:bg-gray-900 hover:text-white transition-all flex items-center gap-2"
-            >
-              <Building2 className="w-5 h-5" />
-              Post Requirement
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* ECOSYSTEM SECTION */}
-      <section className="py-24 bg-[#0B0F1A] relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(6,182,212,0.1),_transparent_50%)]" />
-        
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative">
-          <div className="text-center mb-16">
-            <h2 className="text-5xl font-bold text-white mb-6 tracking-tight">One Platform, Three Perspectives</h2>
-            <p className="text-xl text-gray-400">HireNest OS serves everyone in the hiring ecosystem</p>
-          </div>
-
-          {/* Tabs */}
-          <div className="flex justify-center mb-16">
-            <div className="inline-flex p-2 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">
-              {[
-                { id: "clients", label: "For Clients", icon: Building2 },
-                { id: "vendors", label: "For Vendors", icon: Network },
-                { id: "recruiters", label: "For Recruiters", icon: Users },
-              ].map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`px-8 py-4 rounded-xl font-semibold capitalize transition-all flex items-center gap-2 ${
-                    activeTab === tab.id
-                      ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/25"
-                      : "text-gray-400 hover:text-white hover:bg-white/5"
-                  }`}
-                >
-                  <tab.icon className="w-5 h-5" />
-                  {tab.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Content */}
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div className="space-y-8">
-              {activeTab === "clients" && (
-                <>
-                  <div>
-                    <h3 className="text-4xl font-bold text-white mb-4">For Companies & Clients</h3>
-                    <p className="text-xl text-gray-400 leading-relaxed">
-                      Post requirements once and reach multiple vendors instantly. Track everything in real-time with AI-powered insights.
-                    </p>
-                  </div>
-                  <div className="space-y-4">
-                    {[
-                      "Single dashboard for all vendors",
-                      "AI-powered candidate ranking",
-                      "Automated interview scheduling",
-                      "Real-time pipeline visibility",
-                      "Integrated ATS functionality",
-                    ].map((item) => (
-                      <div key={item} className="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10 hover:border-cyan-500/30 transition-colors">
-                        <CheckCircle className="w-6 h-6 text-cyan-400 flex-shrink-0" />
-                        <span className="text-gray-300 font-medium">{item}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <button
-                    onClick={() => setShowClientSignup(true)}
-                    className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl text-white font-semibold hover:shadow-2xl hover:shadow-cyan-500/30 transition-all hover:-translate-y-0.5 flex items-center gap-2"
-                  >
-                    <Building2 className="w-5 h-5" />
-                    Post Your First Requirement
-                    <ArrowRight className="w-5 h-5" />
-                  </button>
-                </>
-              )}
-
-              {activeTab === "vendors" && (
-                <>
-                  <div>
-                    <h3 className="text-4xl font-bold text-white mb-4">For Staffing Vendors</h3>
-                    <p className="text-xl text-gray-400 leading-relaxed">
-                      Get real-time requirements and submit candidates faster. Grow your business with our premium vendor network.
-                    </p>
-                  </div>
-                  <div className="space-y-4">
-                    {[
-                      "Access to 500+ bench consultants",
-                      "Direct client connections",
-                      "Faster payment cycles (Net-15)",
-                      "Performance analytics dashboard",
-                      "Priority matching algorithm",
-                    ].map((item) => (
-                      <div key={item} className="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10 hover:border-cyan-500/30 transition-colors">
-                        <CheckCircle className="w-6 h-6 text-cyan-400 flex-shrink-0" />
-                        <span className="text-gray-300 font-medium">{item}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <button
-                    onClick={() => setShowVendorSignup(true)}
-                    className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl text-white font-semibold hover:shadow-2xl hover:shadow-cyan-500/30 transition-all hover:-translate-y-0.5 flex items-center gap-2"
-                  >
-                    <Network className="w-5 h-5" />
-                    Apply to Join Network
-                    <ArrowRight className="w-5 h-5" />
-                  </button>
-                </>
-              )}
-
-              {activeTab === "recruiters" && (
-                <>
-                  <div>
-                    <h3 className="text-4xl font-bold text-white mb-4">For Recruiters</h3>
-                    <p className="text-xl text-gray-400 leading-relaxed">
-                      Track pipeline and improve closures efficiently with AI-assisted matching and automated workflows.
-                    </p>
-                  </div>
-                  <div className="space-y-4">
-                    {[
-                      "Smart candidate matching AI",
-                      "Automated outreach sequences",
-                      "Interview coordination tools",
-                      "Commission tracking system",
-                      "Mobile app for on-the-go",
-                    ].map((item) => (
-                      <div key={item} className="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10 hover:border-cyan-500/30 transition-colors">
-                        <CheckCircle className="w-6 h-6 text-cyan-400 flex-shrink-0" />
-                        <span className="text-gray-300 font-medium">{item}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <button
-                    onClick={() => setShowEarlyAccess(true)}
-                    className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl text-white font-semibold hover:shadow-2xl hover:shadow-cyan-500/30 transition-all hover:-translate-y-0.5 flex items-center gap-2"
-                  >
-                    <Users className="w-5 h-5" />
-                    Get Recruiter Access
-                    <ArrowRight className="w-5 h-5" />
-                  </button>
-                </>
-              )}
-            </div>
-
-            {/* Visual */}
-            <div className="relative">
-              <div className="absolute -inset-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-[2rem] opacity-20 blur-2xl" />
-              <div className="relative bg-[#0f1623] rounded-3xl border border-white/10 p-8 shadow-2xl">
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center gap-3">
-                    <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse" />
-                    <span className="text-white font-semibold">Live Dashboard</span>
-                  </div>
-                  <span className="text-xs text-gray-500 font-mono">HireNest OS v2.0</span>
-                </div>
-
-                {activeTab === "clients" && (
-                  <div className="space-y-4">
-                    <div className="p-4 rounded-xl bg-white/5 border border-white/10 flex justify-between items-center">
-                      <div>
-                        <div className="text-white font-semibold">Senior React Developer</div>
-                        <div className="text-xs text-gray-500 mt-1">Posted 2h ago • 12 vendor matches</div>
-                      </div>
-                      <span className="px-3 py-1 rounded-full bg-green-500/20 text-green-400 text-xs font-semibold">Active</span>
-                    </div>
-                    <div className="p-4 rounded-xl bg-white/5 border border-white/10 flex justify-between items-center">
-                      <div>
-                        <div className="text-white font-semibold">ML Engineer (Python)</div>
-                        <div className="text-xs text-gray-500 mt-1">Posted 5h ago • 8 vendor matches</div>
-                      </div>
-                      <span className="px-3 py-1 rounded-full bg-yellow-500/20 text-yellow-400 text-xs font-semibold">Reviewing</span>
-                    </div>
-                    <div className="p-4 rounded-xl bg-white/5 border border-white/10 flex justify-between items-center">
-                      <div>
-                        <div className="text-white font-semibold">DevOps Lead</div>
-                        <div className="text-xs text-gray-500 mt-1">Posted 1d ago • 15 vendor matches</div>
-                      </div>
-                      <span className="px-3 py-1 rounded-full bg-blue-500/20 text-blue-400 text-xs font-semibold">Interviewing</span>
-                    </div>
-                  </div>
-                )}
-
-                {activeTab === "vendors" && (
-                  <div className="grid grid-cols-2 gap-4">
-                    {[
-                      { label: "New Requirements", val: "24", icon: Target, color: "cyan" },
-                      { label: "Revenue (MTD)", val: "₹4.2L", icon: TrendingUp, color: "green" },
-                      { label: "Success Rate", val: "89%", icon: CheckCircle2, color: "purple" },
-                      { label: "Active Consultants", val: "156", icon: Users, color: "blue" },
-                    ].map((stat) => (
-                      <div key={stat.label} className="p-4 rounded-xl bg-white/5 border border-white/10 text-center hover:border-cyan-500/30 transition-colors">
-                        <stat.icon className={`w-6 h-6 text-${stat.color}-400 mx-auto mb-2`} />
-                        <div className="text-2xl font-bold text-white">{stat.val}</div>
-                        <div className="text-xs text-gray-500 mt-1">{stat.label}</div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                {activeTab === "recruiters" && (
-                  <div className="space-y-4">
-                    {[
-                      { name: "Rahul Sharma", role: "Senior React Dev", match: "98%", color: "from-cyan-400 to-blue-600" },
-                      { name: "Priya Patel", role: "ML Engineer", match: "95%", color: "from-purple-400 to-pink-600" },
-                      { name: "Arun Kumar", role: "DevOps Lead", match: "92%", color: "from-green-400 to-emerald-600" },
-                    ].map((candidate) => (
-                      <div key={candidate.name} className="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10 hover:border-cyan-500/30 transition-colors">
-                        <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${candidate.color} flex items-center justify-center text-white font-bold`}>
-                          {candidate.name.split(" ").map(n => n[0]).join("")}
-                        </div>
-                        <div className="flex-1">
-                          <div className="text-white font-semibold">{candidate.name}</div>
-                          <div className="text-xs text-gray-500">{candidate.role}</div>
-                        </div>
-                        <div className="text-right">
-                          <div className="text-cyan-400 font-bold">{candidate.match}</div>
-                          <div className="text-xs text-gray-500">match</div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* WHY CHOOSE US */}
-      <section className="py-24 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center mb-20">
-            <span className="text-cyan-600 font-semibold text-sm uppercase tracking-[0.2em]">Advantages</span>
-            <h2 className="text-5xl font-bold text-gray-900 mt-4 mb-6 tracking-tight">Why Choose HireNest</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Everything you need to hire faster, smarter, and better.
-            </p>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {whyCards.map((card, idx) => (
-              <div
-                key={card.title}
-                className="group p-8 bg-white rounded-3xl border border-gray-200 hover:border-cyan-500/30 hover:shadow-2xl hover:shadow-cyan-500/10 transition-all duration-500 text-center hover:-translate-y-2"
-              >
-                <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-cyan-500/10 to-blue-600/10 flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 group-hover:bg-gradient-to-br group-hover:from-cyan-500 group-hover:to-blue-600">
-                  <card.icon className="w-10 h-10 text-cyan-600 group-hover:text-white transition-colors" />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">{card.title}</h3>
-                <p className="text-gray-600 leading-relaxed">{card.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* TESTIMONIALS */}
-      <section className="py-24 bg-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(6,182,212,0.05),transparent_50%)]" />
-        
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative">
-          <div className="text-center mb-20">
-            <span className="text-cyan-600 font-semibold text-sm uppercase tracking-[0.2em]">Testimonials</span>
-            <h2 className="text-5xl font-bold text-gray-900 mt-4 mb-6 tracking-tight">What Our Clients Say</h2>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((t) => (
-              <div
-                key={t.name}
-                className="group p-8 bg-gray-50 rounded-3xl border border-gray-200 hover:border-cyan-500/30 hover:shadow-2xl hover:shadow-cyan-500/10 transition-all duration-500 hover:-translate-y-2"
-              >
-                <div className="flex gap-1 mb-6">
-                  {[1, 2, 3, 4, 5].map((n) => (
-                    <Star key={n} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-                  ))}
-                </div>
-                <Quote className="w-12 h-12 text-cyan-200 mb-6" />
-                <p className="text-gray-700 mb-8 leading-relaxed text-lg italic">"{t.quote}"</p>
-                <div className="flex items-center gap-4">
-                  <div className={`w-14 h-14 rounded-2xl ${t.color} flex items-center justify-center text-white font-bold text-lg shadow-lg`}>
-                    {t.image}
-                  </div>
-                  <div>
-                    <div className="font-bold text-gray-900 text-lg">{t.name}</div>
-                    <div className="text-sm text-gray-500">{t.title} · {t.company}</div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* FINAL CTA */}
-      <section className="py-24 bg-[#0B0F1A] relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(6,182,212,0.15),_transparent_50%)]" />
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%239C92AC%22%20fill-opacity%3D%220.03%22%3E%3Cpath%20d%3D%22M36%2034v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6%2034v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6%204V0H4v4H0v2h4v4h2V6h4V4H6z%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]" />
-        
-        <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center relative">
-          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 mb-10">
-            <Rocket className="w-5 h-5 text-cyan-400" />
-            <span className="text-cyan-400 text-sm font-semibold tracking-wide uppercase">Limited Early Access</span>
-          </div>
-          
-          <h2 className="text-6xl lg:text-7xl font-bold text-white mb-8 tracking-tight leading-tight">
-            Ready to Transform Your{" "}
-            <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
-              Hiring?
-            </span>
-          </h2>
-          
-          <p className="text-2xl text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed">
-            Join the HireNest OS early access program and be among the first to experience the future of workforce management.
-          </p>
-
-          <div className="flex flex-wrap justify-center gap-6">
-            <button
-              onClick={() => setShowEarlyAccess(true)}
-              className="group px-10 py-5 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl text-white font-semibold text-lg hover:shadow-2xl hover:shadow-cyan-500/40 transition-all hover:-translate-y-1 flex items-center gap-3"
-            >
-              <Sparkles className="w-6 h-6 group-hover:rotate-12 transition-transform" />
-              Get Early Access
-            </button>
-            <button
-              onClick={() => setShowClientSignup(true)}
-              className="px-10 py-5 rounded-2xl font-semibold text-lg text-white border-2 border-white/20 hover:bg-white/10 hover:border-white/40 transition-all hover:-translate-y-1 flex items-center gap-3"
-            >
-              <Building2 className="w-6 h-6" />
-              Talk to Sales
-            </button>
-          </div>
-
-          <div className="mt-12 flex items-center justify-center gap-8 text-sm text-gray-500">
-            <span className="flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-green-400" />
-              No credit card required
-            </span>
-            <span className="flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-green-400" />
-              Free during beta
-            </span>
-            <span className="flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-green-400" />
-              Cancel anytime
-            </span>
-          </div>
-        </div>
-      </section>
 
       {/* FOOTER */}
-      <footer className="bg-[#0B0F1A] border-t border-white/10 pt-20 pb-10">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-12 mb-16">
-            <div className="col-span-2">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center">
-                  <Network className="w-7 h-7 text-white" />
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-white">HireNest</div>
-                  <div className="text-xs text-gray-500 uppercase tracking-wider">Workforce OS</div>
-                </div>
-              </div>
-              <p className="text-gray-400 max-w-sm leading-relaxed mb-6">
-                Connecting world-class companies with elite talent through an intelligent network of trusted staffing partners.
-              </p>
-              <div className="flex gap-4">
-                <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-cyan-500 hover:text-white transition-all">
-                  <Linkedin className="w-5 h-5" />
-                </a>
-              </div>
-            </div>
-
-            <div>
-              <h4 className="text-white font-semibold mb-6">Product</h4>
-              <ul className="space-y-4">
-                {["Features", "Pricing", "Integrations", "API", "Security"].map((item) => (
-                  <li key={item}>
-                    <a href="#" className="text-gray-400 hover:text-cyan-400 transition-colors">{item}</a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="text-white font-semibold mb-6">Contact</h4>
-              <ul className="space-y-4">
-                <li className="flex items-center gap-3 text-gray-400">
-                  <Mail className="w-4 h-4 text-cyan-400" />
-                  info@hirenestworkforce.com
-                </li>
-                <li className="flex items-center gap-3 text-gray-400">
-                  <Phone className="w-4 h-4 text-cyan-400" />
-                  +91 9392894748
-                </li>
-                <li className="flex items-start gap-3 text-gray-400">
-                  <MapPin className="w-4 h-4 text-cyan-400 mt-1" />
-                  <span>Hyderabad, Telangana<br />India</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-gray-500 text-sm">
-              © 2026 HireNest Workforce. All rights reserved.
-            </p>
-            <div className="flex gap-6 text-sm">
-              <a href="#" className="text-gray-500 hover:text-cyan-400 transition-colors">Privacy Policy</a>
-              <a href="#" className="text-gray-500 hover:text-cyan-400 transition-colors">Terms of Service</a>
-            </div>
-          </div>
-        </div>
+      <footer className="py-10 text-center text-gray-500">
+        © 2026 HireNest Workforce
       </footer>
-
-      {/* MODALS */}
-
-      {/* Early Access Modal */}
-      {showEarlyAccess && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
-          <div className="relative w-full max-w-lg bg-[#0f1623] rounded-3xl border border-white/10 shadow-2xl overflow-hidden animate-scale-in max-h-[90vh] overflow-y-auto">
-            <div className="relative h-40 bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center">
-              <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.1%22%3E%3Cpath%20d%3D%22M36%2034v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6%2034v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6%204V0H4v4H0v2h4v4h2V6h4V4H6z%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]" />
-              <div className="text-center relative z-10">
-                <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3 backdrop-blur-sm border border-white/30">
-                  <Rocket className="w-10 h-10 text-white" />
-                </div>
-                <h3 className="text-3xl font-bold text-white">Early Access</h3>
-              </div>
-              <button
-                onClick={() => setShowEarlyAccess(false)}
-                className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white hover:bg-white/30 transition-colors border border-white/30"
-              >
-                <X className="w-6 h-6" />
-              </button>
-            </div>
-
-            <div className="p-8">
-              {submitStatus === "success" ? (
-                <div className="text-center py-8">
-                  <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <CheckCircle className="w-10 h-10 text-green-400" />
-                  </div>
-                  <h4 className="text-2xl font-bold text-white mb-2">You're on the list!</h4>
-                  <p className="text-gray-400">We'll contact you soon with early access details.</p>
-                </div>
-              ) : (
-                <>
-                  <p className="text-gray-400 text-center mb-8">
-                    Join 200+ companies getting exclusive access to HireNest OS before public launch.
-                  </p>
-
-                  {submitStatus === "error" && (
-                    <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/30 flex items-center gap-3 text-red-400">
-                      <AlertCircle className="w-5 h-5" />
-                      <span>Something went wrong. Please try again.</span>
-                    </div>
-                  )}
-
-                  <form onSubmit={captureEarlyAccessLead} className="space-y-5">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Full Name *</label>
-                        <div className="relative">
-                          <User className="absolute left-3 top-3.5 w-5 h-5 text-gray-500" />
-                          <input
-                            type="text"
-                            required
-                            placeholder="John Doe"
-                            className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all"
-                            value={earlyAccessForm.name}
-                            onChange={(e) => setEarlyAccessForm({...earlyAccessForm, name: e.target.value })}
-                          />
-                        </div>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Work Email *</label>
-                        <div className="relative">
-                          <Mail className="absolute left-3 top-3.5 w-5 h-5 text-gray-500" />
-<input
-  type="email"
-  required
-  placeholder="john@company.com"
-  className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all"
-  value={earlyAccessForm.email}
-  onChange={(e) =>
-    setEarlyAccessForm({...earlyAccessForm, email: e.target.value })
-  }
-/>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Company *</label>
-                        <div className="relative">
-                          <Building2 className="absolute left-3 top-3.5 w-5 h-5 text-gray-500"/>
-                          <input
-                            type="text"
-                            required
-                            placeholder="Acme Inc"
-                            className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all"
-                            value={earlyAccessForm.company}
-                            onChange={e => setEarlyAccessForm({...earlyAccessForm, company: e.target.value })}
-                          />
-                        </div>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Phone</label>
-                        <div className="relative">
-                          <Phone className="absolute left-3 top-3.5 w-5 h-5 text-gray-500"/>
-                          <input
-                            type="tel"
-                            placeholder="+91 98765 43210"
-                            className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all"
-                            value={earlyAccessForm.phone}
-                            onChange={e => setEarlyAccessForm({...earlyAccessForm, phone: e.target.value })}
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Your Role *</label>
-                   <select
-  required
-  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all appearance-none"
-  value={earlyAccessForm.role}
-  onChange={(e) =>
-    setEarlyAccessForm({ ...earlyAccessForm, role: e.target.value })
-  }
->
-                        <option value=""className="bg-[#0f1623]">Select your role</option>
-                        <option value="hiring_manager"className="bg-[#0f1623]">Hiring Manager</option>
-                        <option value="recruiter"className="bg-[#0f1623]">Recruiter</option>
-                        <option value="vendor"className="bg-[#0f1623]">Staffing Vendor</option>
-                        <option value="founder"className="bg-[#0f1623]">Founder/CEO</option>
-                        <option value="hr"className="bg-[#0f1623]">HR Director</option>
-                        <option value="other"className="bg-[#0f1623]">Other</option>
-                      </select>
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
-                        Early Access Code <span className="text-gray-500">(Optional)</span>
-                      </label>
-                      <input
-                        type="text"
-                        placeholder="XXXX-XXXX"
-                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all"
-                        value={earlyAccessForm.code}
-                        onChange={e => setEarlyAccessForm({...earlyAccessForm, code: e.target.value })}
-                      />
-                    </div>
-    </div>
-
-    <button
-      type="submit"
-      disabled={isSubmitting}
-      className="w-full py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl text-white font-semibold flex items-center justify-center gap-2"
-    >
-      {isSubmitting ? (
-        <>
-          <Loader2 className="w-5 h-5 animate-spin" />
-          Submitting...
-        </>
-      ) : (
-        "Request Early Access"
-      )}
-    </button>
-
-  </form>
-</div>
-
-                  <p className="text-xs text-gray-500 text-center mt-6">
-                    By requesting access, you agree to our Terms of Service and Privacy Policy.
-                    We respect your privacy and will never share your information.
-                  </p>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Vendor Signup Modal */}
-      {showVendorSignup && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
-          <div className="relative w-full max-w-lg bg-[#0f1623] rounded-3xl border border-white/10 shadow-2xl overflow-hidden animate-scale-in max-h-[90vh] overflow-y-auto">
-            <div className="relative h-32 bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center">
-              <div className="text-center relative z-10">
-                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-2 backdrop-blur-sm">
-                  <Network className="w-8 h-8 text-white"/>
-                </div>
-                <h3 className="text-2xl font-bold text-white">Join Vendor Network</h3>
-              </div>
-              <button
-                onClick={() => setShowVendorSignup(false)}
-                className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white hover:bg-white/30 transition-colors"
-              >
-                <X className="w-5 h-5"/>
-              </button>
-            </div>
-
-            <div className="p-6">
-              {submitStatus === "success"? (
-                <div className="text-center py-8">
-                  <CheckCircle className="w-16 h-16 text-green-400 mx-auto mb-4"/>
-                  <h4 className="text-xl font-bold text-white mb-2">Application Received!</h4>
-                  <p className="text-gray-400">We’ll review and get back within 48 hours.</p>
-                </div>
-              ) : (
-                <form onSubmit={captureVendorLead} className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">Company Name *</label>
-                    <input
-                      type="text"
-                      required
-                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50"
-                      value={vendorForm.company_name}
-                      onChange={e => setVendorForm({...vendorForm, company_name: e.target.value })}
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-1">Contact Name *</label>
-                      <input
-                        type="text"
-                        required
-                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50"
-                        value={vendorForm.contact_name}
-                        onChange={e => setVendorForm({...vendorForm, contact_name: e.target.value })}
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-1">Email *</label>
-                      <input
-                        type="email"
-                        required
-                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50"
-                        value={vendorForm.email}
-                        onChange={e => setVendorForm({...vendorForm, email: e.target.value })}
-                      />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-1">Phone *</label>
-                      <input
-                        type="tel"
-                        required
-                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50"
-                        value={vendorForm.phone}
-                        onChange={e => setVendorForm({...vendorForm, phone: e.target.value })}
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-1">Website</label>
-                      <input
-                        type="url"
-                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50"
-                        value={vendorForm.website}
-                        onChange={e => setVendorForm({...vendorForm, website: e.target.value })}
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">Specialization *</label>
-                    <select
-                      required
-                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50"
-                      value={vendorForm.specialization}
-                      onChange={e => setVendorForm({...vendorForm, specialization: e.target.value })}
-                    >
-                      <option value=""className="bg-[#0f1623]">Select specialization</option>
-                      <option value="it_staffing"className="bg-[#0f1623]">IT Staffing</option>
-                      <option value="ai_data"className="bg-[#0f1623]">AI & Data</option>
-                      <option value="contract"className="bg-[#0f1623]">Contract Staffing</option>
-                      <option value="permanent"className="bg-[#0f1623]">Permanent Hiring</option>
-                      <option value="executive"className="bg-[#0f1623]">Executive Search</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">Team Size *</label>
-                    <select
-                      required
-                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50"
-                      value={vendorForm.team_size}
-                      onChange={e => setVendorForm({...vendorForm, team_size: e.target.value })}
-                    >
-                      <option value=""className="bg-[#0f1623]">Select team size</option>
-                      <option value="1-10"className="bg-[#0f1623]">1-10</option>
-                      <option value="11-50"className="bg-[#0f1623]">11-50</option>
-                      <option value="51-200"className="bg-[#0f1623]">51-200</option>
-                      <option value="200+"className="bg-[#0f1623]">200+</option>
-                    </select>
-                  </div>
-
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full py-4 bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl text-white font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2 mt-6 disabled:opacity-50"
-                  >
-                    {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin"/> : "Submit Application"}
-                  </button>
-                </form>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Client Signup Modal */}
-      {showClientSignup && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
-          <div className="relative w-full max-w-lg bg-[#0f1623] rounded-3xl border border-white/10 shadow-2xl overflow-hidden animate-scale-in max-h-[90vh] overflow-y-auto">
-            <div className="relative h-32 bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
-              <div className="text-center relative z-10">
-                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-2 backdrop-blur-sm">
-                  <Building2 className="w-8 h-8 text-white"/>
-                </div>
-                <h3 className="text-2xl font-bold text-white">Post Requirement</h3>
-              </div>
-              <button
-                onClick={() => setShowClientSignup(false)}
-                className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white hover:bg-white/30 transition-colors"
-              >
-                <X className="w-5 h-5"/>
-              </button>
-            </div>
-
-            <div className="p-6">
-              {submitStatus === "success"? (
-                <div className="text-center py-8">
-                  <CheckCircle className="w-16 h-16 text-green-400 mx-auto mb-4"/>
-                  <h4 className="text-xl font-bold text-white mb-2">Request Submitted!</h4>
-                  <p className="text-gray-400">Our team will contact you within 24 hours.</p>
-                </div>
-              ) : (
-                <form onSubmit={captureClientLead} className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">Company Name *</label>
-                    <input
-                      type="text"
-                      required
-                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50"
-                      value={clientForm.company_name}
-                      onChange={e => setClientForm({...clientForm, company_name: e.target.value })}
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-1">Contact Name *</label>
-                      <input
-                        type="text"
-                        required
-                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50"
-                        value={clientForm.contact_name}
-                        onChange={e => setClientForm({...clientForm, contact_name: e.target.value })}
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-1">Email *</label>
-                      <input
-                        type="email"
-                        required
-                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50"
-                        value={clientForm.email}
-                        onChange={e => setClientForm({...clientForm, email: e.target.value })}
-                      />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-1">Phone *</label>
-                      <input
-                        type="tel"
-                        required
-                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50"
-                        value={clientForm.phone}
-                        onChange={e => setClientForm({...clientForm, phone: e.target.value })}
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-1">Industry *</label>
-                      <select
-                        required
-                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50"
-                        value={clientForm.industry}
-                        onChange={e => setClientForm({...clientForm, industry: e.target.value })}
-                      >
-                        <option value=""className="bg-[#0f1623]">Select industry</option>
-                        <option value="technology"className="bg-[#0f1623]">Technology</option>
-                        <option value="finance"className="bg-[#0f1623]">Finance</option>
-                        <option value="healthcare"className="bg-[#0f1623]">Healthcare</option>
-                        <option value="ecommerce"className="bg-[#0f1623]">E-commerce</option>
-                        <option value="other"className="bg-[#0f1623]">Other</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-1">Company Size *</label>
-                      <select
-                        required
-                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50"
-                        value={clientForm.company_size}
-                        onChange={e => setClientForm({...clientForm, company_size: e.target.value })}
-                      >
-                        <option value=""className="bg-[#0f1623]">Select size</option>
-                        <option value="1-50"className="bg-[#0f1623]">1-50</option>
-                        <option value="51-200"className="bg-[#0f1623]">51-200</option>
-                        <option value="201-1000"className="bg-[#0f1623]">201-1000</option>
-                        <option value="1000+"className="bg-[#0f1623]">1000+</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-1">Hiring Needs (Positions) *</label>
-                      <input
-                        type="number"
-                        required
-                        min="1"
-                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50"
-                        value={clientForm.hiring_needs}
-                        onChange={e => setClientForm({...clientForm, hiring_needs: e.target.value })}
-                      />
-                    </div>
-                  </div>
-
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full py-4 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl text-white font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2 mt-6 disabled:opacity-50"
-                  >
-                    {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin"/> : "Submit Requirement"}
-                  </button>
-                </form>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
