@@ -1391,8 +1391,8 @@ export default function Home() {
       {/* FINAL CTA */}
       <section className="py-24 bg-[#0B0F1A] relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(6,182,212,0.15),_transparent_50%)]" />
-        <div className="absolute inset-0 bg-[url('data:images/Logo.png'>
-
+        <div className="absolute inset-0 bg-[url('data:images/Logo.png')]">
+        </div>
         <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center relative">
           <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 mb-10">
             <Rocket className="w-5 h-5 text-cyan-400" />
