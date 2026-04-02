@@ -253,20 +253,28 @@ export default function Home() {
 
   // Email notification function - LinkedIn Style
   const sendNotification = async (type: string, data: any, formName: string) => {
-    try {
-      await supabase.functions.invoke("send-linkedin-notification", {
-        body: {
-          type: type,
-          formName: formName,
-          data: data,
+  try {
+    await fetch(
+      "https://hjeukduwzdginoqjjgod.supabase.co/functions/v1/send-email",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": "hirenest-secure-key-2026", // ✅ IMPORTANT
+        },
+        body: JSON.stringify({
+          type,
+          formName,
+          data,
           timestamp: new Date().toISOString(),
           source: window.location.href,
-        },
-      });
-    } catch (error) {
-      console.error("Notification error:", error);
-    }
-  };
+        }),
+      }
+    );
+  } catch (error) {
+    console.error("Notification error:", error);
+  }
+};
 
   // Early Access Form Submit
   const captureEarlyAccessLead = async (e: React.FormEvent) => {
