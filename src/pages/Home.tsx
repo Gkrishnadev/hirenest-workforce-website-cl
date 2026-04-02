@@ -1662,6 +1662,6 @@ export default function Home() {
         </div>
       )}
     </div>
-    </div> {/* ✅ ADD THIS MISSING DIV */}
+    </div> 
   );
 }
