@@ -22,6 +22,7 @@ export default function Contact() {
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
 
+  // ✅ THIS IS YOUR BRIDGE (FORM → SUPABASE)
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
@@ -42,27 +43,29 @@ ${form.message}
       .insert([payload]);
 
     if (error) {
+      console.error("Insert error:", error);
       toast.error("Something went wrong. Please try again.");
     } else {
       try {
         await fetch(
-  "https://hjeukduwzdginoqjjgod.supabase.co/functions/v1/send-email",
-  {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": "hirenest-secure-key-2026", // 🔥 FIX
-    },
-    body: JSON.stringify({
-      type: "Contact Form",
-      data: {
-        name,
-        email,
-        message,
-      },
-    }),
-  }
-);
+          "https://hjeukduwzdginoqjjgod.supabase.co/functions/v1/send-email",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-api-key": "hirenest-secure-key-2026",
+            },
+            body: JSON.stringify({
+              type: "Contact Form",
+              data: {
+                name: form.name,       // ✅ FIXED
+                email: form.email,     // ✅ FIXED
+                message: form.message, // ✅ FIXED
+                company: form.company, // ✅ ADDED (optional but useful)
+              },
+            }),
+          }
+        );
       } catch (err) {
         console.error("Email failed:", err);
       }
@@ -77,7 +80,6 @@ ${form.message}
 
   return (
     <div>
-      {/* ✅ SEO (ADDED) */}
       <SEO
         title="Contact HireNest Workforce | IT Staffing Support"
         description="Contact HireNest Workforce for IT staffing, vendor partnerships, and hiring solutions. Get response within 24 hours."
@@ -85,8 +87,6 @@ ${form.message}
       />
 
       <div className="pt-[72px]">
-        
-        {/* 🔥 HERO */}
         <section
           className="py-24 text-center"
           style={{
@@ -110,7 +110,6 @@ ${form.message}
           </p>
         </section>
 
-        {/* 🔥 FORM SECTION */}
         <section
           className="py-24"
           style={{
@@ -119,8 +118,6 @@ ${form.message}
           }}
         >
           <div className="max-w-6xl mx-auto px-4 grid lg:grid-cols-5 gap-16">
-
-            {/* FORM */}
             <div className="lg:col-span-3">
               <h2
                 className="text-2xl font-display font-bold mb-8"
@@ -157,7 +154,6 @@ ${form.message}
                     borderColor: "oklch(var(--border))",
                   }}
                 >
-
                   <div>
                     <label className="block text-sm font-medium mb-2">
                       Full Name *
@@ -242,7 +238,6 @@ ${form.message}
               )}
             </div>
 
-            {/* CONTACT INFO */}
             <div className="lg:col-span-2 space-y-6">
               <h2
                 className="text-2xl font-display font-bold mb-4"
@@ -273,7 +268,6 @@ ${form.message}
                 </div>
               ))}
             </div>
-
           </div>
         </section>
       </div>
