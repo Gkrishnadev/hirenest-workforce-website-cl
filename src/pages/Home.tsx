@@ -1266,15 +1266,17 @@ export default function Home() {
                       <div>
                         <label className="block text-sm font-medium text-gray-300 mb-2">Work Email *</label>
                         <div className="relative">
-                          <Mail className=”absolute left-3 top-3.5 w-5 h-5 text-gray-500” />
-                          <input
-                            Type=”email”
-                            Required
-                            Placeholder=john@company.com
-                            className=”w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all”
-                            value={earlyAccessForm.email}
-                            onChange={€ => setEarlyAccessForm({ …earlyAccessForm, email: e.target.value })}
-                          />
+                          <Mail className="absolute left-3 top-3.5 w-5 h-5 text-gray-500" />
+<input
+  type="email"
+  required
+  placeholder="john@company.com"
+  className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all"
+  value={earlyAccessForm.email}
+  onChange={(e) =>
+    setEarlyAccessForm({ ...earlyAccessForm, email: e.target.value })
+  }
+/>
                         </div>
                       </div>
                     </div>
@@ -1285,12 +1287,12 @@ export default function Home() {
                         <div className=”relative”>
                           <Building2 className=”absolute left-3 top-3.5 w-5 h-5 text-gray-500” />
                           <input
-                            Type=”text”
+                            type=”text”
                             Required
                             Placeholder=”Acme Inc”
                             className=”w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all”
                             value={earlyAccessForm.company}
-                            onChange={€ => setEarlyAccessForm({ …earlyAccessForm, company: e.target.value })}
+                            onChange={e => setEarlyAccessForm({ …earlyAccessForm, company: e.target.value })}
                           />
                         </div>
                       </div>
@@ -1299,11 +1301,11 @@ export default function Home() {
                         <div className=”relative”>
                           <Phone className=”absolute left-3 top-3.5 w-5 h-5 text-gray-500” />
                           <input
-                            Type=”tel”
+                            type=”tel”
                             Placeholder=”+91 98765 43210”
                             className=”w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all”
                             value={earlyAccessForm.phone}
-                            onChange={€ => setEarlyAccessForm({ …earlyAccessForm, phone: e.target.value })}
+                            onChange={e => setEarlyAccessForm({ …earlyAccessForm, phone: e.target.value })}
                           />
                         </div>
                       </div>
@@ -1315,7 +1317,7 @@ export default function Home() {
                         Required
                         className=”w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all appearance-none”
                         value={earlyAccessForm.role}
-                        onChange={€ => setEarlyAccessForm({ …earlyAccessForm, role: e.target.value })}
+                        onChange={e => setEarlyAccessForm({ …earlyAccessForm, role: e.target.value })}
                       >
                         <option value=”” className=”bg-[#0f1623]”>Select your role</option>
                         <option value=”hiring_manager” className=”bg-[#0f1623]”>Hiring Manager</option>
@@ -1332,16 +1334,16 @@ export default function Home() {
                         Early Access Code <span className=”text-gray-500”>(Optional)</span>
                       </label>
                       <input
-                        Type=”text”
+                        type=”text”
                         Placeholder=”XXXX-XXXX”
                         className=”w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all”
                         value={earlyAccessForm.code}
-                        onChange={€ => setEarlyAccessForm({ …earlyAccessForm, code: e.target.value })}
+                        onChange={e => setEarlyAccessForm({ …earlyAccessForm, code: e.target.value })}
                       />
                     </div>
 
                     <button
-                      Type=”submit”
+                      type=”submit”
                       Disabled={isSubmitting}
                       className=”w-full py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl text-white font-semibold hover:shadow-lg hover:shadow-cyan-500/25 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed mt-6”
                     >
@@ -1401,32 +1403,32 @@ export default function Home() {
                   <div>
                     <label className=”block text-sm font-medium text-gray-300 mb-1”>Company Name *</label>
                     <input
-                      Type=”text”
+                      type=”text”
                       Required
                       className=”w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50”
                       value={vendorForm.company_name}
-                      onChange={€ => setVendorForm({ …vendorForm, company_name: e.target.value })}
+                      onChange={e => setVendorForm({ …vendorForm, company_name: e.target.value })}
                     />
                   </div>
                   <div className=”grid grid-cols-2 gap-4”>
                     <div>
                       <label className=”block text-sm font-medium text-gray-300 mb-1”>Contact Name *</label>
                       <input
-                        Type=”text”
+                        type=”text”
                         Required
                         className=”w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50”
                         value={vendorForm.contact_name}
-                        onChange={€ => setVendorForm({ …vendorForm, contact_name: e.target.value })}
+                        onChange={e => setVendorForm({ …vendorForm, contact_name: e.target.value })}
                       />
                     </div>
                     <div>
                       <label className=”block text-sm font-medium text-gray-300 mb-1”>Email *</label>
                       <input
-                        Type=”email”
+                        type=”email”
                         Required
                         className=”w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50”
                         value={vendorForm.email}
-                        onChange={€ => setVendorForm({ …vendorForm, email: e.target.value })}
+                        onChange={e => setVendorForm({ …vendorForm, email: e.target.value })}
                       />
                     </div>
                   </div>
@@ -1434,20 +1436,20 @@ export default function Home() {
                     <div>
                       <label className=”block text-sm font-medium text-gray-300 mb-1”>Phone *</label>
                       <input
-                        Type=”tel”
+                        type=”tel”
                         Required
                         className=”w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50”
                         value={vendorForm.phone}
-                        onChange={€ => setVendorForm({ …vendorForm, phone: e.target.value })}
+                        onChange={e => setVendorForm({ …vendorForm, phone: e.target.value })}
                       />
                     </div>
                     <div>
                       <label className=”block text-sm font-medium text-gray-300 mb-1”>Website</label>
                       <input
-                        Type=”url”
+                        type=”url”
                         className=”w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50”
                         value={vendorForm.website}
-                        onChange={€ => setVendorForm({ …vendorForm, website: e.target.value })}
+                        onChange={e => setVendorForm({ …vendorForm, website: e.target.value })}
                       />
                     </div>
                   </div>
@@ -1457,7 +1459,7 @@ export default function Home() {
                       Required
                       className=”w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50”
                       value={vendorForm.specialization}
-                      onChange={€ => setVendorForm({ …vendorForm, specialization: e.target.value })}
+                      onChange={e => setVendorForm({ …vendorForm, specialization: e.target.value })}
                     >
                       <option value=”” className=”bg-[#0f1623]”>Select specialization</option>
                       <option value=”it_staffing” className=”bg-[#0f1623]”>IT Staffing</option>
@@ -1473,7 +1475,7 @@ export default function Home() {
                       Required
                       className=”w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50”
                       value={vendorForm.team_size}
-                      onChange={€ => setVendorForm({ …vendorForm, team_size: e.target.value })}
+                      onChange={e => setVendorForm({ …vendorForm, team_size: e.target.value })}
                     >
                       <option value=”” className=”bg-[#0f1623]”>Select team size</option>
                       <option value=”1-10” className=”bg-[#0f1623]”>1-10</option>
@@ -1484,7 +1486,7 @@ export default function Home() {
                   </div>
 
                   <button
-                    Type=”submit”
+                    type=”submit”
                     Disabled={isSubmitting}
                     className=”w-full py-4 bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl text-white font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2 mt-6 disabled:opacity-50”
                   >
@@ -1528,32 +1530,32 @@ export default function Home() {
                   <div>
                     <label className=”block text-sm font-medium text-gray-300 mb-1”>Company Name *</label>
                     <input
-                      Type=”text”
+                      type=”text”
                       Required
                       className=”w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50”
                       value={clientForm.company_name}
-                      onChange={€ => setClientForm({ …clientForm, company_name: e.target.value })}
+                      onChange={e => setClientForm({ …clientForm, company_name: e.target.value })}
                     />
                   </div>
                   <div className=”grid grid-cols-2 gap-4”>
                     <div>
                       <label className=”block text-sm font-medium text-gray-300 mb-1”>Contact Name *</label>
                       <input
-                        Type=”text”
+                        type=”text”
                         Required
                         className=”w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50”
                         value={clientForm.contact_name}
-                        onChange={€ => setClientForm({ …clientForm, contact_name: e.target.value })}
+                        onChange={e => setClientForm({ …clientForm, contact_name: e.target.value })}
                       />
                     </div>
                     <div>
                       <label className=”block text-sm font-medium text-gray-300 mb-1”>Email *</label>
                       <input
-                        Type=”email”
+                        type=”email”
                         Required
                         className=”w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50”
                         value={clientForm.email}
-                        onChange={€ => setClientForm({ …clientForm, email: e.target.value })}
+                        onChange={e => setClientForm({ …clientForm, email: e.target.value })}
                       />
                     </div>
                   </div>
@@ -1561,11 +1563,11 @@ export default function Home() {
                     <div>
                       <label className=”block text-sm font-medium text-gray-300 mb-1”>Phone *</label>
                       <input
-                        Type=”tel”
+                        type=”tel”
                         Required
                         className=”w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50”
                         value={clientForm.phone}
-                        onChange={€ => setClientForm({ …clientForm, phone: e.target.value })}
+                        onChange={e => setClientForm({ …clientForm, phone: e.target.value })}
                       />
                     </div>
                     <div>
@@ -1574,7 +1576,7 @@ export default function Home() {
                         Required
                         className=”w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50”
                         value={clientForm.industry}
-                        onChange={€ => setClientForm({ …clientForm, industry: e.target.value })}
+                        onChange={e => setClientForm({ …clientForm, industry: e.target.value })}
                       >
                         <option value=”” className=”bg-[#0f1623]”>Select industry</option>
                         <option value=”technology” className=”bg-[#0f1623]”>Technology</option>
@@ -1592,7 +1594,7 @@ export default function Home() {
                         Required
                         className=”w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50”
                         value={clientForm.company_size}
-                        onChange={€ => setClientForm({ …clientForm, company_size: e.target.value })}
+                        onChange={e => setClientForm({ …clientForm, company_size: e.target.value })}
                       >
                         <option value=”” className=”bg-[#0f1623]”>Select size</option>
                         <option value=”1-50” className=”bg-[#0f1623]”>1-50</option>
@@ -1604,18 +1606,18 @@ export default function Home() {
                     <div>
                       <label className=”block text-sm font-medium text-gray-300 mb-1”>Hiring Needs (Positions) *</label>
                       <input
-                        Type=”number”
+                        type=”number”
                         Required
                         Min=”1”
                         className=”w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50”
                         value={clientForm.hiring_needs}
-                        onChange={€ => setClientForm({ …clientForm, hiring_needs: e.target.value })}
+                        onChange={e => setClientForm({ …clientForm, hiring_needs: e.target.value })}
                       />
                     </div>
                   </div>
 
                   <button
-                    Type=”submit”
+                    type=”submit”
                     Disabled={isSubmitting}
                     className=”w-full py-4 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl text-white font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2 mt-6 disabled:opacity-50”
                   >
