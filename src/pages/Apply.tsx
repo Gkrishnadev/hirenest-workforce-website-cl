@@ -27,11 +27,11 @@ export default function Apply() {
       // ✅ 1. UPLOAD RESUME
       // =====================================================
       if (resume) {
-        const fileName = `${Date.now()}-${resume.name}`;
+        const filePath = `${Date.now()}-${resume.name}`;
 
         const { error: uploadError } = await supabase.storage
           .from("Resumes")
-          .upload(fileName, resume);
+          .upload(filePath, resume);
 
         if (uploadError) {
           console.error(uploadError);
@@ -42,13 +42,13 @@ export default function Apply() {
 
         const { data } = supabase.storage
           .from("Resumes")
-          .getPublicUrl(fileName);
+          .getPublicUrl(filePath);
 
         resumeUrl = data.publicUrl;
       }
 
       // =====================================================
-      // ✅ 2. SAVE TO DB
+      // ✅ 2. SAVE TO DB (FIXED: added await)
       // =====================================================
       const { error: dbError } = await supabase
         .from("job_applications")
@@ -70,38 +70,42 @@ export default function Apply() {
       }
 
       // =====================================================
-      // ✅ 3. SEND EMAIL (FIXED)
+      // ✅ 3. SEND EMAIL (ADMIN + LOGIC)
       // =====================================================
       const res = await sendEmail({
         type: "Job Application",
+        formName: "Apply Form",
         data: {
           name: form.name,
           email: form.email,
           phone: form.phone,
           role: role,
           resumeUrl: resumeUrl,
-          whyFit: "", // ✅ SAFE FIX (removed undefined error)
+          whyFit: "",
         },
       });
 
       if (!res.ok) {
+        console.error(await res.text());
         alert("Email failed ❌");
         setLoading(false);
         return;
       }
 
       // =====================================================
-      // ✅ 4. CANDIDATE CONFIRMATION EMAIL
+      // ✅ 4. CANDIDATE EMAIL (FIXED: added API KEY)
       // =====================================================
-      await fetch(
+      const confirmRes = await fetch(
         "https://hjeukduwzdginoqjjgod.supabase.co/functions/v1/send-email",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "x-api-key": "hirenest-secure-key-2026", // ✅ FIXED
           },
           body: JSON.stringify({
             type: "Candidate Confirmation",
+            formName: "Apply Form",
             data: {
               name: form.name,
               email: form.email,
@@ -110,6 +114,10 @@ export default function Apply() {
           }),
         }
       );
+
+      if (!confirmRes.ok) {
+        console.error(await confirmRes.text());
+      }
 
       // =====================================================
       // ✅ 5. SUCCESS
@@ -130,7 +138,6 @@ export default function Apply() {
 
   return (
     <div className="pt-[72px] p-6 max-w-xl mx-auto">
-
       <h1 className="text-3xl font-bold mb-6">
         Apply for {role}
       </h1>
