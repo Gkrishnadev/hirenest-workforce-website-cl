@@ -188,9 +188,9 @@ const testimonials = [
 
 // Stats
 const stats = [
-  { number: "120+", label: "Staffing Vendors", suffix: "" },
-  { number: "500+", label: "Bench Consultants", suffix: "" },
-  { number: "40+", label: "Active Requirements", suffix: "" },
+  { number: "20+", label: "Staffing Vendors", suffix: "" },
+  { number: "150+", label: "Bench Consultants", suffix: "" },
+  { number: "30", label: "Active Requirements", suffix: "" },
   { number: "95%", label: "Match Accuracy", suffix: "" },
 ];
 
@@ -778,7 +778,7 @@ export default function Home() {
               </p>
 
               <p className="text-lg text-gray-400 leading-relaxed">
-                Founded in 2024, we&apos;ve rapidly grown to serve 500+ companies across Technology, Finance, Healthcare, and E-commerce sectors. Our unique approach combines human expertise with AI-powered matching to deliver candidates that don&apos;t just fit the job description—they fit your culture and drive results.
+                Founded in 2026, we&apos;ve rapidly grown to serve 50+ companies across Technology, Finance, Healthcare, and E-commerce sectors. Our unique approach combines human expertise with AI-powered matching to deliver candidates that don&apos;t just fit the job description—they fit your culture and drive results.
               </p>
 
               <div className="grid grid-cols-2 gap-6 pt-4">
@@ -806,8 +806,8 @@ export default function Home() {
               <div className="relative bg-[#0f1623] rounded-3xl border border-white/10 p-8">
                 <div className="grid grid-cols-2 gap-6">
                   {[
-                    { value: "500+", label: "Companies Served" },
-                    { value: "10,000+", label: "Placements Made" },
+                    { value: "50+", label: "Companies Served" },
+                    { value: "10+", label: "Placements Made" },
                     { value: "98%", label: "Client Retention" },
                     { value: "24h", label: "Avg. Time to First Match" },
                   ].map((stat, i) => (
@@ -1391,7 +1391,7 @@ export default function Home() {
       {/* FINAL CTA */}
       <section className="py-24 bg-[#0B0F1A] relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(6,182,212,0.15),_transparent_50%)]" />
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%239C92AC%22%20fill-opacity%3D%220.03%22%3E%3Cpath%20d%3D%22M36%2034v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6%2034v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6%204V0H4v4H0v2h4v4h2V6h4V4H6z%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]" opacity="0.5" />
+        <div className="absolute inset-0 bg-[url('data:images/Logo.png'>
 
         <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center relative">
           <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 mb-10">
@@ -1520,7 +1520,7 @@ export default function Home() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
           <div className="relative w-full max-w-lg bg-[#0f1623] rounded-3xl border border-white/10 shadow-2xl overflow-hidden animate-scale-in max-h-[90vh] overflow-y-auto">
             <div className="relative h-40 bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center">
-              <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.1%22%3E%3Cpath%20d%3D%22M36%2034v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6%2034v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6%204V0H4v4H0v2h4v4h2V6h4V4H6z%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]" />
+              <div className="absolute inset-0 bg-[url('data:images/Logo.png')]" />
               <div className="text-center relative z-10">
                 <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3 backdrop-blur-sm border border-white/30">
                   <Rocket className="w-10 h-10 text-white" />
