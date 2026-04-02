@@ -671,53 +671,72 @@ export default function Home() {
               </div>
             ))}
           </div>
-
-          {/* Early Access CTA */}
-   
  {/* Early Access CTA */}
-<div className="grid grid-cols-2 gap-4">
-  <div>
-    <label className="block text-sm font-medium text-gray-300 mb-2">
-      Company *
-    </label>
-    <div className="relative">
-      <Building2 className="absolute left-3 top-3.5 w-5 h-5 text-gray-500" />
-      <input
-        type="text"
-        required
-        placeholder="Acme Inc"
-        className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all"
-        value={earlyAccessForm.company}
-        onChange={(e) =>
-          setEarlyAccessForm({
-            ...earlyAccessForm,
-            company: e.target.value,
-          })
-        }
-      />
-    </div>
-  </div>
+{/* Early Access CTA */}
+<div className="mt-16 max-w-3xl mx-auto">
+  <form onSubmit={captureEarlyAccessLead} className="space-y-6">
+
+    <div className="grid grid-cols-2 gap-4">
+      <div>
+        <label className="block text-sm font-medium text-gray-300 mb-2">
+          Company *
+        </label>
+        <div className="relative">
+          <Building2 className="absolute left-3 top-3.5 w-5 h-5 text-gray-500" />
+          <input
+            type="text"
+            required
+            placeholder="Acme Inc"
+            className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white"
+            value={earlyAccessForm.company}
+            onChange={(e) =>
+              setEarlyAccessForm({
+                ...earlyAccessForm,
+                company: e.target.value,
+              })
+            }
+          />
+        </div>
+      </div>
 
   <div>
-    <label className="block text-sm font-medium text-gray-300 mb-2">
-      Phone
-    </label>
-    <div className="relative">
-      <Phone className="absolute left-3 top-3.5 w-5 h-5 text-gray-500" />
-      <input
-        type="tel"
-        placeholder="+91 98765 43210"
-        className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all"
-        value={earlyAccessForm.phone}
-        onChange={(e) =>
-          setEarlyAccessForm({
-            ...earlyAccessForm,
-            phone: e.target.value,
-          })
-        }
-      />
+        <label className="block text-sm font-medium text-gray-300 mb-2">
+          Phone
+        </label>
+        <div className="relative">
+          <Phone className="absolute left-3 top-3.5 w-5 h-5 text-gray-500" />
+          <input
+            type="tel"
+            placeholder="+91 98765 43210"
+            className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white"
+            value={earlyAccessForm.phone}
+            onChange={(e) =>
+              setEarlyAccessForm({
+                ...earlyAccessForm,
+                phone: e.target.value,
+              })
+            }
+          />
+        </div>
+      </div>
     </div>
-  </div>
+
+    <button
+      type="submit"
+      disabled={isSubmitting}
+      className="w-full py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl text-white font-semibold flex items-center justify-center gap-2"
+    >
+      {isSubmitting ? (
+        <>
+          <Loader2 className="w-5 h-5 animate-spin" />
+          Submitting...
+        </>
+      ) : (
+        "Request Early Access"
+      )}
+    </button>
+
+  </form>
 </div>
       </section>
 
@@ -1373,25 +1392,25 @@ export default function Home() {
                         onChange={e => setEarlyAccessForm({...earlyAccessForm, code: e.target.value })}
                       />
                     </div>
+    </div>
 
-                    <button
-  type="submit"
-  disabled={isSubmitting}
-  className="w-full py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl text-white font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed mt-6"
->
-                      {isSubmitting ? (
-                        <>
-                          <Loader2 className="w-5 h-5 animate-spin"/>
-                          Submitting…
-                        </>
-                      ) : (
-                        <>
-                          <Sparkles className="w-5 h-5"/>
-                          Request Access
-                        </>
-                      )}
-                    </button>
-                  </form>
+    <button
+      type="submit"
+      disabled={isSubmitting}
+      className="w-full py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl text-white font-semibold flex items-center justify-center gap-2"
+    >
+      {isSubmitting ? (
+        <>
+          <Loader2 className="w-5 h-5 animate-spin" />
+          Submitting...
+        </>
+      ) : (
+        "Request Early Access"
+      )}
+    </button>
+
+  </form>
+</div>
 
                   <p className="text-xs text-gray-500 text-center mt-6">
                     By requesting access, you agree to our Terms of Service and Privacy Policy.
