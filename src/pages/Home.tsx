@@ -198,9 +198,11 @@ const stats = [
 const navItems = [
   { label: "Home", href: "/" },
   { label: "Services", href: "#services" },
+  { label: "Hire Developers", href: "/hire-developers" }, 
   { label: "Vendor Network", href: "#vendors" },
   { label: "About", href: "#about" },
   { label: "Contact", href: "#contact" },
+  { label: "Careers", href: "/careers" }, 
 ];
 
 export default function Home() {
@@ -455,9 +457,11 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center">
-                <Network className="w-6 h-6 text-white" />
-              </div>
+           <img 
+  src="/Images/Logo.png" 
+  alt="HireNest Logo" 
+  className="w-10 h-10 object-contain"
+/>
               <div>
                 <div className="text-xl font-bold text-white">HireNest</div>
                 <div className="text-[10px] text-gray-400 uppercase tracking-wider">Workforce</div>
@@ -549,7 +553,7 @@ export default function Home() {
       </div>
 
       {/* HERO SECTION */}
-      <section className="relative min-h-screen flex items-center overflow-hidden pt-20">
+     <section className="relative min-h-screen flex items-center overflow-hidden pt-28">
         <div className="absolute inset-0 bg-[#0B0F1A]">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(6,182,212,0.15),_transparent_50%)]" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(59,130,246,0.1),_transparent_50%)]" />
@@ -1399,7 +1403,7 @@ export default function Home() {
       {/* FINAL CTA */}
       <section className="py-24 bg-[#0B0F1A] relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(6,182,212,0.15),_transparent_50%)]" />
-        <div className="absolute inset-0 bg-[url('data:images/Logo.png')]">
+        <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-blue-600/5" />
         </div>
         <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center relative">
           <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 mb-10">
@@ -1458,9 +1462,11 @@ export default function Home() {
           <div className="grid md:grid-cols-4 gap-12 mb-16">
             <div className="col-span-2">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center">
-                  <Network className="w-7 h-7 text-white" />
-                </div>
+               <img 
+  src="/Images/Logo.png" 
+  alt="HireNest Logo" 
+  className="w-12 h-12 object-contain"
+/>
                 <div>
                   <div className="text-2xl font-bold text-white">HireNest</div>
                   <div className="text-xs text-gray-500 uppercase tracking-wider">Workforce OS</div>
@@ -1484,7 +1490,10 @@ export default function Home() {
               <ul className="space-y-4">
                 {["Features", "Pricing", "Integrations", "API", "Security"].map((item) => (
                   <li key={item}>
-                    <a href="#" className="text-gray-400 hover:text-cyan-400 transition-colors">{item}</a>
+                    <a href="#" className="text-gray-400 hover:text-cyan-400 transition-colors flex items-center gap-2">
+  <Mail className="w-5 h-5" />
+  {item}
+</a>
                   </li>
                 ))}
               </ul>
@@ -1514,8 +1523,13 @@ export default function Home() {
               © 2026 HireNest Workforce. All rights reserved.
             </p>
             <div className="flex gap-6 text-sm">
-              <a href="#" className="text-gray-500 hover:text-cyan-400 transition-colors">Privacy Policy</a>
-              <a href="#" className="text-gray-500 hover:text-cyan-400 transition-colors">Terms of Service</a>
+         <Link to="/privacy-policy" className="text-gray-500 hover:text-cyan-400 transition-colors">
+  Privacy Policy
+</Link>
+
+<Link to="/terms" className="text-gray-500 hover:text-cyan-400 transition-colors">
+  Terms of Service
+</Link>
             </div>
           </div>
         </div>
