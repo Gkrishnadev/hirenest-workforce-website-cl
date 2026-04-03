@@ -249,6 +249,17 @@ export default function Home() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Close mobile menu on resize to desktop
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        setMobileMenuOpen(false);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   // Email notification function
   const sendNotification = async (type: string, data: any, formName: string) => {
     try {
@@ -440,29 +451,31 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#0B0F1A] font-sans selection:bg-cyan-500/30">
-      {/* Navigation - FIXED: Proper mobile/desktop separation */}
+      {/* Navigation - FIXED: Solid background and proper z-index */}
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? "bg-[#0B0F1A]/95 backdrop-blur-md border-b border-white/10" : "bg-transparent"
+        scrolled || mobileMenuOpen ? "bg-[#0B0F1A] border-b border-white/10" : "bg-[#0B0F1A]/95 backdrop-blur-md"
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
-            <div className="flex items-center gap-3 flex-shrink-0">
-              <img 
-                src="/Images/Logo.png" 
-                alt="HireNest Logo" 
-                className="w-10 h-10 object-contain"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.style.display = 'none';
-                  target.parentElement!.innerHTML = '<div class="w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-lg">H</div>';
-                }}
-              />
-              <div>
+            <Link to="/" className="flex items-center gap-3 flex-shrink-0">
+              <div className="w-10 h-10 overflow-hidden rounded-lg">
+                <img 
+                  src="/Images/Logo.png" 
+                  alt="HireNest Logo" 
+                  className="w-full h-full object-contain"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.style.display = 'none';
+                    target.parentElement!.innerHTML = '<div class="w-full h-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-white font-bold text-lg">H</div>';
+                  }}
+                />
+              </div>
+              <div className="hidden sm:block">
                 <div className="text-xl font-bold text-white">HireNest</div>
                 <div className="text-[10px] text-gray-400 uppercase tracking-wider">Workforce</div>
               </div>
-            </div>
+            </Link>
 
             {/* Desktop Navigation Links */}
             <div className="hidden lg:flex items-center gap-6">
@@ -493,7 +506,7 @@ export default function Home() {
               </button>
             </div>
 
-            {/* Mobile Menu Button - Only visible on small screens */}
+            {/* Mobile Menu Button */}
             <button
               className="lg:hidden text-white p-2 rounded-lg hover:bg-white/10 transition-colors"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -502,54 +515,62 @@ export default function Home() {
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
+        </div>
 
-          {/* Mobile Menu Dropdown - Only shows when toggled */}
-          {mobileMenuOpen && (
-            <div className="lg:hidden absolute top-full left-0 right-0 bg-[#0B0F1A]/98 backdrop-blur-md border-b border-white/10 shadow-2xl">
-              <div className="px-4 py-6 space-y-4">
-                {/* Mobile Nav Links */}
-                <div className="flex flex-col space-y-3">
-                  {navItems.map((item) => (
-                    <Link
-                      key={item.label}
-                      to={item.href}
-                      className="text-gray-300 hover:text-cyan-400 transition-colors text-base font-medium py-2"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      {item.label}
-                    </Link>
-                  ))}
-                </div>
+        {/* Mobile Menu - FIXED: Solid background, no transparency */}
+        {mobileMenuOpen && (
+          <div className="lg:hidden fixed inset-x-0 top-20 bg-[#0B0F1A] border-b border-white/10 shadow-2xl">
+            <div className="px-4 py-6 space-y-4 max-h-[calc(100vh-5rem)] overflow-y-auto">
+              {/* Mobile Nav Links */}
+              <div className="flex flex-col space-y-1">
+                {navItems.map((item) => (
+                  <Link
+                    key={item.label}
+                    to={item.href}
+                    className="text-gray-300 hover:text-cyan-400 hover:bg-white/5 transition-colors text-base font-medium py-3 px-4 rounded-lg"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
 
-                {/* Mobile CTA Buttons */}
-                <div className="flex flex-col gap-3 pt-4 border-t border-white/10">
-                  <button
-                    onClick={() => {
-                      setShowVendorSignup(true);
-                      setMobileMenuOpen(false);
-                    }}
-                    className="w-full px-4 py-3 text-sm font-medium text-cyan-400 border border-cyan-500/30 rounded-lg hover:bg-cyan-500/10 transition-all"
-                  >
-                    Join as Vendor
-                  </button>
-                  <button
-                    onClick={() => {
-                      setShowEarlyAccess(true);
-                      setMobileMenuOpen(false);
-                    }}
-                    className="w-full px-4 py-3 text-sm font-medium text-white bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg"
-                  >
-                    Hire Developers
-                  </button>
-                </div>
+              {/* Mobile CTA Buttons */}
+              <div className="flex flex-col gap-3 pt-4 border-t border-white/10">
+                <button
+                  onClick={() => {
+                    setShowVendorSignup(true);
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full px-4 py-3 text-sm font-medium text-cyan-400 border border-cyan-500/30 rounded-lg hover:bg-cyan-500/10 transition-all"
+                >
+                  Join as Vendor
+                </button>
+                <button
+                  onClick={() => {
+                    setShowEarlyAccess(true);
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full px-4 py-3 text-sm font-medium text-white bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg"
+                >
+                  Hire Developers
+                </button>
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </nav>
 
+      {/* Overlay for mobile menu */}
+      {mobileMenuOpen && (
+        <div 
+          className="lg:hidden fixed inset-0 bg-black/50 z-40 top-20"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
+
       {/* Floating OS Badge */}
-      <div className="fixed top-28 right-6 z-40 hidden xl:block animate-bounce-slow">
+      <div className="fixed top-28 right-6 z-30 hidden xl:block animate-bounce-slow">
         <button
           onClick={() => setShowEarlyAccess(true)}
           className="group bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-5 py-3 rounded-full shadow-2xl border border-cyan-400/30 backdrop-blur-md flex items-center gap-2 hover:shadow-cyan-500/50 transition-all hover:scale-105"
@@ -561,7 +582,7 @@ export default function Home() {
       </div>
 
       {/* HERO SECTION */}
-      <section className="relative min-h-screen flex items-center overflow-hidden pt-28">
+      <section className="relative min-h-screen flex items-center overflow-hidden pt-20">
         <div className="absolute inset-0 bg-[#0B0F1A]">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(6,182,212,0.15),_transparent_50%)]" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(59,130,246,0.1),_transparent_50%)]" />
@@ -570,84 +591,80 @@ export default function Home() {
 
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-20" />
 
-        <div className="relative max-w-7xl mx-auto px-6 lg:px-8 py-20 w-full">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             <div className="space-y-6 z-10">
-              <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm hover:border-cyan-500/30 transition-colors cursor-pointer group">
+              <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
                 <span className="relative flex h-2.5 w-2.5">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-500"></span>
                 </span>
-                <span className="text-cyan-400 text-sm font-semibold tracking-wide uppercase">
+                <span className="text-cyan-400 text-xs sm:text-sm font-semibold tracking-wide uppercase">
                   Workforce Operating System
                 </span>
-                <ArrowRight className="w-4 h-4 text-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
 
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-[0.95] tracking-tight">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-white leading-[1.1] tracking-tight">
                 Hire{" "}
                 <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
                   Faster
                 </span>
                 <br />
-                <span className="text-3xl lg:text-5xl xl:text-6xl text-gray-400 font-light">
+                <span className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-gray-400 font-light">
                   with HireNest
                 </span>
                 <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent"> OS</span>
               </h1>
 
-              <p className="text-lg text-gray-400 max-w-xl leading-relaxed font-light">
+              <p className="text-base sm:text-lg text-gray-400 max-w-xl leading-relaxed font-light">
                 The world&apos;s first <span className="text-cyan-400 font-semibold">Workforce Operating System</span> that unifies clients, vendors, and recruiters into one intelligent hiring pipeline powered by AI.
               </p>
 
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-2 sm:gap-3">
                 {[
                   { icon: Brain, text: "AI Matching" },
                   { icon: Workflow, text: "Real-time Pipeline" },
                   { icon: Globe, text: "Global Network" },
                   { icon: Clock, text: "24h Delivery" },
                 ].map((feature) => (
-                  <div key={feature.text} className="group px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 hover:border-cyan-500/30 hover:bg-white/10 transition-all duration-300 flex items-center gap-2 cursor-default">
+                  <div key={feature.text} className="group px-3 sm:px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:border-cyan-500/30 hover:bg-white/10 transition-all duration-300 flex items-center gap-2 cursor-default">
                     <feature.icon className="w-4 h-4 text-cyan-400 group-hover:scale-110 transition-transform" />
-                    <span className="text-gray-300 text-sm font-medium">{feature.text}</span>
+                    <span className="text-gray-300 text-xs sm:text-sm font-medium">{feature.text}</span>
                   </div>
                 ))}
               </div>
 
-              <div className="flex flex-wrap gap-4 pt-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2">
                 <button
                   onClick={() => setShowEarlyAccess(true)}
-                  className="group relative px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl font-semibold text-white shadow-2xl shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+                  className="group relative px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl font-semibold text-white shadow-2xl shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all duration-300 hover:-translate-y-1 overflow-hidden flex items-center justify-center gap-2"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
-                  <span className="relative flex items-center gap-2">
-                    <Rocket className="w-5 h-5" />
-                    Get Early Access
-                    <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                  </span>
+                  <Rocket className="w-5 h-5" />
+                  <span>Get Early Access</span>
+                  <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </button>
 
                 <button
                   onClick={() => setShowVendorSignup(true)}
-                  className="px-8 py-4 rounded-2xl font-semibold text-white border-2 border-white/20 hover:bg-white/10 hover:border-white/40 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 flex items-center gap-2 group"
+                  className="px-6 sm:px-8 py-3 sm:py-4 rounded-2xl font-semibold text-white border-2 border-white/20 hover:bg-white/10 hover:border-white/40 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 flex items-center justify-center gap-2 group"
                 >
                   <Network className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-                  Join as Vendor
+                  <span>Join as Vendor</span>
                 </button>
               </div>
 
-              <div className="flex items-center gap-6 pt-6 border-t border-white/10">
-                <div className="flex -space-x-3">
+              <div className="flex items-center gap-4 sm:gap-6 pt-4 sm:pt-6 border-t border-white/10">
+                <div className="flex -space-x-2 sm:-space-x-3">
                   {[1, 2, 3, 4, 5].map((i) => (
                     <div
                       key={i}
-                      className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 border-2 border-[#0B0F1A] flex items-center justify-center text-xs text-white font-bold shadow-lg"
+                      className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 border-2 border-[#0B0F1A] flex items-center justify-center text-xs text-white font-bold shadow-lg"
                     >
                       {String.fromCharCode(64 + i)}
                     </div>
                   ))}
                 </div>
-                <div className="text-sm">
+                <div className="text-xs sm:text-sm">
                   <span className="text-white font-semibold">500+ companies</span>
                   <span className="text-gray-500"> trust HireNest</span>
                   <div className="flex items-center gap-1 mt-1">
@@ -753,6 +770,7 @@ export default function Home() {
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0B0F1A] to-transparent" />
       </section>
 
+      {/* Rest of the component remains the same... */}
       {/* STATS BAR */}
       <section className="relative py-12 bg-white border-y border-gray-100">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -1470,16 +1488,18 @@ export default function Home() {
           <div className="grid md:grid-cols-4 gap-12 mb-12">
             <div className="col-span-2">
               <div className="flex items-center gap-3 mb-6">
-                <img 
-                  src="/Images/Logo.png" 
-                  alt="HireNest Logo" 
-                  className="w-12 h-12 object-contain"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.style.display = 'none';
-                    target.parentElement!.innerHTML = '<div class="w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">H</div>';
-                  }}
-                />
+                <div className="w-12 h-12 overflow-hidden rounded-lg">
+                  <img 
+                    src="/Images/Logo.png" 
+                    alt="HireNest Logo" 
+                    className="w-full h-full object-contain"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = 'none';
+                      target.parentElement!.innerHTML = '<div class="w-full h-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-white font-bold text-xl">H</div>';
+                    }}
+                  />
+                </div>
                 <div>
                   <div className="text-2xl font-bold text-white">HireNest</div>
                   <div className="text-xs text-gray-500 uppercase tracking-wider">Workforce OS</div>
@@ -1553,8 +1573,8 @@ export default function Home() {
 
       {/* Early Access Modal */}
       {showEarlyAccess && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
-          <div className="relative w-full max-w-lg bg-[#0f1623] rounded-3xl border border-white/10 shadow-2xl overflow-hidden animate-scale-in max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+          <div className="relative w-full max-w-lg bg-[#0f1623] rounded-3xl border border-white/10 shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto">
             <div className="relative h-36 bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center">
               <div className="absolute inset-0 bg-[url(&apos;/Images/Logo.png&apos;)] opacity-10 bg-center bg-no-repeat bg-contain" />
               <div className="text-center relative z-10">
@@ -1718,8 +1738,8 @@ export default function Home() {
 
       {/* Vendor Signup Modal */}
       {showVendorSignup && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
-          <div className="relative w-full max-w-lg bg-[#0f1623] rounded-3xl border border-white/10 shadow-2xl overflow-hidden animate-scale-in max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+          <div className="relative w-full max-w-lg bg-[#0f1623] rounded-3xl border border-white/10 shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto">
             <div className="relative h-28 bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center">
               <div className="text-center relative z-10">
                 <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-2 backdrop-blur-sm">
@@ -1845,8 +1865,8 @@ export default function Home() {
 
       {/* Client Signup Modal */}
       {showClientSignup && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
-          <div className="relative w-full max-w-lg bg-[#0f1623] rounded-3xl border border-white/10 shadow-2xl overflow-hidden animate-scale-in max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+          <div className="relative w-full max-w-lg bg-[#0f1623] rounded-3xl border border-white/10 shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto">
             <div className="relative h-28 bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
               <div className="text-center relative z-10">
                 <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-2 backdrop-blur-sm">
