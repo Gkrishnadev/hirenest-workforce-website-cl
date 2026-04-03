@@ -197,10 +197,10 @@ const navItems = [
   { label: "Home", href: "/" },
   { label: "Services", href: "/services" },
   { label: "Vendor Network", href: "/vendor-network" },
-   { label: "Hire Developers", href: "/hire-developers-india" }, 
+  { label: "Hire Developers", href: "/hire-developers-india" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
-  { label: "Careers", href: "/careers" }, 
+  { label: "Careers", href: "/careers" },
 ];
 
 export default function Home() {
@@ -287,7 +287,7 @@ export default function Home() {
     }
   };
 
-  // Early Access Form Submit
+  // Early Access Form Submit - SENDS CONFIRMATION EMAIL
   const captureEarlyAccessLead = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -310,7 +310,8 @@ export default function Home() {
 
       if (error) throw error;
 
-      await sendNotification("early_access", earlyAccessForm, "🚀 HireNest OS Early Access Request");
+      // Send confirmation email notification
+      await sendNotification("early_access", earlyAccessForm, "🚀 HireNest OS Early Access - Confirmation");
 
       setSubmitStatus("success");
       setTimeout(() => {
@@ -459,11 +460,11 @@ export default function Home() {
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
-            {/* Logo - FIXED PATH */}
+            {/* Logo */}
             <Link to="/" className="flex items-center gap-3 flex-shrink-0">
               <div className="w-10 h-10 overflow-hidden rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center">
                 <img 
-                  src="/images/Logo.png" 
+                  src="/Images/Logo.png" 
                   alt="HireNest" 
                   className="w-full h-full object-contain"
                   onError={(e) => {
@@ -707,7 +708,7 @@ export default function Home() {
       <section className="relative py-12 bg-white border-y border-gray-100">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
-            {stats.map((stat, idx) => (
+            {stats.map((stat) => (
               <div key={stat.label} className="text-center group cursor-default">
                 <div className="relative inline-block">
                   <span className="text-4xl lg:text-5xl font-bold bg-gradient-to-br from-[#0B0F1A] to-gray-600 bg-clip-text text-transparent group-hover:scale-110 transition-transform duration-300 inline-block">
@@ -733,7 +734,7 @@ export default function Home() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
-            {services.map((service, idx) => (
+            {services.map((service) => (
               <div
                 key={service.title}
                 className="group relative p-6 bg-white rounded-2xl border border-gray-200 hover:border-transparent transition-all duration-500 overflow-hidden"
@@ -785,7 +786,7 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-12 relative">
             <div className="hidden md:block absolute top-24 left-[16%] right-[16%] h-1 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 rounded-full" />
 
-            {steps.map((step, idx) => (
+            {steps.map((step) => (
               <div key={step.n} className="relative text-center group">
                 <div className="w-16 h-16 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 text-white flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-cyan-500/30 relative z-10 group-hover:scale-110 transition-transform duration-300">
                   <step.icon className="w-7 h-7" />
@@ -814,7 +815,7 @@ export default function Home() {
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {whyCards.map((card, idx) => (
+            {whyCards.map((card) => (
               <div
                 key={card.title}
                 className="group p-6 bg-white rounded-2xl border border-gray-200 hover:border-cyan-500/30 hover:shadow-2xl hover:shadow-cyan-500/10 transition-all duration-500 text-center hover:-translate-y-2"
@@ -1006,15 +1007,16 @@ export default function Home() {
         </div>
       </section>
 
-      {/* FOOTER */}
+      {/* FOOTER - SINGLE INSTANCE WITH QUICK LINKS, FOR PARTNERS, CONTACT */}
       <footer id="contact" className="bg-[#0B0F1A] border-t border-white/10 pt-16 pb-8">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-12 mb-12">
-            <div className="col-span-2">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+            {/* Brand Column */}
+            <div className="lg:col-span-1">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-12 h-12 overflow-hidden rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center">
                   <img 
-                    src="/images/Logo.png" 
+                    src="/Images/Logo.png" 
                     alt="HireNest" 
                     className="w-full h-full object-contain"
                     onError={(e) => {
@@ -1030,7 +1032,7 @@ export default function Home() {
                 </div>
               </div>
               <p className="text-gray-400 max-w-sm leading-relaxed mb-6 text-sm">
-                Premium workforce solutions for ambitious companies. Building teams that drive innovation.
+                Connecting world-class companies with elite talent through an intelligent network of trusted staffing partners.
               </p>
               <div className="flex gap-4">
                 <a href="https://linkedin.com/company/hirenest" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-cyan-500 hover:text-white transition-all">
@@ -1042,18 +1044,31 @@ export default function Home() {
               </div>
             </div>
 
+            {/* Quick Links */}
             <div>
-              <h4 className="text-white font-semibold mb-6">Services</h4>
+              <h4 className="text-white font-semibold mb-6 text-sm uppercase tracking-wider">Quick Links</h4>
               <ul className="space-y-3">
-                <li><Link to="/hire-developers-india" className="text-gray-400 hover:text-cyan-400 transition-colors text-sm">Hire Developers</Link></li>
+                <li><Link to="/about" className="text-gray-400 hover:text-cyan-400 transition-colors text-sm">About HireNest</Link></li>
                 <li><Link to="/vendor-network" className="text-gray-400 hover:text-cyan-400 transition-colors text-sm">Vendor Network</Link></li>
-                <li><a href="#services" className="text-gray-400 hover:text-cyan-400 transition-colors text-sm">IT Staffing</a></li>
-                <li><a href="#services" className="text-gray-400 hover:text-cyan-400 transition-colors text-sm">AI Talent</a></li>
+                <li><Link to="/contact" className="text-gray-400 hover:text-cyan-400 transition-colors text-sm">Submit Requirement</Link></li>
+                <li><Link to="/careers" className="text-gray-400 hover:text-cyan-400 transition-colors text-sm">Bench Consultants</Link></li>
+                <li><Link to="/contact" className="text-gray-400 hover:text-cyan-400 transition-colors text-sm">Contact</Link></li>
               </ul>
             </div>
 
+            {/* For Partners */}
             <div>
-              <h4 className="text-white font-semibold mb-6">Contact</h4>
+              <h4 className="text-white font-semibold mb-6 text-sm uppercase tracking-wider">For Partners</h4>
+              <ul className="space-y-3">
+                <li><button onClick={() => setShowVendorSignup(true)} className="text-gray-400 hover:text-cyan-400 transition-colors text-sm text-left">Partner With Us</button></li>
+                <li><Link to="/vendor-network" className="text-gray-400 hover:text-cyan-400 transition-colors text-sm">Vendor Onboarding</Link></li>
+                <li><Link to="/careers" className="text-gray-400 hover:text-cyan-400 transition-colors text-sm">Careers</Link></li>
+              </ul>
+            </div>
+
+            {/* Contact */}
+            <div>
+              <h4 className="text-white font-semibold mb-6 text-sm uppercase tracking-wider">Contact</h4>
               <ul className="space-y-3">
                 <li className="flex items-center gap-3 text-gray-400 text-sm">
                   <Mail className="w-4 h-4 text-cyan-400" />
@@ -1065,12 +1080,13 @@ export default function Home() {
                 </li>
                 <li className="flex items-start gap-3 text-gray-400 text-sm">
                   <MapPin className="w-4 h-4 text-cyan-400 mt-1" />
-                  <span>Hyderabad, Telangana<br />India</span>
+                  <span>Headquarters at Hyderabad<br />Telangana, India</span>
                 </li>
               </ul>
             </div>
           </div>
 
+          {/* Bottom Bar */}
           <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-gray-500 text-sm">
               © 2026 HireNest Workforce. All rights reserved.
@@ -1087,8 +1103,7 @@ export default function Home() {
         </div>
       </footer>
 
-      {/* MODALS - Same as before, omitted for brevity but keep them */}
-      {/* Early Access Modal */}
+      {/* EARLY ACCESS MODAL - Sends Confirmation Email */}
       {showEarlyAccess && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
           <div className="relative w-full max-w-lg bg-[#0f1623] rounded-3xl border border-white/10 shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto">
@@ -1196,7 +1211,7 @@ export default function Home() {
         </div>
       )}
 
-      {/* Vendor Signup Modal */}
+      {/* VENDOR SIGNUP MODAL */}
       {showVendorSignup && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
           <div className="relative w-full max-w-lg bg-[#0f1623] rounded-3xl border border-white/10 shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto">
@@ -1270,7 +1285,7 @@ export default function Home() {
         </div>
       )}
 
-      {/* Client Signup Modal */}
+      {/* CLIENT SIGNUP MODAL */}
       {showClientSignup && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
           <div className="relative w-full max-w-lg bg-[#0f1623] rounded-3xl border border-white/10 shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto">
