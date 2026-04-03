@@ -1488,15 +1488,17 @@ export default function Home() {
             <div>
               <h4 className="text-white font-semibold mb-6">Product</h4>
               <ul className="space-y-4">
-                {["Features", "Pricing", "Integrations", "API", "Security"].map((item) => (
-                  <li key={item}>
-                    <a href="#" className="text-gray-400 hover:text-cyan-400 transition-colors flex items-center gap-2">
-  <Mail className="w-5 h-5" />
-  {item}
-</a>
-                  </li>
-                ))}
-              </ul>
+  {["Features", "Pricing", "Integrations", "API", "Security"].map((item) => (
+    <li key={item}>
+      <a
+        href="#"
+        className="text-gray-400 hover:text-cyan-400 transition-colors"
+      >
+        {item}
+      </a>
+    </li>
+  ))}
+</ul>
             </div>
 
             <div>
