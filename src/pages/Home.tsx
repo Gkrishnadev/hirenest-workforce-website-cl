@@ -193,11 +193,11 @@ const stats = [
 // Navigation items
 const navItems = [
   { label: "Home", href: "/" },
-  { label: "Services", href: "#services" },
+  { label: "Services", href: "/services" },
   { label: "Hire Developers", href: "/hire-developers-india" }, 
-  { label: "Vendor Network", href: "#vendors" },
-  { label: "About", href: "#about" },
-  { label: "Contact", href: "#contact" },
+  { label: "Vendor Network", href: "/vendors" },
+  { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
   { label: "Careers", href: "/careers" }, 
 ];
 
