@@ -194,11 +194,11 @@ const stats = [
   { number: "95%", label: "Match Accuracy", suffix: "" },
 ];
 
-// Navigation items
+// Navigation items - ADDED Hire Developers and Careers
 const navItems = [
   { label: "Home", href: "/" },
   { label: "Services", href: "#services" },
-  { label: "Hire Developers", href: "/hire-developers" }, 
+  { label: "Hire Developers", href: "/hire-developers-india" }, 
   { label: "Vendor Network", href: "#vendors" },
   { label: "About", href: "#about" },
   { label: "Contact", href: "#contact" },
@@ -253,32 +253,32 @@ export default function Home() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Email notification function - LinkedIn Style
+  // Email notification function - FIXED for Early Access
   const sendNotification = async (type: string, data: any, formName: string) => {
-  try {
-    await fetch(
-      "https://hjeukduwzdginoqjjgod.supabase.co/functions/v1/send-email",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-api-key": "hirenest-secure-key-2026", // ✅ IMPORTANT
-        },
-        body: JSON.stringify({
-          type,
-          formName,
-          data,
-          timestamp: new Date().toISOString(),
-          source: window.location.href,
-        }),
-      }
-    );
-  } catch (error) {
-    console.error("Notification error:", error);
-  }
-};
+    try {
+      await fetch(
+        "https://hjeukduwzdginoqjjgod.supabase.co/functions/v1/send-email",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-api-key": "hirenest-secure-key-2026",
+          },
+          body: JSON.stringify({
+            type,
+            formName,
+            data,
+            timestamp: new Date().toISOString(),
+            source: window.location.href,
+          }),
+        }
+      );
+    } catch (error) {
+      console.error("Notification error:", error);
+    }
+  };
 
-  // Early Access Form Submit
+  // FIXED: Early Access Form Submit - Now sends proper early access email
   const captureEarlyAccessLead = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -301,7 +301,8 @@ export default function Home() {
 
       if (error) throw error;
 
-      await sendNotification("early_access", earlyAccessForm, "🚀 Early Access Application - HireNest OS");
+      // FIXED: Send proper early access confirmation email
+      await sendNotification("early_access", earlyAccessForm, "🚀 HireNest OS Early Access Request");
 
       setSubmitStatus("success");
       setTimeout(() => {
@@ -457,11 +458,11 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             <div className="flex items-center gap-3">
-           <img 
-  src="/Images/Logo.png" 
-  alt="HireNest Logo" 
-  className="w-10 h-10 object-contain"
-/>
+              <img 
+                src="/Images/Logo.png" 
+                alt="HireNest Logo" 
+                className="w-10 h-10 object-contain"
+              />
               <div>
                 <div className="text-xl font-bold text-white">HireNest</div>
                 <div className="text-[10px] text-gray-400 uppercase tracking-wider">Workforce</div>
@@ -552,8 +553,8 @@ export default function Home() {
         </button>
       </div>
 
-      {/* HERO SECTION */}
-     <section className="relative min-h-screen flex items-center overflow-hidden pt-28">
+      {/* HERO SECTION - REDUCED FONT SIZES */}
+      <section className="relative min-h-screen flex items-center overflow-hidden pt-28">
         <div className="absolute inset-0 bg-[#0B0F1A]">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(6,182,212,0.15),_transparent_50%)]" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(59,130,246,0.1),_transparent_50%)]" />
@@ -564,7 +565,7 @@ export default function Home() {
 
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8 py-20 w-full">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div className="space-y-8 z-10">
+            <div className="space-y-6 z-10">
               <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm hover:border-cyan-500/30 transition-colors cursor-pointer group">
                 <span className="relative flex h-2.5 w-2.5">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
@@ -576,19 +577,19 @@ export default function Home() {
                 <ArrowRight className="w-4 h-4 text-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
 
-              <h1 className="text-5xl lg:text-7xl xl:text-8xl font-bold text-white leading-[0.9] tracking-tight">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-[0.95] tracking-tight">
                 Hire{" "}
                 <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
                   Faster
                 </span>
                 <br />
-                <span className="text-4xl lg:text-6xl xl:text-7xl text-gray-400 font-light">
+                <span className="text-3xl lg:text-5xl xl:text-6xl text-gray-400 font-light">
                   with HireNest
                 </span>
                 <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent"> OS</span>
               </h1>
 
-              <p className="text-xl text-gray-400 max-w-xl leading-relaxed font-light">
+              <p className="text-lg text-gray-400 max-w-xl leading-relaxed font-light">
                 The world&apos;s first <span className="text-cyan-400 font-semibold">Workforce Operating System</span> that unifies clients, vendors, and recruiters into one intelligent hiring pipeline powered by AI.
               </p>
 
@@ -745,14 +746,14 @@ export default function Home() {
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0B0F1A] to-transparent" />
       </section>
 
-      {/* STATS BAR */}
-      <section className="relative py-16 bg-white border-y border-gray-100">
+      {/* STATS BAR - REDUCED SIZES */}
+      <section className="relative py-12 bg-white border-y border-gray-100">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
             {stats.map((stat, idx) => (
               <div key={stat.label} className="text-center group cursor-default">
                 <div className="relative inline-block">
-                  <span className="text-5xl lg:text-6xl font-bold bg-gradient-to-br from-[#0B0F1A] to-gray-600 bg-clip-text text-transparent group-hover:scale-110 transition-transform duration-300 inline-block">
+                  <span className="text-4xl lg:text-5xl font-bold bg-gradient-to-br from-[#0B0F1A] to-gray-600 bg-clip-text text-transparent group-hover:scale-110 transition-transform duration-300 inline-block">
                     {stat.number}
                   </span>
                   {idx === 3 && (
@@ -766,8 +767,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ABOUT HIRENEST WORKFORCE */}
-      <section id="about" className="py-24 bg-[#0B0F1A] relative overflow-hidden">
+      {/* ABOUT HIRENEST WORKFORCE - REDUCED SIZES */}
+      <section id="about" className="py-20 bg-[#0B0F1A] relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(6,182,212,0.08),transparent_50%)]" />
 
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative">
@@ -778,18 +779,18 @@ export default function Home() {
                 <span className="text-cyan-400 text-sm font-semibold tracking-wide uppercase">About HireNest Workforce</span>
               </div>
 
-              <h2 className="text-4xl lg:text-5xl font-bold text-white leading-tight">
+              <h2 className="text-3xl lg:text-4xl font-bold text-white leading-tight">
                 Revolutionizing Workforce Solutions for the{" "}
                 <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
                   Modern Enterprise
                 </span>
               </h2>
 
-              <p className="text-lg text-gray-400 leading-relaxed">
+              <p className="text-base text-gray-400 leading-relaxed">
                 HireNest Workforce is not just another staffing company. We are a technology-first workforce solutions provider that connects ambitious companies with exceptional talent through our proprietary HireNest OS platform.
               </p>
 
-              <p className="text-lg text-gray-400 leading-relaxed">
+              <p className="text-base text-gray-400 leading-relaxed">
                 Founded in 2026, we&apos;ve rapidly grown to serve 50+ companies across Technology, Finance, Healthcare, and E-commerce sectors. Our unique approach combines human expertise with AI-powered matching to deliver candidates that don&apos;t just fit the job description—they fit your culture and drive results.
               </p>
 
@@ -850,22 +851,22 @@ export default function Home() {
         </div>
       </section>
 
-      {/* HIRENEST OS SECTION */}
-      <section className="py-24 bg-[#0B0F1A] relative overflow-hidden">
+      {/* HIRENEST OS SECTION - REDUCED SIZES */}
+      <section className="py-20 bg-[#0B0F1A] relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(6,182,212,0.08),transparent_50%)]" />
 
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative">
-          <div className="text-center mb-20">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/30 mb-8 hover:bg-cyan-500/20 transition-colors cursor-pointer" onClick={() => setShowEarlyAccess(true)}>
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/30 mb-6 hover:bg-cyan-500/20 transition-colors cursor-pointer" onClick={() => setShowEarlyAccess(true)}>
               <Cpu className="w-4 h-4 text-cyan-400" />
               <span className="text-cyan-400 text-sm font-semibold tracking-wide uppercase">Coming Q2 2026</span>
             </div>
 
-            <h2 className="text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight">
+            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6 tracking-tight">
               Introducing <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">HireNest OS</span>
             </h2>
 
-            <p className="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-lg text-gray-400 max-w-3xl mx-auto leading-relaxed">
               The world&apos;s first operating system built specifically for workforce management. 
               Unify your hiring pipeline, vendors, and analytics in one powerful platform.
             </p>
@@ -875,22 +876,22 @@ export default function Home() {
             {osFeatures.map((feature, idx) => (
               <div
                 key={feature.title}
-                className="group relative p-8 rounded-3xl bg-white/5 border border-white/10 hover:border-cyan-500/50 hover:bg-white/10 transition-all duration-500 hover:-translate-y-3 overflow-hidden"
+                className="group relative p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-cyan-500/50 hover:bg-white/10 transition-all duration-500 hover:-translate-y-2 overflow-hidden"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-blue-600/5 opacity-0 group-hover:opacity-100 transition-opacity" />
 
                 <div className="relative">
-                  <div className="flex justify-between items-start mb-6">
-                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-blue-600/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                      <feature.icon className="w-7 h-7 text-cyan-400" />
+                  <div className="flex justify-between items-start mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-600/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                      <feature.icon className="w-6 h-6 text-cyan-400" />
                     </div>
                     <div className="text-right">
-                      <div className="text-3xl font-bold text-cyan-400">{feature.stat}</div>
+                      <div className="text-2xl font-bold text-cyan-400">{feature.stat}</div>
                       <div className="text-xs text-gray-500 uppercase">{feature.statLabel}</div>
                     </div>
                   </div>
 
-                  <h3 className="text-xl font-bold text-white mb-3">{feature.title}</h3>
+                  <h3 className="text-lg font-bold text-white mb-2">{feature.title}</h3>
                   <p className="text-gray-400 leading-relaxed text-sm">{feature.desc}</p>
                 </div>
               </div>
@@ -898,7 +899,7 @@ export default function Home() {
           </div>
 
           {/* OS Dashboard Preview */}
-          <div className="mt-20 relative">
+          <div className="mt-16 relative">
             <div className="absolute -inset-4 bg-gradient-to-r from-cyan-500/20 to-blue-600/20 rounded-[2rem] blur-3xl" />
             <div className="relative bg-[#0f1623] rounded-3xl border border-white/10 overflow-hidden">
               <div className="flex items-center justify-between px-8 py-4 border-b border-white/10 bg-white/5">
@@ -992,7 +993,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="mt-16 text-center">
+          <div className="mt-12 text-center">
             <button
               onClick={() => setShowEarlyAccess(true)}
               className="group inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl text-white font-semibold hover:shadow-2xl hover:shadow-cyan-500/30 transition-all hover:-translate-y-1"
@@ -1006,43 +1007,43 @@ export default function Home() {
         </div>
       </section>
 
-      {/* SERVICES SECTION */}
-      <section id="services" className="py-24 bg-gray-50 relative">
+      {/* SERVICES SECTION - REDUCED SIZES */}
+      <section id="services" className="py-20 bg-gray-50 relative">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <div className="text-center mb-12">
             <span className="text-cyan-600 font-semibold text-sm uppercase tracking-[0.2em]">What We Do</span>
-            <h2 className="text-5xl font-bold text-gray-900 mt-4 mb-6 tracking-tight">Our Services</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <h2 className="text-4xl font-bold text-gray-900 mt-4 mb-4 tracking-tight">Our Services</h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Comprehensive talent solutions built for the speed and scale of modern business.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-2 gap-6">
             {services.map((service, idx) => (
               <div
                 key={service.title}
-                className="group relative p-8 bg-white rounded-3xl border border-gray-200 hover:border-transparent transition-all duration-500 overflow-hidden"
+                className="group relative p-6 bg-white rounded-2xl border border-gray-200 hover:border-transparent transition-all duration-500 overflow-hidden"
               >
                 <div className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-0 group-hover:opacity-5 transition-opacity duration-500`} />
 
                 <div className="relative flex gap-6">
-                  <div className={`flex-shrink-0 w-16 h-16 rounded-2xl bg-gradient-to-br ${service.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-                    <service.icon className="w-8 h-8 text-white" />
+                  <div className={`flex-shrink-0 w-14 h-14 rounded-xl bg-gradient-to-br ${service.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                    <service.icon className="w-7 h-7 text-white" />
                   </div>
 
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <h3 className="text-2xl font-bold text-gray-900 group-hover:text-cyan-600 transition-colors">
+                      <h3 className="text-xl font-bold text-gray-900 group-hover:text-cyan-600 transition-colors">
                         {service.title}
                       </h3>
                       <span className="px-2 py-1 rounded-full bg-gray-100 text-gray-600 text-xs font-medium">
                         {service.stats}
                       </span>
                     </div>
-                    <p className="text-gray-600 leading-relaxed mb-4">{service.desc}</p>
+                    <p className="text-gray-600 leading-relaxed mb-3 text-sm">{service.desc}</p>
                     <button
                       onClick={() => setShowClientSignup(true)}
-                      className="inline-flex items-center text-cyan-600 font-semibold group-hover:gap-3 transition-all gap-2"
+                      className="inline-flex items-center text-cyan-600 font-semibold group-hover:gap-3 transition-all gap-2 text-sm"
                     >
                       Get Started <ArrowRight className="w-4 h-4" />
                     </button>
@@ -1052,7 +1053,7 @@ export default function Home() {
             ))}
           </div>
 
-          <div className="mt-16 text-center">
+          <div className="mt-12 text-center">
             <button
               onClick={() => setShowClientSignup(true)}
               className="inline-flex items-center gap-3 px-8 py-4 border-2 border-gray-900 rounded-2xl font-semibold text-gray-900 hover:bg-gray-900 hover:text-white transition-all duration-300"
@@ -1063,15 +1064,15 @@ export default function Home() {
         </div>
       </section>
 
-      {/* HOW IT WORKS */}
-      <section className="py-24 bg-white relative overflow-hidden">
+      {/* HOW IT WORKS - REDUCED SIZES */}
+      <section className="py-20 bg-white relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(6,182,212,0.05),transparent_50%)]" />
 
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative">
-          <div className="text-center mb-20">
+          <div className="text-center mb-16">
             <span className="text-cyan-600 font-semibold text-sm uppercase tracking-[0.2em]">Process</span>
-            <h2 className="text-5xl font-bold text-gray-900 mt-4 mb-6 tracking-tight">How HireNest Works</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <h2 className="text-4xl font-bold text-gray-900 mt-4 mb-4 tracking-tight">How HireNest Works</h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Three simple steps to start collaborating on the HireNest network.
             </p>
           </div>
@@ -1083,21 +1084,21 @@ export default function Home() {
 
             {steps.map((step, idx) => (
               <div key={step.n} className="relative text-center group">
-                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 text-white flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-cyan-500/30 relative z-10 group-hover:scale-110 transition-transform duration-300">
-                  <step.icon className="w-8 h-8" />
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 text-white flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-cyan-500/30 relative z-10 group-hover:scale-110 transition-transform duration-300">
+                  <step.icon className="w-7 h-7" />
                   <div className="absolute inset-0 rounded-full bg-cyan-500 animate-ping opacity-20" />
                 </div>
-                <div className="text-5xl font-bold text-gray-200 absolute top-0 left-1/2 -translate-x-1/2 -z-10">
+                <div className="text-4xl font-bold text-gray-200 absolute top-0 left-1/2 -translate-x-1/2 -z-10">
                   {step.n}
                 </div>
 
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">{step.title}</h3>
-                <p className="text-gray-600 leading-relaxed max-w-sm mx-auto">{step.desc}</p>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">{step.title}</h3>
+                <p className="text-gray-600 leading-relaxed max-w-sm mx-auto text-sm">{step.desc}</p>
               </div>
             ))}
           </div>
 
-          <div className="mt-20 flex justify-center gap-4">
+          <div className="mt-16 flex justify-center gap-4">
             <button
               onClick={() => setShowVendorSignup(true)}
               className="px-8 py-4 bg-gray-900 text-white rounded-2xl font-semibold hover:bg-gray-800 transition-all flex items-center gap-2"
@@ -1116,17 +1117,17 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ECOSYSTEM SECTION */}
-      <section id="vendors" className="py-24 bg-[#0B0F1A] relative overflow-hidden">
+      {/* ECOSYSTEM SECTION - REDUCED SIZES */}
+      <section id="vendors" className="py-20 bg-[#0B0F1A] relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(6,182,212,0.1),_transparent_50%)]" />
 
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative">
-          <div className="text-center mb-16">
-            <h2 className="text-5xl font-bold text-white mb-6 tracking-tight">One Platform, Three Perspectives</h2>
-            <p className="text-xl text-gray-400">HireNest OS serves everyone in the hiring ecosystem</p>
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-white mb-4 tracking-tight">One Platform, Three Perspectives</h2>
+            <p className="text-lg text-gray-400">HireNest OS serves everyone in the hiring ecosystem</p>
           </div>
 
-          <div className="flex justify-center mb-16">
+          <div className="flex justify-center mb-12">
             <div className="inline-flex p-2 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">
               {[
                 { id: "clients", label: "For Clients", icon: Building2 },
@@ -1136,7 +1137,7 @@ export default function Home() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`px-8 py-4 rounded-xl font-semibold capitalize transition-all flex items-center gap-2 ${
+                  className={`px-6 py-3 rounded-xl font-semibold capitalize transition-all flex items-center gap-2 ${
                     activeTab === tab.id
                       ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/25"
                       : "text-gray-400 hover:text-white hover:bg-white/5"
@@ -1149,17 +1150,17 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div className="space-y-8">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="space-y-6">
               {activeTab === "clients" && (
                 <>
                   <div>
-                    <h3 className="text-4xl font-bold text-white mb-4">For Companies & Clients</h3>
-                    <p className="text-xl text-gray-400 leading-relaxed">
+                    <h3 className="text-3xl font-bold text-white mb-3">For Companies & Clients</h3>
+                    <p className="text-lg text-gray-400 leading-relaxed">
                       Post requirements once and reach multiple vendors instantly. Track everything in real-time with AI-powered insights.
                     </p>
                   </div>
-                  <div className="space-y-4">
+                  <div className="space-y-3">
                     {[
                       "Single dashboard for all vendors",
                       "AI-powered candidate ranking",
@@ -1187,12 +1188,12 @@ export default function Home() {
               {activeTab === "vendors" && (
                 <>
                   <div>
-                    <h3 className="text-4xl font-bold text-white mb-4">For Staffing Vendors</h3>
-                    <p className="text-xl text-gray-400 leading-relaxed">
+                    <h3 className="text-3xl font-bold text-white mb-3">For Staffing Vendors</h3>
+                    <p className="text-lg text-gray-400 leading-relaxed">
                       Get real-time requirements and submit candidates faster. Grow your business with our premium vendor network.
                     </p>
                   </div>
-                  <div className="space-y-4">
+                  <div className="space-y-3">
                     {[
                       "Access to 500+ bench consultants",
                       "Direct client connections",
@@ -1220,12 +1221,12 @@ export default function Home() {
               {activeTab === "recruiters" && (
                 <>
                   <div>
-                    <h3 className="text-4xl font-bold text-white mb-4">For Recruiters</h3>
-                    <p className="text-xl text-gray-400 leading-relaxed">
+                    <h3 className="text-3xl font-bold text-white mb-3">For Recruiters</h3>
+                    <p className="text-lg text-gray-400 leading-relaxed">
                       Track pipeline and improve closures efficiently with AI-assisted matching and automated workflows.
                     </p>
                   </div>
-                  <div className="space-y-4">
+                  <div className="space-y-3">
                     {[
                       "Smart candidate matching AI",
                       "Automated outreach sequences",
@@ -1334,63 +1335,63 @@ export default function Home() {
         </div>
       </section>
 
-      {/* WHY CHOOSE US */}
-      <section className="py-24 bg-gray-50">
+      {/* WHY CHOOSE US - REDUCED SIZES */}
+      <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center mb-20">
+          <div className="text-center mb-16">
             <span className="text-cyan-600 font-semibold text-sm uppercase tracking-[0.2em]">Advantages</span>
-            <h2 className="text-5xl font-bold text-gray-900 mt-4 mb-6 tracking-tight">Why Choose HireNest</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <h2 className="text-4xl font-bold text-gray-900 mt-4 mb-4 tracking-tight">Why Choose HireNest</h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Everything you need to hire faster, smarter, and better.
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {whyCards.map((card, idx) => (
               <div
                 key={card.title}
-                className="group p-8 bg-white rounded-3xl border border-gray-200 hover:border-cyan-500/30 hover:shadow-2xl hover:shadow-cyan-500/10 transition-all duration-500 text-center hover:-translate-y-2"
+                className="group p-6 bg-white rounded-2xl border border-gray-200 hover:border-cyan-500/30 hover:shadow-2xl hover:shadow-cyan-500/10 transition-all duration-500 text-center hover:-translate-y-2"
               >
-                <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-cyan-500/10 to-blue-600/10 flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 group-hover:bg-gradient-to-br group-hover:from-cyan-500 group-hover:to-blue-600">
-                  <card.icon className="w-10 h-10 text-cyan-600 group-hover:text-white transition-colors" />
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-500/10 to-blue-600/10 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 group-hover:bg-gradient-to-br group-hover:from-cyan-500 group-hover:to-blue-600">
+                  <card.icon className="w-8 h-8 text-cyan-600 group-hover:text-white transition-colors" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">{card.title}</h3>
-                <p className="text-gray-600 leading-relaxed">{card.desc}</p>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">{card.title}</h3>
+                <p className="text-gray-600 leading-relaxed text-sm">{card.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* TESTIMONIALS */}
-      <section className="py-24 bg-white relative overflow-hidden">
+      {/* TESTIMONIALS - REDUCED SIZES */}
+      <section className="py-20 bg-white relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(6,182,212,0.05),transparent_50%)]" />
 
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative">
-          <div className="text-center mb-20">
+          <div className="text-center mb-16">
             <span className="text-cyan-600 font-semibold text-sm uppercase tracking-[0.2em]">Testimonials</span>
-            <h2 className="text-5xl font-bold text-gray-900 mt-4 mb-6 tracking-tight">What Our Clients Say</h2>
+            <h2 className="text-4xl font-bold text-gray-900 mt-4 mb-4 tracking-tight">What Our Clients Say</h2>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-6">
             {testimonials.map((t) => (
               <div
                 key={t.name}
-                className="group p-8 bg-gray-50 rounded-3xl border border-gray-200 hover:border-cyan-500/30 hover:shadow-2xl hover:shadow-cyan-500/10 transition-all duration-500 hover:-translate-y-2"
+                className="group p-6 bg-gray-50 rounded-2xl border border-gray-200 hover:border-cyan-500/30 hover:shadow-2xl hover:shadow-cyan-500/10 transition-all duration-500 hover:-translate-y-2"
               >
-                <div className="flex gap-1 mb-6">
+                <div className="flex gap-1 mb-4">
                   {[1, 2, 3, 4, 5].map((n) => (
-                    <Star key={n} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                    <Star key={n} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                   ))}
                 </div>
-                <Quote className="w-12 h-12 text-cyan-200 mb-6" />
-                <p className="text-gray-700 mb-8 leading-relaxed text-lg italic">&quot;{t.quote}&quot;</p>
+                <Quote className="w-10 h-10 text-cyan-200 mb-4" />
+                <p className="text-gray-700 mb-6 leading-relaxed text-base italic">&quot;{t.quote}&quot;</p>
                 <div className="flex items-center gap-4">
-                  <div className={`w-14 h-14 rounded-2xl ${t.color} flex items-center justify-center text-white font-bold text-lg shadow-lg`}>
+                  <div className={`w-12 h-12 rounded-xl ${t.color} flex items-center justify-center text-white font-bold text-lg shadow-lg`}>
                     {t.image}
                   </div>
                   <div>
-                    <div className="font-bold text-gray-900 text-lg">{t.name}</div>
+                    <div className="font-bold text-gray-900 text-base">{t.name}</div>
                     <div className="text-sm text-gray-500">{t.title} · {t.company}</div>
                   </div>
                 </div>
@@ -1400,46 +1401,46 @@ export default function Home() {
         </div>
       </section>
 
-      {/* FINAL CTA */}
-      <section className="py-24 bg-[#0B0F1A] relative overflow-hidden">
+      {/* FINAL CTA - REDUCED SIZES */}
+      <section className="py-20 bg-[#0B0F1A] relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(6,182,212,0.15),_transparent_50%)]" />
         <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-blue-600/5" />
-        </div>
+
         <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center relative">
-          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 mb-10">
+          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 mb-8">
             <Rocket className="w-5 h-5 text-cyan-400" />
             <span className="text-cyan-400 text-sm font-semibold tracking-wide uppercase">Limited Early Access</span>
           </div>
 
-          <h2 className="text-5xl lg:text-7xl font-bold text-white mb-8 tracking-tight leading-tight">
+          <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6 tracking-tight leading-tight">
             Ready to Transform Your{" "}
             <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
               Hiring?
             </span>
           </h2>
 
-          <p className="text-2xl text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xl text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
             Join the HireNest OS early access program and be among the first to experience the future of workforce management.
           </p>
 
-          <div className="flex flex-wrap justify-center gap-6">
+          <div className="flex flex-wrap justify-center gap-4">
             <button
               onClick={() => setShowEarlyAccess(true)}
-              className="group px-10 py-5 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl text-white font-semibold text-lg hover:shadow-2xl hover:shadow-cyan-500/40 transition-all hover:-translate-y-1 flex items-center gap-3"
+              className="group px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl text-white font-semibold text-lg hover:shadow-2xl hover:shadow-cyan-500/40 transition-all hover:-translate-y-1 flex items-center gap-3"
             >
               <Sparkles className="w-6 h-6 group-hover:rotate-12 transition-transform" />
               Get Early Access
             </button>
             <button
               onClick={() => setShowClientSignup(true)}
-              className="px-10 py-5 rounded-2xl font-semibold text-lg text-white border-2 border-white/20 hover:bg-white/10 hover:border-white/40 transition-all hover:-translate-y-1 flex items-center gap-3"
+              className="px-8 py-4 rounded-2xl font-semibold text-lg text-white border-2 border-white/20 hover:bg-white/10 hover:border-white/40 transition-all hover:-translate-y-1 flex items-center gap-3"
             >
               <Building2 className="w-6 h-6" />
               Talk to Sales
             </button>
           </div>
 
-          <div className="mt-12 flex items-center justify-center gap-8 text-sm text-gray-500">
+          <div className="mt-10 flex items-center justify-center gap-8 text-sm text-gray-500">
             <span className="flex items-center gap-2">
               <CheckCircle className="w-4 h-4 text-green-400" />
               No credit card required
@@ -1456,23 +1457,23 @@ export default function Home() {
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer id="contact" className="bg-[#0B0F1A] border-t border-white/10 pt-20 pb-10">
+      {/* FOOTER - FIXED OVERLAPPING ISSUE */}
+      <footer id="contact" className="bg-[#0B0F1A] border-t border-white/10 pt-16 pb-8">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-12 mb-16">
+          <div className="grid md:grid-cols-4 gap-12 mb-12">
             <div className="col-span-2">
               <div className="flex items-center gap-3 mb-6">
-               <img 
-  src="/Images/Logo.png" 
-  alt="HireNest Logo" 
-  className="w-12 h-12 object-contain"
-/>
+                <img 
+                  src="/Images/Logo.png" 
+                  alt="HireNest Logo" 
+                  className="w-12 h-12 object-contain"
+                />
                 <div>
                   <div className="text-2xl font-bold text-white">HireNest</div>
                   <div className="text-xs text-gray-500 uppercase tracking-wider">Workforce OS</div>
                 </div>
               </div>
-              <p className="text-gray-400 max-w-sm leading-relaxed mb-6">
+              <p className="text-gray-400 max-w-sm leading-relaxed mb-6 text-sm">
                 Connecting world-class companies with elite talent through an intelligent network of trusted staffing partners.
               </p>
               <div className="flex gap-4">
@@ -1487,32 +1488,32 @@ export default function Home() {
 
             <div>
               <h4 className="text-white font-semibold mb-6">Product</h4>
-              <ul className="space-y-4">
-  {["Features", "Pricing", "Integrations", "API", "Security"].map((item) => (
-    <li key={item}>
-      <a
-        href="#"
-        className="text-gray-400 hover:text-cyan-400 transition-colors"
-      >
-        {item}
-      </a>
-    </li>
-  ))}
-</ul>
+              <ul className="space-y-3">
+                {["Features", "Pricing", "Integrations", "API", "Security"].map((item) => (
+                  <li key={item}>
+                    <a
+                      href="#"
+                      className="text-gray-400 hover:text-cyan-400 transition-colors text-sm"
+                    >
+                      {item}
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </div>
 
             <div>
               <h4 className="text-white font-semibold mb-6">Contact</h4>
-              <ul className="space-y-4">
-                <li className="flex items-center gap-3 text-gray-400">
+              <ul className="space-y-3">
+                <li className="flex items-center gap-3 text-gray-400 text-sm">
                   <Mail className="w-4 h-4 text-cyan-400" />
                   info@hirenestworkforce.com
                 </li>
-                <li className="flex items-center gap-3 text-gray-400">
+                <li className="flex items-center gap-3 text-gray-400 text-sm">
                   <Phone className="w-4 h-4 text-cyan-400" />
                   +91 9392894748
                 </li>
-                <li className="flex items-start gap-3 text-gray-400">
+                <li className="flex items-start gap-3 text-gray-400 text-sm">
                   <MapPin className="w-4 h-4 text-cyan-400 mt-1" />
                   <span>Hyderabad, Telangana<br />India</span>
                 </li>
@@ -1525,13 +1526,12 @@ export default function Home() {
               © 2026 HireNest Workforce. All rights reserved.
             </p>
             <div className="flex gap-6 text-sm">
-         <Link to="/privacy-policy" className="text-gray-500 hover:text-cyan-400 transition-colors">
-  Privacy Policy
-</Link>
-
-<Link to="/terms" className="text-gray-500 hover:text-cyan-400 transition-colors">
-  Terms of Service
-</Link>
+              <Link to="/privacy-policy" className="text-gray-500 hover:text-cyan-400 transition-colors">
+                Privacy Policy
+              </Link>
+              <Link to="/terms" className="text-gray-500 hover:text-cyan-400 transition-colors">
+                Terms of Service
+              </Link>
             </div>
           </div>
         </div>
@@ -1539,17 +1539,17 @@ export default function Home() {
 
       {/* MODALS */}
 
-      {/* Early Access Modal */}
+      {/* Early Access Modal - FIXED MESSAGE */}
       {showEarlyAccess && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
           <div className="relative w-full max-w-lg bg-[#0f1623] rounded-3xl border border-white/10 shadow-2xl overflow-hidden animate-scale-in max-h-[90vh] overflow-y-auto">
-            <div className="relative h-40 bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center">
-              <div className="absolute inset-0 bg-[url('data:images/Logo.png')]" />
+            <div className="relative h-36 bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center">
+              <div className="absolute inset-0 bg-[url(&apos;/Images/Logo.png&apos;)] opacity-10 bg-center bg-no-repeat bg-contain" />
               <div className="text-center relative z-10">
-                <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3 backdrop-blur-sm border border-white/30">
-                  <Rocket className="w-10 h-10 text-white" />
+                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-2 backdrop-blur-sm border border-white/30">
+                  <Rocket className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-3xl font-bold text-white">Early Access</h3>
+                <h3 className="text-2xl font-bold text-white">Early Access</h3>
               </div>
               <button
                 onClick={() => setShowEarlyAccess(false)}
@@ -1561,51 +1561,51 @@ export default function Home() {
 
             <div className="p-8">
               {submitStatus === "success" ? (
-                <div className="text-center py-8">
-                  <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <CheckCircle className="w-10 h-10 text-green-400" />
+                <div className="text-center py-6">
+                  <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <CheckCircle className="w-8 h-8 text-green-400" />
                   </div>
-                  <h4 className="text-2xl font-bold text-white mb-2">You&apos;re on the list!</h4>
-                  <p className="text-gray-400">We&apos;ll contact you soon with early access details.</p>
+                  <h4 className="text-xl font-bold text-white mb-2">Request Received!</h4>
+                  <p className="text-gray-400 text-sm">Thank you for your interest in HireNest OS. Our team will contact you within 24 hours to discuss early access.</p>
                 </div>
               ) : (
                 <>
-                  <p className="text-gray-400 text-center mb-8">
+                  <p className="text-gray-400 text-center mb-6 text-sm">
                     Join 200+ companies getting exclusive access to HireNest OS before public launch.
                   </p>
 
                   {submitStatus === "error" && (
-                    <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/30 flex items-center gap-3 text-red-400">
+                    <div className="mb-4 p-4 rounded-xl bg-red-500/10 border border-red-500/30 flex items-center gap-3 text-red-400 text-sm">
                       <AlertCircle className="w-5 h-5" />
                       <span>Something went wrong. Please try again.</span>
                     </div>
                   )}
 
-                  <form onSubmit={captureEarlyAccessLead} className="space-y-5">
+                  <form onSubmit={captureEarlyAccessLead} className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Full Name *</label>
+                        <label className="block text-sm font-medium text-gray-300 mb-1">Full Name *</label>
                         <div className="relative">
-                          <User className="absolute left-3 top-3.5 w-5 h-5 text-gray-500" />
+                          <User className="absolute left-3 top-3 w-4 h-4 text-gray-500" />
                           <input
                             type="text"
                             required
                             placeholder="John Doe"
-                            className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all"
+                            className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all text-sm"
                             value={earlyAccessForm.name}
                             onChange={(e) => setEarlyAccessForm({...earlyAccessForm, name: e.target.value })}
                           />
                         </div>
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Work Email *</label>
+                        <label className="block text-sm font-medium text-gray-300 mb-1">Work Email *</label>
                         <div className="relative">
-                          <Mail className="absolute left-3 top-3.5 w-5 h-5 text-gray-500" />
+                          <Mail className="absolute left-3 top-3 w-4 h-4 text-gray-500" />
                           <input
                             type="email"
                             required
                             placeholder="john@company.com"
-                            className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all"
+                            className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all text-sm"
                             value={earlyAccessForm.email}
                             onChange={(e) => setEarlyAccessForm({...earlyAccessForm, email: e.target.value })}
                           />
@@ -1615,27 +1615,27 @@ export default function Home() {
 
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Company *</label>
+                        <label className="block text-sm font-medium text-gray-300 mb-1">Company *</label>
                         <div className="relative">
-                          <Building2 className="absolute left-3 top-3.5 w-5 h-5 text-gray-500"/>
+                          <Building2 className="absolute left-3 top-3 w-4 h-4 text-gray-500"/>
                           <input
                             type="text"
                             required
                             placeholder="Acme Inc"
-                            className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all"
+                            className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all text-sm"
                             value={earlyAccessForm.company}
                             onChange={(e) => setEarlyAccessForm({...earlyAccessForm, company: e.target.value })}
                           />
                         </div>
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Phone</label>
+                        <label className="block text-sm font-medium text-gray-300 mb-1">Phone</label>
                         <div className="relative">
-                          <Phone className="absolute left-3 top-3.5 w-5 h-5 text-gray-500"/>
+                          <Phone className="absolute left-3 top-3 w-4 h-4 text-gray-500"/>
                           <input
                             type="tel"
                             placeholder="+91 98765 43210"
-                            className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all"
+                            className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all text-sm"
                             value={earlyAccessForm.phone}
                             onChange={(e) => setEarlyAccessForm({...earlyAccessForm, phone: e.target.value })}
                           />
@@ -1644,10 +1644,10 @@ export default function Home() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Your Role *</label>
+                      <label className="block text-sm font-medium text-gray-300 mb-1">Your Role *</label>
                       <select
                         required
-                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all appearance-none"
+                        className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all appearance-none text-sm"
                         value={earlyAccessForm.role}
                         onChange={(e) => setEarlyAccessForm({ ...earlyAccessForm, role: e.target.value })}
                       >
@@ -1662,13 +1662,13 @@ export default function Home() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                      <label className="block text-sm font-medium text-gray-300 mb-1">
                         Early Access Code <span className="text-gray-500">(Optional)</span>
                       </label>
                       <input
                         type="text"
                         placeholder="XXXX-XXXX"
-                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all"
+                        className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all text-sm"
                         value={earlyAccessForm.code}
                         onChange={(e) => setEarlyAccessForm({...earlyAccessForm, code: e.target.value })}
                       />
@@ -1677,7 +1677,7 @@ export default function Home() {
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl text-white font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed mt-6"
+                      className="w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl text-white font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed mt-4"
                     >
                       {isSubmitting ? (
                         <>
@@ -1693,7 +1693,7 @@ export default function Home() {
                     </button>
                   </form>
 
-                  <p className="text-xs text-gray-500 text-center mt-6">
+                  <p className="text-xs text-gray-500 text-center mt-4">
                     By requesting access, you agree to our Terms of Service and Privacy Policy.
                     We respect your privacy and will never share your information.
                   </p>
@@ -1708,12 +1708,12 @@ export default function Home() {
       {showVendorSignup && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
           <div className="relative w-full max-w-lg bg-[#0f1623] rounded-3xl border border-white/10 shadow-2xl overflow-hidden animate-scale-in max-h-[90vh] overflow-y-auto">
-            <div className="relative h-32 bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center">
+            <div className="relative h-28 bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center">
               <div className="text-center relative z-10">
-                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-2 backdrop-blur-sm">
-                  <Network className="w-8 h-8 text-white"/>
+                <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-2 backdrop-blur-sm">
+                  <Network className="w-7 h-7 text-white"/>
                 </div>
-                <h3 className="text-2xl font-bold text-white">Join Vendor Network</h3>
+                <h3 className="text-xl font-bold text-white">Join Vendor Network</h3>
               </div>
               <button
                 onClick={() => setShowVendorSignup(false)}
@@ -1725,10 +1725,10 @@ export default function Home() {
 
             <div className="p-6">
               {submitStatus === "success" ? (
-                <div className="text-center py-8">
-                  <CheckCircle className="w-16 h-16 text-green-400 mx-auto mb-4"/>
-                  <h4 className="text-xl font-bold text-white mb-2">Application Received!</h4>
-                  <p className="text-gray-400">We&apos;ll review and get back within 48 hours.</p>
+                <div className="text-center py-6">
+                  <CheckCircle className="w-14 h-14 text-green-400 mx-auto mb-3"/>
+                  <h4 className="text-lg font-bold text-white mb-2">Application Received!</h4>
+                  <p className="text-gray-400 text-sm">We&apos;ll review and get back within 48 hours.</p>
                 </div>
               ) : (
                 <form onSubmit={captureVendorLead} className="space-y-4">
@@ -1737,7 +1737,7 @@ export default function Home() {
                     <input
                       type="text"
                       required
-                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50"
+                      className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 text-sm"
                       value={vendorForm.company_name}
                       onChange={(e) => setVendorForm({...vendorForm, company_name: e.target.value })}
                     />
@@ -1748,7 +1748,7 @@ export default function Home() {
                       <input
                         type="text"
                         required
-                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50"
+                        className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 text-sm"
                         value={vendorForm.contact_name}
                         onChange={(e) => setVendorForm({...vendorForm, contact_name: e.target.value })}
                       />
@@ -1758,7 +1758,7 @@ export default function Home() {
                       <input
                         type="email"
                         required
-                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50"
+                        className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 text-sm"
                         value={vendorForm.email}
                         onChange={(e) => setVendorForm({...vendorForm, email: e.target.value })}
                       />
@@ -1770,7 +1770,7 @@ export default function Home() {
                       <input
                         type="tel"
                         required
-                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50"
+                        className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 text-sm"
                         value={vendorForm.phone}
                         onChange={(e) => setVendorForm({...vendorForm, phone: e.target.value })}
                       />
@@ -1779,7 +1779,7 @@ export default function Home() {
                       <label className="block text-sm font-medium text-gray-300 mb-1">Website</label>
                       <input
                         type="url"
-                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50"
+                        className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 text-sm"
                         value={vendorForm.website}
                         onChange={(e) => setVendorForm({...vendorForm, website: e.target.value })}
                       />
@@ -1789,7 +1789,7 @@ export default function Home() {
                     <label className="block text-sm font-medium text-gray-300 mb-1">Specialization *</label>
                     <select
                       required
-                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50"
+                      className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 text-sm"
                       value={vendorForm.specialization}
                       onChange={(e) => setVendorForm({...vendorForm, specialization: e.target.value })}
                     >
@@ -1805,7 +1805,7 @@ export default function Home() {
                     <label className="block text-sm font-medium text-gray-300 mb-1">Team Size *</label>
                     <select
                       required
-                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50"
+                      className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 text-sm"
                       value={vendorForm.team_size}
                       onChange={(e) => setVendorForm({...vendorForm, team_size: e.target.value })}
                     >
@@ -1820,7 +1820,7 @@ export default function Home() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-4 bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl text-white font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2 mt-6 disabled:opacity-50"
+                    className="w-full py-3 bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl text-white font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2 mt-4 disabled:opacity-50 text-sm"
                   >
                     {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin"/> : "Submit Application"}
                   </button>
@@ -1835,12 +1835,12 @@ export default function Home() {
       {showClientSignup && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
           <div className="relative w-full max-w-lg bg-[#0f1623] rounded-3xl border border-white/10 shadow-2xl overflow-hidden animate-scale-in max-h-[90vh] overflow-y-auto">
-            <div className="relative h-32 bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
+            <div className="relative h-28 bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
               <div className="text-center relative z-10">
-                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-2 backdrop-blur-sm">
-                  <Building2 className="w-8 h-8 text-white"/>
+                <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-2 backdrop-blur-sm">
+                  <Building2 className="w-7 h-7 text-white"/>
                 </div>
-                <h3 className="text-2xl font-bold text-white">Post Requirement</h3>
+                <h3 className="text-xl font-bold text-white">Post Requirement</h3>
               </div>
               <button
                 onClick={() => setShowClientSignup(false)}
@@ -1852,10 +1852,10 @@ export default function Home() {
 
             <div className="p-6">
               {submitStatus === "success" ? (
-                <div className="text-center py-8">
-                  <CheckCircle className="w-16 h-16 text-green-400 mx-auto mb-4"/>
-                  <h4 className="text-xl font-bold text-white mb-2">Request Submitted!</h4>
-                  <p className="text-gray-400">Our team will contact you within 24 hours.</p>
+                <div className="text-center py-6">
+                  <CheckCircle className="w-14 h-14 text-green-400 mx-auto mb-3"/>
+                  <h4 className="text-lg font-bold text-white mb-2">Request Submitted!</h4>
+                  <p className="text-gray-400 text-sm">Our team will contact you within 24 hours.</p>
                 </div>
               ) : (
                 <form onSubmit={captureClientLead} className="space-y-4">
@@ -1864,7 +1864,7 @@ export default function Home() {
                     <input
                       type="text"
                       required
-                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50"
+                      className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 text-sm"
                       value={clientForm.company_name}
                       onChange={(e) => setClientForm({...clientForm, company_name: e.target.value })}
                     />
@@ -1875,7 +1875,7 @@ export default function Home() {
                       <input
                         type="text"
                         required
-                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50"
+                        className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 text-sm"
                         value={clientForm.contact_name}
                         onChange={(e) => setClientForm({...clientForm, contact_name: e.target.value })}
                       />
@@ -1885,7 +1885,7 @@ export default function Home() {
                       <input
                         type="email"
                         required
-                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50"
+                        className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 text-sm"
                         value={clientForm.email}
                         onChange={(e) => setClientForm({...clientForm, email: e.target.value })}
                       />
@@ -1897,7 +1897,7 @@ export default function Home() {
                       <input
                         type="tel"
                         required
-                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50"
+                        className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 text-sm"
                         value={clientForm.phone}
                         onChange={(e) => setClientForm({...clientForm, phone: e.target.value })}
                       />
@@ -1906,7 +1906,7 @@ export default function Home() {
                       <label className="block text-sm font-medium text-gray-300 mb-1">Industry *</label>
                       <select
                         required
-                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50"
+                        className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 text-sm"
                         value={clientForm.industry}
                         onChange={(e) => setClientForm({...clientForm, industry: e.target.value })}
                       >
@@ -1924,7 +1924,7 @@ export default function Home() {
                       <label className="block text-sm font-medium text-gray-300 mb-1">Company Size *</label>
                       <select
                         required
-                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50"
+                        className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 text-sm"
                         value={clientForm.company_size}
                         onChange={(e) => setClientForm({...clientForm, company_size: e.target.value })}
                       >
@@ -1941,7 +1941,7 @@ export default function Home() {
                         type="number"
                         required
                         min="1"
-                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50"
+                        className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 text-sm"
                         value={clientForm.hiring_needs}
                         onChange={(e) => setClientForm({...clientForm, hiring_needs: e.target.value })}
                       />
@@ -1951,7 +1951,7 @@ export default function Home() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-4 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl text-white font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2 mt-6 disabled:opacity-50"
+                    className="w-full py-3 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl text-white font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2 mt-4 disabled:opacity-50 text-sm"
                   >
                     {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin"/> : "Submit Requirement"}
                   </button>
