@@ -464,7 +464,7 @@ export default function Home() {
             <Link to="/" className="flex items-center gap-3 flex-shrink-0">
               <div className="w-10 h-10 overflow-hidden rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center">
                 <img 
-                  src="/Images/Logo.png" 
+                  src="/images/Logo.png" 
                   alt="HireNest" 
                   className="w-full h-full object-contain"
                   onError={(e) => {
@@ -1016,7 +1016,7 @@ export default function Home() {
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-12 h-12 overflow-hidden rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center">
                   <img 
-                    src="/Images/Logo.png" 
+                    src="/images/Logo.png" 
                     alt="HireNest" 
                     className="w-full h-full object-contain"
                     onError={(e) => {
@@ -1035,7 +1035,7 @@ export default function Home() {
                 Connecting world-class companies with elite talent through an intelligent network of trusted staffing partners.
               </p>
               <div className="flex gap-4">
-                <a href="https://linkedin.com/company/hirenest" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-cyan-500 hover:text-white transition-all">
+                <a href="https://www.linkedin.com/company/hirenest-workforce-pvt-ltd" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-cyan-500 hover:text-white transition-all">
                   <Linkedin className="w-5 h-5" />
                 </a>
                 <a href="mailto:info@hirenestworkforce.com" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-cyan-500 hover:text-white transition-all">
