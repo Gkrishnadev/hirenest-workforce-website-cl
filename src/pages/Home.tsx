@@ -194,7 +194,7 @@ const stats = [
   { number: "95%", label: "Match Accuracy", suffix: "" },
 ];
 
-// Navigation items - ADDED Hire Developers and Careers
+// Navigation items
 const navItems = [
   { label: "Home", href: "/" },
   { label: "Services", href: "#services" },
@@ -253,7 +253,7 @@ export default function Home() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Email notification function - FIXED for Early Access
+  // Email notification function
   const sendNotification = async (type: string, data: any, formName: string) => {
     try {
       await fetch(
@@ -278,7 +278,7 @@ export default function Home() {
     }
   };
 
-  // FIXED: Early Access Form Submit - Now sends proper early access email
+  // Early Access Form Submit
   const captureEarlyAccessLead = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -301,7 +301,6 @@ export default function Home() {
 
       if (error) throw error;
 
-      // FIXED: Send proper early access confirmation email
       await sendNotification("early_access", earlyAccessForm, "🚀 HireNest OS Early Access Request");
 
       setSubmitStatus("success");
@@ -451,13 +450,14 @@ export default function Home() {
         path="/"
       />
 
-      {/* Navigation */}
+      {/* Navigation - FIXED: Proper mobile/desktop separation */}
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled ? "bg-[#0B0F1A]/95 backdrop-blur-md border-b border-white/10" : "bg-transparent"
       }`}>
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
-            <div className="flex items-center gap-3">
+            {/* Logo */}
+            <div className="flex items-center gap-3 flex-shrink-0">
               <img 
                 src="/Images/Logo.png" 
                 alt="HireNest Logo" 
@@ -469,7 +469,8 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="hidden md:flex items-center gap-8">
+            {/* Desktop Navigation Links */}
+            <div className="hidden lg:flex items-center gap-6">
               {navItems.map((item) => (
                 <a
                   key={item.label}
@@ -481,7 +482,8 @@ export default function Home() {
               ))}
             </div>
 
-            <div className="hidden md:flex items-center gap-4">
+            {/* Desktop CTA Buttons */}
+            <div className="hidden lg:flex items-center gap-3 flex-shrink-0">
               <button
                 onClick={() => setShowVendorSignup(true)}
                 className="px-4 py-2 text-sm font-medium text-cyan-400 border border-cyan-500/30 rounded-lg hover:bg-cyan-500/10 transition-all"
@@ -496,45 +498,55 @@ export default function Home() {
               </button>
             </div>
 
+            {/* Mobile Menu Button - Only visible on small screens */}
             <button
-              className="md:hidden text-white"
+              className="lg:hidden text-white p-2 rounded-lg hover:bg-white/10 transition-colors"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle menu"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
 
+          {/* Mobile Menu Dropdown - Only shows when toggled */}
           {mobileMenuOpen && (
-            <div className="md:hidden py-4 border-t border-white/10">
-              <div className="flex flex-col gap-4">
-                {navItems.map((item) => (
-                  <a
-                    key={item.label}
-                    href={item.href}
-                    className="text-gray-300 hover:text-cyan-400 transition-colors text-sm font-medium"
-                    onClick={() => setMobileMenuOpen(false)}
+            <div className="lg:hidden absolute top-full left-0 right-0 bg-[#0B0F1A]/98 backdrop-blur-md border-b border-white/10 shadow-2xl">
+              <div className="px-4 py-6 space-y-4">
+                {/* Mobile Nav Links */}
+                <div className="flex flex-col space-y-3">
+                  {navItems.map((item) => (
+                    <a
+                      key={item.label}
+                      href={item.href}
+                      className="text-gray-300 hover:text-cyan-400 transition-colors text-base font-medium py-2"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      {item.label}
+                    </a>
+                  ))}
+                </div>
+
+                {/* Mobile CTA Buttons */}
+                <div className="flex flex-col gap-3 pt-4 border-t border-white/10">
+                  <button
+                    onClick={() => {
+                      setShowVendorSignup(true);
+                      setMobileMenuOpen(false);
+                    }}
+                    className="w-full px-4 py-3 text-sm font-medium text-cyan-400 border border-cyan-500/30 rounded-lg hover:bg-cyan-500/10 transition-all"
                   >
-                    {item.label}
-                  </a>
-                ))}
-                <button
-                  onClick={() => {
-                    setShowVendorSignup(true);
-                    setMobileMenuOpen(false);
-                  }}
-                  className="px-4 py-2 text-sm font-medium text-cyan-400 border border-cyan-500/30 rounded-lg"
-                >
-                  Join as Vendor
-                </button>
-                <button
-                  onClick={() => {
-                    setShowEarlyAccess(true);
-                    setMobileMenuOpen(false);
-                  }}
-                  className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg"
-                >
-                  Hire Developers
-                </button>
+                    Join as Vendor
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowEarlyAccess(true);
+                      setMobileMenuOpen(false);
+                    }}
+                    className="w-full px-4 py-3 text-sm font-medium text-white bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg"
+                  >
+                    Hire Developers
+                  </button>
+                </div>
               </div>
             </div>
           )}
@@ -542,7 +554,7 @@ export default function Home() {
       </nav>
 
       {/* Floating OS Badge */}
-      <div className="fixed top-28 right-6 z-40 hidden lg:block animate-bounce-slow">
+      <div className="fixed top-28 right-6 z-40 hidden xl:block animate-bounce-slow">
         <button
           onClick={() => setShowEarlyAccess(true)}
           className="group bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-5 py-3 rounded-full shadow-2xl border border-cyan-400/30 backdrop-blur-md flex items-center gap-2 hover:shadow-cyan-500/50 transition-all hover:scale-105"
@@ -553,7 +565,7 @@ export default function Home() {
         </button>
       </div>
 
-      {/* HERO SECTION - REDUCED FONT SIZES */}
+      {/* HERO SECTION */}
       <section className="relative min-h-screen flex items-center overflow-hidden pt-28">
         <div className="absolute inset-0 bg-[#0B0F1A]">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(6,182,212,0.15),_transparent_50%)]" />
@@ -746,7 +758,7 @@ export default function Home() {
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0B0F1A] to-transparent" />
       </section>
 
-      {/* STATS BAR - REDUCED SIZES */}
+      {/* STATS BAR */}
       <section className="relative py-12 bg-white border-y border-gray-100">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
@@ -767,7 +779,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ABOUT HIRENEST WORKFORCE - REDUCED SIZES */}
+      {/* ABOUT HIRENEST WORKFORCE */}
       <section id="about" className="py-20 bg-[#0B0F1A] relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(6,182,212,0.08),transparent_50%)]" />
 
@@ -851,7 +863,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* HIRENEST OS SECTION - REDUCED SIZES */}
+      {/* HIRENEST OS SECTION */}
       <section className="py-20 bg-[#0B0F1A] relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(6,182,212,0.08),transparent_50%)]" />
 
@@ -1007,7 +1019,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* SERVICES SECTION - REDUCED SIZES */}
+      {/* SERVICES SECTION */}
       <section id="services" className="py-20 bg-gray-50 relative">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -1064,7 +1076,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* HOW IT WORKS - REDUCED SIZES */}
+      {/* HOW IT WORKS */}
       <section className="py-20 bg-white relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(6,182,212,0.05),transparent_50%)]" />
 
@@ -1117,7 +1129,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ECOSYSTEM SECTION - REDUCED SIZES */}
+      {/* ECOSYSTEM SECTION */}
       <section id="vendors" className="py-20 bg-[#0B0F1A] relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(6,182,212,0.1),_transparent_50%)]" />
 
@@ -1335,7 +1347,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* WHY CHOOSE US - REDUCED SIZES */}
+      {/* WHY CHOOSE US */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -1363,7 +1375,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* TESTIMONIALS - REDUCED SIZES */}
+      {/* TESTIMONIALS */}
       <section className="py-20 bg-white relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(6,182,212,0.05),transparent_50%)]" />
 
@@ -1401,7 +1413,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* FINAL CTA - REDUCED SIZES */}
+      {/* FINAL CTA */}
       <section className="py-20 bg-[#0B0F1A] relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(6,182,212,0.15),_transparent_50%)]" />
         <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-blue-600/5" />
@@ -1457,7 +1469,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* FOOTER - FIXED OVERLAPPING ISSUE */}
+      {/* FOOTER */}
       <footer id="contact" className="bg-[#0B0F1A] border-t border-white/10 pt-16 pb-8">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid md:grid-cols-4 gap-12 mb-12">
@@ -1539,7 +1551,7 @@ export default function Home() {
 
       {/* MODALS */}
 
-      {/* Early Access Modal - FIXED MESSAGE */}
+      {/* Early Access Modal */}
       {showEarlyAccess && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
           <div className="relative w-full max-w-lg bg-[#0f1623] rounded-3xl border border-white/10 shadow-2xl overflow-hidden animate-scale-in max-h-[90vh] overflow-y-auto">
