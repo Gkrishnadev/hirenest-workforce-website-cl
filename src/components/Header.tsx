@@ -87,7 +87,7 @@ export default function Header() {
             })}
           </nav>
 
-          {/* CTA Buttons */}
+          {/* CTA Buttons - FIXED: Changed Partner With Us to Early Access */}
           <div className="hidden md:flex items-center gap-3">
             <Link to="/vendors">
               <button
@@ -101,14 +101,14 @@ export default function Header() {
               </button>
             </Link>
 
-            <Link to="/partner">
+            <Link to="/early-access">
               <button
                 className="font-semibold px-5 py-2 text-sm rounded-md text-white transition-all duration-200 hover:opacity-90 hover:-translate-y-0.5"
                 style={{
                   backgroundColor: "oklch(var(--electric))",
                 }}
               >
-                Partner With Us
+                Early Access
               </button>
             </Link>
           </div>
@@ -146,9 +146,10 @@ export default function Header() {
             </button>
           </Link>
 
-          <Link to="/partner">
+          {/* FIXED: Changed to Early Access */}
+          <Link to="/early-access">
             <button className="w-full bg-blue-500 text-white p-2 rounded">
-              Partner With Us
+              Early Access
             </button>
           </Link>
         </div>
