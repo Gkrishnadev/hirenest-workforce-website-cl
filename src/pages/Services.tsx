@@ -69,145 +69,101 @@ const services = [
 
 export default function Services() {
   return (
-    <div className="pt-[72px]">
+    <div className="min-h-screen bg-[#0B0F1A]">
+      {/* Hero - Premium Dark */}
+      <section className="relative pt-32 pb-20 overflow-hidden">
+        <div className="absolute inset-0 bg-[#0B0F1A]">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(6,182,212,0.15),_transparent_50%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(59,130,246,0.1),_transparent_50%)]" />
+        </div>
 
-      {/* 🔥 HERO */}
-      <section
-        className="py-28 text-center"
-        style={{
-          background:
-            "linear-gradient(135deg, oklch(var(--navy)) 0%, oklch(0.20 0.05 265) 100%)",
-        }}
-      >
-        <p
-          className="text-sm font-semibold uppercase tracking-widest mb-4"
-          style={{ color: "oklch(var(--electric-light))" }}
-        >
-          Our Services
-        </p>
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/30 mb-6">
+            <span className="text-cyan-400 text-sm font-semibold tracking-wide uppercase">Our Services</span>
+          </div>
 
-        <h1 className="text-5xl font-display font-bold text-white mb-6">
-          Talent Solutions Built for Modern Teams
-        </h1>
-
-        <p
-          className="text-lg max-w-2xl mx-auto"
-          style={{ color: "oklch(0.78 0.02 255)" }}
-        >
-          From IT staffing to AI talent — we deliver high-quality hiring solutions
-          tailored to your business growth.
-        </p>
+          <h1 className="text-5xl font-bold text-white mb-6">
+            Talent Solutions Built for Modern Teams
+          </h1>
+          <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+            From IT staffing to AI talent — we deliver high-quality hiring solutions
+            tailored to your business growth.
+          </p>
+        </div>
       </section>
 
-      {/* 💼 SERVICES */}
-      <section className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 space-y-24">
-
+      {/* Services - Dark Cards */}
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-24">
           {services.map((s, i) => (
             <div
               key={s.title}
-              className={`grid lg:grid-cols-2 gap-16 items-center ${
+              className={`grid lg:grid-cols-2 gap-12 items-center ${
                 i % 2 === 1 ? "lg:grid-flow-dense" : ""
               }`}
             >
-
-              {/* LEFT */}
+              {/* Content Side */}
               <div className={i % 2 === 1 ? "lg:col-start-2" : ""}>
-                <div
-                  className="w-14 h-14 rounded-xl flex items-center justify-center mb-6"
-                  style={{ backgroundColor: "oklch(var(--electric) / 0.1)" }}
-                >
-                  <s.icon
-                    className="w-7 h-7"
-                    style={{ color: "oklch(var(--electric))" }}
-                  />
+                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-600/20 flex items-center justify-center mb-6">
+                  <s.icon className="w-7 h-7 text-cyan-400" />
                 </div>
 
-                <h2 className="text-3xl font-display font-bold mb-4">
+                <h2 className="text-3xl font-bold text-white mb-4">
                   {s.title}
                 </h2>
 
-                <p className="section-subtext mb-8 leading-relaxed">
+                <p className="text-gray-400 text-lg mb-8 leading-relaxed">
                   {s.desc}
                 </p>
 
                 <Link to="/contact">
-                  <button
-                    className="inline-flex items-center gap-2 px-6 py-3 rounded-md font-semibold text-white transition hover:opacity-90"
-                    style={{
-                      background:
-                        "linear-gradient(135deg, oklch(var(--electric)), oklch(var(--electric-light)))",
-                    }}
-                  >
-                    {s.ctaLabel} <ArrowRight className="w-4 h-4" />
+                  <button className="group inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-cyan-500 to-blue-600 hover:shadow-lg hover:shadow-cyan-500/25 transition-all">
+                    {s.ctaLabel} <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </button>
                 </Link>
               </div>
 
-              {/* RIGHT CARD */}
-              <div
-                className={`p-8 rounded-2xl border shadow-sm ${
-                  i % 2 === 1 ? "lg:col-start-1" : ""
-                }`}
-                style={{
-                  backgroundColor: "oklch(var(--surface) / 0.9)",
-                  borderColor: "oklch(var(--border))",
-                }}
-              >
-                <p
-                  className="text-sm font-semibold uppercase tracking-widest mb-5"
-                  style={{ color: "oklch(var(--electric))" }}
-                >
-                  Specializations
-                </p>
+              {/* Specializations Card */}
+              <div className={i % 2 === 1 ? "lg:col-start-1" : ""}>
+                <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 hover:border-cyan-500/30 transition-all">
+                  <p className="text-cyan-400 text-sm font-semibold uppercase tracking-widest mb-5">
+                    Specializations
+                  </p>
 
-                <ul className="space-y-3">
-                  {s.specializations.map((spec) => (
-                    <li key={spec} className="flex items-start gap-3">
-                      <CheckCircle2
-                        className="w-5 h-5 mt-0.5"
-                        style={{ color: "oklch(var(--electric))" }}
-                      />
-                      <span className="text-sm section-subtext">{spec}</span>
-                    </li>
-                  ))}
-                </ul>
+                  <ul className="space-y-3">
+                    {s.specializations.map((spec) => (
+                      <li key={spec} className="flex items-start gap-3">
+                        <CheckCircle2 className="w-5 h-5 mt-0.5 text-cyan-400 shrink-0" />
+                        <span className="text-gray-300">{spec}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </div>
           ))}
-
         </div>
       </section>
 
-      {/* 🚀 CTA */}
-      <section
-        className="py-24 text-center"
-        style={{
-          background:
-            "linear-gradient(135deg, oklch(var(--navy)) 0%, oklch(0.18 0.05 258) 100%)",
-        }}
-      >
-        <h2 className="text-3xl font-display font-bold text-white mb-4">
-          Ready to hire top talent?
-        </h2>
+      {/* CTA Section */}
+      <section className="relative py-24 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-cyan-900/30 via-[#0B0F1A] to-blue-900/30" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(6,182,212,0.15),_transparent_50%)]" />
 
-        <p
-          className="mb-8 max-w-xl mx-auto"
-          style={{ color: "oklch(0.78 0.02 255)" }}
-        >
-          Let HireNest connect you with the right candidates quickly and efficiently.
-        </p>
-
-        <Link to="/contact">
-          <button
-            className="px-7 py-3 rounded-md font-semibold bg-white transition hover:shadow-lg"
-            style={{ color: "oklch(var(--navy))" }}
-          >
-            Get Started <ArrowRight className="w-4 h-4 inline ml-2" />
-          </button>
-        </Link>
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-4xl font-bold text-white mb-4">
+            Ready to hire top talent?
+          </h2>
+          <p className="text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
+            Let HireNest connect you with the right candidates quickly and efficiently.
+          </p>
+          <Link to="/contact">
+            <button className="px-8 py-4 rounded-xl font-semibold bg-gradient-to-r from-cyan-500 to-blue-600 text-white hover:shadow-lg hover:shadow-cyan-500/25 transition-all">
+              Get Started <ArrowRight className="w-4 h-4 inline ml-2" />
+            </button>
+          </Link>
+        </div>
       </section>
-
     </div>
   );
 }
