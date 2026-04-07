@@ -22,7 +22,6 @@ export default function Contact() {
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  // ✅ THIS IS YOUR BRIDGE (FORM → SUPABASE)
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
@@ -58,10 +57,10 @@ ${form.message}
             body: JSON.stringify({
               type: "Contact Form",
               data: {
-                name: form.name,       // ✅ FIXED
-                email: form.email,     // ✅ FIXED
-                message: form.message, // ✅ FIXED
-                company: form.company, // ✅ ADDED (optional but useful)
+                name: form.name,
+                email: form.email,
+                message: form.message,
+                company: form.company,
               },
             }),
           }
@@ -79,83 +78,61 @@ ${form.message}
   };
 
   return (
-    <div>
+    <div className="min-h-screen bg-[#0B0F1A]">
       <SEO
         title="Contact HireNest Workforce | IT Staffing Support"
         description="Contact HireNest Workforce for IT staffing, vendor partnerships, and hiring solutions. Get response within 24 hours."
         path="/contact"
       />
 
-      <div className="pt-[72px]">
-        <section
-          className="py-24 text-center"
-          style={{
-            background:
-              "linear-gradient(135deg, oklch(var(--navy)) 0%, oklch(0.20 0.05 265) 100%)",
-          }}
-        >
-          <p
-            className="text-sm font-semibold uppercase tracking-widest mb-4"
-            style={{ color: "oklch(var(--electric-light))" }}
-          >
-            Get In Touch
-          </p>
+      {/* Hero - Premium Dark */}
+      <section className="relative pt-32 pb-20 overflow-hidden">
+        <div className="absolute inset-0 bg-[#0B0F1A]">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(6,182,212,0.15),_transparent_50%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(59,130,246,0.1),_transparent_50%)]" />
+        </div>
 
-          <h1 className="text-5xl font-display font-bold text-white mb-6">
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/30 mb-6">
+            <span className="text-cyan-400 text-sm font-semibold tracking-wide uppercase">Get In Touch</span>
+          </div>
+
+          <h1 className="text-5xl font-bold text-white mb-6">
             Contact HireNest
           </h1>
-
-          <p className="text-lg" style={{ color: "oklch(0.78 0.02 255)" }}>
+          <p className="text-xl text-gray-400 max-w-2xl mx-auto">
             Have a hiring requirement or question? We respond within 24 hours.
           </p>
-        </section>
+        </div>
+      </section>
 
-        <section
-          className="py-24"
-          style={{
-            background:
-              "linear-gradient(180deg, white 0%, oklch(var(--surface)) 100%)",
-          }}
-        >
-          <div className="max-w-6xl mx-auto px-4 grid lg:grid-cols-5 gap-16">
+      {/* Contact Section */}
+      <section className="py-20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-5 gap-12">
+            {/* Form Side */}
             <div className="lg:col-span-3">
-              <h2
-                className="text-2xl font-display font-bold mb-8"
-                style={{ color: "oklch(var(--navy))" }}
-              >
+              <h2 className="text-2xl font-bold text-white mb-8">
                 Send Us a Message
               </h2>
 
               {success ? (
-                <div
-                  className="p-8 rounded-xl border text-center"
-                  style={{
-                    backgroundColor: "oklch(0.97 0.02 145)",
-                    borderColor: "oklch(0.65 0.18 145)",
-                  }}
-                >
-                  <CheckCircle2
-                    className="w-12 h-12 mx-auto mb-4"
-                    style={{ color: "oklch(0.55 0.20 145)" }}
-                  />
-                  <h3 className="font-display font-bold text-lg mb-2">
+                <div className="bg-green-500/10 border border-green-500/30 rounded-2xl p-8 text-center">
+                  <CheckCircle2 className="w-12 h-12 mx-auto mb-4 text-green-400" />
+                  <h3 className="font-bold text-white text-lg mb-2">
                     Message Sent!
                   </h3>
-                  <p className="text-sm">
+                  <p className="text-gray-400">
                     We'll get back to you within 24 hours.
                   </p>
                 </div>
               ) : (
                 <form
                   onSubmit={handleSubmit}
-                  className="space-y-6 p-8 rounded-xl border shadow-sm"
-                  style={{
-                    backgroundColor: "oklch(var(--surface))",
-                    borderColor: "oklch(var(--border))",
-                  }}
+                  className="space-y-6 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8"
                 >
                   <div>
-                    <label className="block text-sm font-medium mb-2">
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
                       Full Name *
                     </label>
                     <input
@@ -165,13 +142,12 @@ ${form.message}
                         setForm({ ...form, name: e.target.value })
                       }
                       placeholder="John Doe"
-                      className="w-full px-3 py-2 rounded-md border text-sm"
-                      style={{ borderColor: "oklch(var(--border))" }}
+                      className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 transition-colors"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-2">
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
                       Email Address *
                     </label>
                     <input
@@ -182,13 +158,12 @@ ${form.message}
                         setForm({ ...form, email: e.target.value })
                       }
                       placeholder="john@company.com"
-                      className="w-full px-3 py-2 rounded-md border text-sm"
-                      style={{ borderColor: "oklch(var(--border))" }}
+                      className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 transition-colors"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-2">
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
                       Company Name *
                     </label>
                     <input
@@ -198,13 +173,12 @@ ${form.message}
                         setForm({ ...form, company: e.target.value })
                       }
                       placeholder="Your Company"
-                      className="w-full px-3 py-2 rounded-md border text-sm"
-                      style={{ borderColor: "oklch(var(--border))" }}
+                      className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 transition-colors"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-2">
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
                       Message *
                     </label>
                     <textarea
@@ -215,19 +189,14 @@ ${form.message}
                         setForm({ ...form, message: e.target.value })
                       }
                       placeholder="Tell us about your hiring needs..."
-                      className="w-full px-3 py-2 rounded-md border text-sm"
-                      style={{ borderColor: "oklch(var(--border))" }}
+                      className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 transition-colors resize-none"
                     />
                   </div>
 
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="w-full flex items-center justify-center gap-2 py-3 rounded-md text-white font-semibold transition"
-                    style={{
-                      background:
-                        "linear-gradient(135deg, oklch(var(--electric)), oklch(var(--electric-light)))",
-                    }}
+                    className="w-full flex items-center justify-center gap-2 py-4 rounded-xl text-white font-semibold bg-gradient-to-r from-cyan-500 to-blue-600 hover:shadow-lg hover:shadow-cyan-500/25 transition-all disabled:opacity-50"
                   >
                     {submitting && (
                       <Loader2 className="w-4 h-4 animate-spin" />
@@ -238,39 +207,50 @@ ${form.message}
               )}
             </div>
 
+            {/* Contact Info Side */}
             <div className="lg:col-span-2 space-y-6">
-              <h2
-                className="text-2xl font-display font-bold mb-4"
-                style={{ color: "oklch(var(--navy))" }}
-              >
+              <h2 className="text-2xl font-bold text-white mb-6">
                 Contact Information
               </h2>
 
-              {[
-                { icon: Mail, value: "info@hirenestworkforce.com" },
-                { icon: Phone, value: "+91 9392894748" },
-                { icon: MapPin, value: "Hyderabad, Telangana" },
-                { icon: Clock, value: "Mon–Fri, 9AM–6PM" },
-              ].map((item, i) => (
-                <div key={i} className="flex items-center gap-4">
-                  <div
-                    className="w-10 h-10 rounded-lg flex items-center justify-center"
-                    style={{
-                      backgroundColor: "oklch(var(--electric) / 0.1)",
-                    }}
-                  >
-                    <item.icon
-                      className="w-5 h-5"
-                      style={{ color: "oklch(var(--electric))" }}
-                    />
+              <div className="space-y-4">
+                {[
+                  { icon: Mail, value: "info@hirenestworkforce.com" },
+                  { icon: Phone, value: "+91 9392894748" },
+                  { icon: MapPin, value: "Hyderabad, Telangana" },
+                  { icon: Clock, value: "Mon–Fri, 9AM–6PM" },
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-4 bg-white/5 border border-white/10 rounded-xl p-4">
+                    <div className="w-10 h-10 rounded-lg bg-cyan-500/10 flex items-center justify-center">
+                      <item.icon className="w-5 h-5 text-cyan-400" />
+                    </div>
+                    <p className="text-gray-300">{item.value}</p>
                   </div>
-                  <p className="text-sm">{item.value}</p>
-                </div>
-              ))}
+                ))}
+              </div>
+
+              {/* Quick Stats */}
+              <div className="bg-gradient-to-br from-cyan-500/10 to-blue-600/10 border border-cyan-500/20 rounded-2xl p-6 mt-8">
+                <h3 className="text-white font-semibold mb-4">Why Choose Us?</h3>
+                <ul className="space-y-2 text-gray-400 text-sm">
+                  <li className="flex items-center gap-2">
+                    <span className="text-cyan-400">✓</span> 24-hour response time
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-cyan-400">✓</span> Dedicated account manager
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-cyan-400">✓</span> 500+ verified consultants
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-cyan-400">✓</span> 120+ vendor network
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
     </div>
   );
 }
