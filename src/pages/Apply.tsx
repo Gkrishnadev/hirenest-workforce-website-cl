@@ -95,26 +95,17 @@ export default function Apply() {
       // =====================================================
       // ✅ 4. CANDIDATE EMAIL (FIXED: added API KEY)
       // =====================================================
-      const confirmRes = await fetch(
-        "https://hjeukduwzdginoqjjgod.supabase.co/functions/v1/send-email",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-api-key": "hirenest-secure-key-2026", // ✅ FIXED
-          },
-          body: JSON.stringify({
-            type: "Candidate Confirmation",
-            formName: "Apply Form",
-            data: {
-              name: form.name,
-              email: form.email,
-              role: role,
-            },
-          }),
-        }
-      );
-
+      const confirmRes =await sendEmail({
+  type: "Job Application",
+  data: {
+    name: form.name,
+    email: form.email,
+    phone: form.phone,
+    role: role,
+    resumeUrl: resumeUrl,
+    whyFit: "",
+  },
+});
       if (!confirmRes.ok) {
         console.error(await confirmRes.text());
       }
