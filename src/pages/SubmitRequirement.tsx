@@ -53,8 +53,9 @@ Contact Person: ${form.contactName}
         await fetch("https://hjeukduwzdginoqjjgod.supabase.co/functions/v1/send-email", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+           "x-api-key": "hirenest-secure-key-2026", 
           body: JSON.stringify({
-            type: "Requirement Submission",
+            type: "Requirement",
             data: {
               name: form.contactName,
               email: form.contactEmail,
