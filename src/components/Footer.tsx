@@ -113,7 +113,47 @@ export default function Footer() {
             </div>
           </div>
           
-  // Light Theme Footer (for functional pages)
+          {/* Bottom bar - ADDED MISSING SECTION */}
+          <div className="mt-12 pt-6 border-t border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
+            <p>© {year} HireNest Workforce. All rights reserved.</p>
+            <div className="flex items-center gap-4">
+              <span className="hover:text-white transition-colors cursor-pointer">
+                Privacy Policy
+              </span>
+              <span>|</span>
+              <span className="hover:text-white transition-colors cursor-pointer">
+                Terms of Service
+              </span>
+              <span>|</span>
+              <a
+                href="https://www.linkedin.com/company/hirenest-workforce-pvt-ltd"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-white transition-colors inline-flex items-center gap-1"
+              >
+                <Linkedin className="w-3.5 h-3.5" />
+                LinkedIn
+              </a>
+            </div>
+            <p>
+              Built with ❤️ using{" "}
+              <a
+                href={caffeineUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-white transition-colors underline underline-offset-2"
+              >
+                caffeine.ai
+              </a>
+            </p>
+          </div>
+          
+        </div>
+      </footer>
+    );  // ← FIXED: Added missing closing parenthesis and semicolon
+  }  // ← FIXED: Added missing closing brace for if statement
+
+  // Light Theme Footer (for functional pages) - MOVED OUTSIDE JSX
   return (
     <footer className="bg-gray-900 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-10">
