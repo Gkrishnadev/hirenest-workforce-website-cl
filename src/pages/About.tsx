@@ -271,19 +271,11 @@ export default function About() {
                 
                 {/* Social Links */}
                 <div className="flex justify-center gap-4 mt-6">
-                  <a href="https://linkedin.com/in/gopala-krishna" target="_blank" rel="noopener noreferrer" 
+                  <a href="https://www.linkedin.com/in/gopala-krishna-sathikela-venkata-668251255/" target="_blank" rel="noopener noreferrer" 
                      className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-cyan-500 transition-colors">
                     <Linkedin className="w-5 h-5" />
                   </a>
-                  <a href="https://twitter.com/gkrishna" target="_blank" rel="noopener noreferrer"
-                     className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-cyan-500 transition-colors">
-                    <Twitter className="w-5 h-5" />
-                  </a>
-                  <a href="https://github.com/gkrishna" target="_blank" rel="noopener noreferrer"
-                     className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-cyan-500 transition-colors">
-                    <Github className="w-5 h-5" />
-                  </a>
-                </div>
+                                  </div>
               </div>
             </div>
 
@@ -341,24 +333,33 @@ export default function About() {
             <div className="flex gap-6">
               <div className="flex-shrink-0 w-12 h-12 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center font-bold">✓</div>
               <div>
-                <h3 className="text-xl font-bold text-white">v1.0 — Network Launch</h3>
-                <p className="text-gray-400 mt-1">Core platform live with 50+ vendor partners and matching engine operational.</p>
+                <h3 className="text-xl font-bold text-white">v0.1 — Foundation ✓</h3>
+                <p className="text-gray-400 mt-1">Core platform live with enterprise data integrations. Building in public.</p>
+              </div>
+            </div>
+
+          <div className="space-y-8">
+            <div className="flex gap-6">
+              <div className="flex-shrink-0 w-12 h-12 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center font-bold">✓</div>
+              <div>
+                <h3 className="text-xl font-bold text-white">v1.0 — Network Launch →</h3>
+                <p className="text-gray-400 mt-1">MVP active: 50+ vendor partners onboarding. Matching engine in testing. Core network effects building.</p>
               </div>
             </div>
 
             <div className="flex gap-6">
               <div className="flex-shrink-0 w-12 h-12 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold">→</div>
               <div>
-                <h3 className="text-xl font-bold text-white">v2.0 — Intelligence Layer</h3>
-                <p className="text-gray-400 mt-1">AI-powered candidate ranking, predictive hiring analytics, and automated sourcing.</p>
+                <h3 className="text-xl font-bold text-white">v2.0 — Intelligence Layer ○</h3>
+                <p className="text-gray-400 mt-1">AI-powered candidate ranking, predictive hiring analytics, and automated sourcing pipelines.</p>
               </div>
             </div>
 
             <div className="flex gap-6 opacity-50">
               <div className="flex-shrink-0 w-12 h-12 rounded-full bg-white/10 text-gray-500 flex items-center justify-center font-bold">○</div>
               <div>
-                <h3 className="text-xl font-bold text-white">v3.0 — Global Expansion</h3>
-                <p className="text-gray-400 mt-1">International compliance, multi-currency, and talent mobility across 50+ countries.</p>
+                <h3 className="text-xl font-bold text-white">v3.0 — Global Expansion ○</h3>
+                <p className="text-gray-400 mt-1">International compliance framework. Multi-currency support. Talent mobility across 50+ countries.</p>
               </div>
             </div>
           </div>
