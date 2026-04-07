@@ -1,14 +1,18 @@
-import Header from "./Header";
-import Footer from "./Footer";
+// src/components/Layout.tsx - MAKE SURE IT LOOKS LIKE THIS
+import { ReactNode } from "react";
+import Navbar from "./Navbar";
+import Footer from "./Footer"; // Only import ONCE
 
-export default function Layout({ children }) {
+interface LayoutProps {
+  children: ReactNode;
+}
+
+export default function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
-      <main className="flex-1">
-        {children}
-      </main>
-      <Footer />
+      <Navbar />
+      <main className="flex-1">{children}</main>
+      <Footer /> {/* Only render ONCE here */}
     </div>
   );
 }
