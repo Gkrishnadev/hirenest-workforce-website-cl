@@ -22,6 +22,7 @@ import SubmitRequirement from "./pages/SubmitRequirement";
 import VendorNetwork from "./pages/VendorNetwork";
 import Vendors from "./pages/Vendors";
 import HireDevelopers from "./pages/HireDevelopers";
+import EarlyAccess from "./pages/EarlyAccess";
 
 // ================= ROOT =================
 
@@ -118,11 +119,17 @@ const applyRoute = createRoute({
   component: Apply,
 });
 
-// ✅ FIXED (LOWERCASE VARIABLE NAME)
 const jobDetailRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/jobs/$role",
   component: JobDetail,
+});
+
+// ✅ ADDED: Early Access Route
+const earlyAccessRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/early-access",
+  component: EarlyAccess,
 });
 
 // ================= ROUTE TREE =================
@@ -141,7 +148,8 @@ const routeTree = rootRoute.addChildren([
   hireDevelopersRoute,
   careersRoute,
   jobDetailRoute, 
-  applyRoute, // ✅ NOW MATCHES
+  applyRoute,
+  earlyAccessRoute, // ✅ ADDED
 ]);
 
 const router = createRouter({ routeTree });
