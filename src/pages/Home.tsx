@@ -26,49 +26,49 @@ import {
 } from "lucide-react";
 import { useState, useEffect } from "react";
 
-// OS Features - Platform capabilities, not services
-const osCapabilities = [
+// Capabilities - What HireNest Workforce delivers (powered by OS)
+const workforceCapabilities = [
   {
     icon: Cpu,
-    title: "Intelligent Matching",
-    desc: "AI-powered candidate ranking with 94% accuracy. Not keyword search—semantic understanding of skills, culture, and growth trajectory.",
+    title: "AI-Powered Matching",
+    desc: "Our HireNest OS engine matches requirements to candidates with 94% accuracy—understanding skills, culture fit, and growth trajectory, not just keywords.",
     stat: "94%",
     statLabel: "Match Accuracy",
     color: "from-cyan-500 to-blue-600"
   },
   {
     icon: Network,
-    title: "Vendor Orchestration",
-    desc: "One requirement, instant broadcast to curated vendors. Real-time coordination, duplicate elimination, and performance tracking.",
+    title: "Curated Vendor Network",
+    desc: "One requirement, instant broadcast to our hand-picked network of verified staffing partners. Real-time coordination and performance tracking.",
     stat: "10x",
     statLabel: "Faster Sourcing",
     color: "from-purple-500 to-pink-600"
   },
   {
     icon: Layers,
-    title: "Unified Pipeline",
-    desc: "Single dashboard for all hiring channels: direct applicants, vendor submissions, and passive talent. One source of truth.",
+    title: "Unified Hiring Pipeline",
+    desc: "Single dashboard for all your hiring channels—direct applicants, vendor submissions, and passive talent. One source of truth, zero spreadsheets.",
     stat: "3x",
     statLabel: "Team Efficiency",
     color: "from-orange-500 to-red-600"
   },
   {
     icon: Workflow,
-    title: "Automated Workflows",
-    desc: "From req to offer, automated. Interview scheduling, feedback collection, and approvals—no spreadsheets, no chaos.",
+    title: "Streamlined Workflows",
+    desc: "From req to offer, automated through HireNest OS. Interview scheduling, feedback collection, and approvals—no chaos, no dropped balls.",
     stat: "60%",
     statLabel: "Time Saved",
     color: "from-green-500 to-emerald-600"
   }
 ];
 
-// Who is this for - Three OS interfaces
-const osInterfaces = [
+// Who we serve - Three perspectives
+const whoWeServe = [
   {
     icon: Building2,
     title: "For Companies",
-    subtitle: "Client OS",
-    desc: "Hire faster with intelligence. One platform, unlimited vendors, zero coordination overhead.",
+    subtitle: "Hire Smarter",
+    desc: "Work with HireNest Workforce as your single point of contact—reach multiple verified vendors instantly through our HireNest OS platform.",
     cta: "Start Hiring",
     href: "/hire-developers-india",
     features: ["AI candidate ranking", "Vendor performance analytics", "Automated workflows"]
@@ -76,8 +76,8 @@ const osInterfaces = [
   {
     icon: Network,
     title: "For Vendors",
-    subtitle: "Partner OS",
-    desc: "Get consistent, qualified requirements. No more cold outreach. No more competing blindly.",
+    subtitle: "Partner With Us",
+    desc: "Join the HireNest Workforce partner network. Get consistent, qualified requirements through our shared HireNest OS platform.",
     cta: "Join Network",
     href: "/vendor-network",
     features: ["Qualified leads daily", "Direct client access", "Faster submissions"]
@@ -85,9 +85,9 @@ const osInterfaces = [
   {
     icon: Users,
     title: "For Recruiters",
-    subtitle: "Talent OS",
-    desc: "Track everything. Submit smarter. Close faster with data-driven insights.",
-    cta: "Access Platform",
+    subtitle: "Access Platform",
+    desc: "Track everything, submit smarter, close faster with data-driven insights powered by HireNest OS.",
+    cta: "Get Access",
     href: "/early-access",
     features: ["Candidate tracking", "Submission analytics", "Commission transparency"]
   }
@@ -95,7 +95,7 @@ const osInterfaces = [
 
 // Social proof - Real metrics
 const traction = [
-  { number: "$2.4M", label: "Talent Placed", suffix: "" },
+  { number: "500+", label: "Companies Trusting HireNest", suffix: "" },
   { number: "94%", label: "Match Accuracy", suffix: "" },
   { number: "48h", label: "Avg. Time-to-Hire", suffix: "" },
   { number: "3x", label: "Faster vs Traditional", suffix: "" }
@@ -104,21 +104,21 @@ const traction = [
 // Testimonials
 const testimonials = [
   {
-    quote: "We replaced 8 vendor relationships with HireNest OS. Same coverage, 10x less coordination overhead.",
+    quote: "We replaced 8 vendor relationships with HireNest Workforce. Same coverage, 10x less coordination overhead. The OS dashboard is a game-changer.",
     name: "Sarah Chen",
     title: "VP of Engineering",
     company: "Arcline AI",
     metric: "60% faster hiring"
   },
   {
-    quote: "Finally, a platform that treats vendors as partners, not commodities. Qualified reqs, transparent process.",
+    quote: "Finally, a staffing partner that treats vendors as partners. Qualified reqs, transparent process, all powered by their HireNest OS platform.",
     name: "Marcus O'Brien",
     title: "CEO",
     company: "NovaStaff Solutions",
     metric: "3x submission rate"
   },
   {
-    quote: "The AI matching is scary good. It suggested candidates we would have missed entirely.",
+    quote: "The AI matching is scary good. HireNest Workforce suggested candidates we would have missed entirely. Their OS truly delivers.",
     name: "Priya Nair",
     title: "Head of Talent",
     company: "MedCore Health",
@@ -142,7 +142,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#0B0F1A] text-white font-sans selection:bg-cyan-500/30">
       
-      {/* HERO SECTION - OS Positioning */}
+      {/* HERO SECTION - HireNest Workforce Primary */}
       <section className="relative min-h-screen flex items-center overflow-hidden pt-20">
         {/* Background Effects */}
         <div className="absolute inset-0 bg-[#0B0F1A]">
@@ -163,21 +163,28 @@ export default function Home() {
                   <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-500"></span>
                 </span>
                 <span className="text-cyan-400 text-sm font-semibold tracking-wide uppercase">
-                  Now in Private Beta
+                  AI-Powered Talent Solutions
                 </span>
               </div>
 
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.05] tracking-tight">
-                The operating system for{" "}
-                <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
-                  modern hiring
-                </span>
-              </h1>
+              <div className="space-y-2">
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.05] tracking-tight">
+                  HireNest Workforce
+                </h1>
+                <p className="text-2xl sm:text-3xl lg:text-4xl text-gray-400 font-light">
+                  AI-Powered Talent Solutions
+                </p>
+              </div>
 
               <p className="text-xl text-gray-400 leading-relaxed max-w-xl">
-                HireNest OS coordinates companies, vendors, and talent in one intelligent platform. 
-                Stop managing spreadsheets. Start running workforce acquisition like software.
+                We connect ambitious companies with exceptional talent faster than traditional staffing—combining human expertise with intelligent technology.
               </p>
+
+              {/* OS Badge */}
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10">
+                <Cpu className="w-4 h-4 text-cyan-400" />
+                <span className="text-sm text-gray-400">Built on the <span className="text-cyan-400 font-semibold">HireNest OS</span> platform</span>
+              </div>
 
               <div className="flex flex-col sm:flex-row gap-4">
                 <button
@@ -185,7 +192,7 @@ export default function Home() {
                   className="group relative px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl font-semibold text-white shadow-2xl shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all duration-300 hover:-translate-y-1 overflow-hidden flex items-center justify-center gap-3"
                 >
                   <Sparkles className="w-5 h-5" />
-                  <span>Get Early Access</span>
+                  <span>Start Hiring with HireNest</span>
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </button>
 
@@ -217,12 +224,12 @@ export default function Home() {
                     ))}
                     <span className="text-white font-semibold ml-2">4.9/5</span>
                   </div>
-                  <p className="text-sm text-gray-500">From 20+ beta customers</p>
+                  <p className="text-sm text-gray-500">From 500+ client partners</p>
                 </div>
               </div>
             </div>
 
-            {/* Right: OS Dashboard Preview */}
+            {/* Right: Dashboard Preview */}
             <div className="relative hidden lg:block">
               <div className="absolute -inset-8 bg-gradient-to-r from-cyan-500/20 to-purple-600/20 rounded-[3rem] blur-3xl animate-pulse" />
               
@@ -234,7 +241,7 @@ export default function Home() {
                     <div className="w-3 h-3 rounded-full bg-yellow-500" />
                     <div className="w-3 h-3 rounded-full bg-green-500" />
                   </div>
-                  <span className="text-xs text-gray-500 font-mono">HireNest OS v2.0 — Dashboard</span>
+                  <span className="text-xs text-gray-500 font-mono">HireNest OS — Powering HireNest Workforce</span>
                   <div className="w-16"></div>
                 </div>
 
@@ -259,7 +266,7 @@ export default function Home() {
 
                   {/* Live Activity Feed */}
                   <div className="space-y-2">
-                    <div className="text-xs text-gray-500 uppercase tracking-wider mb-2">Live Network Activity</div>
+                    <div className="text-xs text-gray-500 uppercase tracking-wider mb-2">Live Workforce Activity</div>
                     {[
                       { action: "New candidate match", detail: "Senior React Dev • 98% fit", time: "2m ago", type: "match" },
                       { action: "Vendor submission", detail: "NovaStaff • ML Engineer", time: "5m ago", type: "submit" },
@@ -284,7 +291,7 @@ export default function Home() {
                     <div className="flex items-start gap-3">
                       <Brain className="w-5 h-5 text-cyan-400 mt-0.5" />
                       <div>
-                        <div className="text-sm text-white font-medium">AI Insight</div>
+                        <div className="text-sm text-white font-medium">HireNest OS Insight</div>
                         <div className="text-xs text-gray-400 mt-1">
                           Based on your hiring patterns, we suggest expanding your vendor network 
                           to 3 partners specializing in Cloud/DevOps.
@@ -317,25 +324,44 @@ export default function Home() {
         </div>
       </section>
 
-      {/* OS CAPABILITIES - Not Services, But Features */}
+      {/* WHAT WE DO - HireNest Workforce Introduction */}
       <section className="py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <span className="text-cyan-600 font-semibold text-sm uppercase tracking-[0.2em]">Platform</span>
+            <span className="text-cyan-600 font-semibold text-sm uppercase tracking-[0.2em]">About Us</span>
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mt-4 mb-4">
-              Workforce acquisition,<br />
-              <span className="text-gray-500">rebuilt as software</span>
+              Not Your Typical<br />
+              <span className="text-gray-500">Staffing Agency</span>
+            </h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              HireNest Workforce is a technology-first workforce solutions provider. While others rely on outdated processes, we leverage our proprietary <strong>HireNest OS</strong> platform to deliver candidates that don't just fit the job description—they fit your culture and drive results.
+            </p>
+            <p className="text-gray-500 mt-4">
+              Founded in 2026, we've rapidly grown to serve 500+ companies across Technology, Finance, Healthcare, and E-commerce.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* WORKFORCE CAPABILITIES - Powered by OS */}
+      <section className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <span className="text-cyan-600 font-semibold text-sm uppercase tracking-[0.2em]">Our Services</span>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mt-4 mb-4">
+              Comprehensive Talent Solutions<br />
+              <span className="text-gray-500">Powered by HireNest OS</span>
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Four core capabilities. One unified platform. Zero spreadsheets.
+              Everything you need to hire faster, smarter, and better—delivered through our intelligent platform.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
-            {osCapabilities.map((cap) => (
+            {workforceCapabilities.map((cap) => (
               <div
                 key={cap.title}
-                className="group relative p-8 bg-white rounded-2xl border border-gray-200 hover:border-transparent transition-all duration-500 overflow-hidden"
+                className="group relative p-8 bg-gray-50 rounded-2xl border border-gray-200 hover:border-transparent transition-all duration-500 overflow-hidden"
               >
                 <div className={`absolute inset-0 bg-gradient-to-br ${cap.color} opacity-0 group-hover:opacity-5 transition-opacity duration-500`} />
                 
@@ -366,21 +392,129 @@ export default function Home() {
         </div>
       </section>
 
-      {/* THREE INTERFACES - Who Is This For */}
+      {/* THE HIRENEST OS ADVANTAGE */}
+      <section className="py-24 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div className="space-y-8">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/30">
+                <Cpu className="w-4 h-4 text-cyan-600" />
+                <span className="text-cyan-600 text-sm font-semibold tracking-wide uppercase">Our Secret Weapon</span>
+              </div>
+
+              <h2 className="text-4xl lg:text-5xl font-bold leading-tight text-gray-900">
+                Powered by<br />
+                <span className="bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">
+                  HireNest OS
+                </span>
+              </h2>
+
+              <p className="text-xl text-gray-600 leading-relaxed">
+                What makes us different? Our proprietary operating system. While competitors juggle spreadsheets and email chains, HireNest OS unifies your entire hiring pipeline—vendors, candidates, and analytics—in one intelligent platform.
+              </p>
+
+              <div className="p-4 rounded-xl bg-cyan-50 border border-cyan-200">
+                <p className="text-sm text-cyan-800">
+                  <strong>Included with every HireNest Workforce partnership.</strong> No separate software to buy.
+                </p>
+              </div>
+
+              <div className="space-y-4">
+                {[
+                  { icon: Brain, text: "AI-powered candidate ranking" },
+                  { icon: Network, text: "Real-time vendor coordination" },
+                  { icon: Layers, text: "Unified pipeline visibility" },
+                  { icon: Zap, text: "Automated interview scheduling" }
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-4 p-4 rounded-xl bg-white border border-gray-200">
+                    <item.icon className="w-6 h-6 text-cyan-600" />
+                    <span className="text-gray-700">{item.text}</span>
+                  </div>
+                ))}
+              </div>
+
+              <button
+                onClick={() => navigate({ to: "/about" })}
+                className="group inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl font-semibold text-white hover:shadow-2xl hover:shadow-cyan-500/30 transition-all"
+              >
+                Learn More About HireNest OS
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </button>
+            </div>
+
+            <div className="relative">
+              <div className="absolute -inset-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-[2rem] opacity-20 blur-2xl" />
+              <div className="relative bg-white rounded-3xl border border-gray-200 p-8 shadow-2xl">
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-3">
+                    <div className="flex gap-2">
+                      <div className="w-3 h-3 rounded-full bg-red-500" />
+                      <div className="w-3 h-3 rounded-full bg-yellow-500" />
+                      <div className="w-3 h-3 rounded-full bg-green-500" />
+                    </div>
+                    <span className="text-gray-400 text-sm">HireNest OS Dashboard</span>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div className="p-4 rounded-lg bg-gray-50 border border-gray-200">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="font-semibold text-gray-900">AI Matching Engine</span>
+                      <span className="text-xs text-green-600 bg-green-100 px-2 py-1 rounded-full">Active</span>
+                    </div>
+                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div className="h-full w-[94%] bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full" />
+                    </div>
+                    <p className="text-xs text-gray-500 mt-2">94% match accuracy across 500+ placements</p>
+                  </div>
+
+                  <div className="p-4 rounded-lg bg-gray-50 border border-gray-200">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="font-semibold text-gray-900">Vendor Network</span>
+                      <span className="text-xs text-cyan-600 bg-cyan-100 px-2 py-1 rounded-full">50+ Partners</span>
+                    </div>
+                    <div className="flex gap-2 mt-2">
+                      {['Tech', 'Finance', 'Health', 'Retail'].map((tag) => (
+                        <span key={tag} className="text-xs bg-white border border-gray-200 px-2 py-1 rounded text-gray-600">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="p-4 rounded-lg bg-gradient-to-r from-cyan-50 to-blue-50 border border-cyan-200">
+                    <div className="flex items-start gap-3">
+                      <Sparkles className="w-5 h-5 text-cyan-600 mt-0.5" />
+                      <div>
+                        <div className="text-sm text-gray-900 font-medium">Smart Recommendation</div>
+                        <div className="text-xs text-gray-600 mt-1">
+                          Based on your hiring velocity, we recommend adding 2 senior backend engineers to your pipeline.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* WHO WE SERVE */}
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <span className="text-cyan-600 font-semibold text-sm uppercase tracking-[0.2em]">Interfaces</span>
+            <span className="text-cyan-600 font-semibold text-sm uppercase tracking-[0.2em]">Who We Serve</span>
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mt-4 mb-4">
-              One OS. Three experiences.
+              One Platform. Three Perspectives.
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Purpose-built interfaces for every stakeholder in the hiring ecosystem.
+              HireNest OS serves everyone in the HireNest Workforce ecosystem.
             </p>
           </div>
 
           <div className="grid lg:grid-cols-3 gap-8">
-            {osInterfaces.map((iface) => (
+            {whoWeServe.map((iface) => (
               <div
                 key={iface.title}
                 className="group relative p-8 rounded-3xl bg-gray-50 border border-gray-200 hover:border-cyan-500/30 hover:shadow-2xl hover:shadow-cyan-500/10 transition-all duration-500 hover:-translate-y-2"
@@ -418,14 +552,64 @@ export default function Home() {
         </div>
       </section>
 
-      {/* TESTIMONIALS */}
+      {/* HOW IT WORKS */}
       <section className="py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <span className="text-cyan-600 font-semibold text-sm uppercase tracking-[0.2em]">Proof</span>
+            <span className="text-cyan-600 font-semibold text-sm uppercase tracking-[0.2em]">Process</span>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mt-4 mb-4">
+              How HireNest Workforce Works
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Three simple steps to start building your team with AI-powered precision.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                step: "01",
+                title: "Tell Us What You Need",
+                desc: "Share your requirements. Our team + HireNest OS gets to work immediately."
+              },
+              {
+                step: "02",
+                title: "Review Matched Candidates",
+                desc: "AI-powered ranking delivers top candidates in hours, not weeks."
+              },
+              {
+                step: "03",
+                title: "Hire & Scale",
+                desc: "Interview, select, and onboard—with real-time visibility throughout."
+              }
+            ].map((item) => (
+              <div key={item.step} className="relative p-8 bg-white rounded-3xl border border-gray-200 hover:border-cyan-500/30 transition-all duration-500">
+                <div className="text-5xl font-bold text-cyan-200 mb-4">{item.step}</div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">{item.title}</h3>
+                <p className="text-gray-600">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <button
+              onClick={() => navigate({ to: "/early-access" })}
+              className="group inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl font-semibold text-white hover:shadow-2xl hover:shadow-cyan-500/30 transition-all"
+            >
+              Start Hiring Now
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* TESTIMONIALS */}
+      <section className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <span className="text-cyan-600 font-semibold text-sm uppercase tracking-[0.2em]">Testimonials</span>
             <h2 className="text-4xl font-bold text-gray-900 mt-4 mb-4">
-              Built for operators,<br />
-              loved by teams
+              Trusted by 500+ Companies
             </h2>
           </div>
 
@@ -433,7 +617,7 @@ export default function Home() {
             {testimonials.map((t) => (
               <div
                 key={t.name}
-                className="group p-8 bg-white rounded-2xl border border-gray-200 hover:border-cyan-500/30 hover:shadow-xl transition-all duration-500"
+                className="group p-8 bg-gray-50 rounded-2xl border border-gray-200 hover:border-cyan-500/30 hover:shadow-xl transition-all duration-500"
               >
                 <div className="flex items-center gap-2 mb-6">
                   <div className="px-3 py-1 rounded-full bg-green-500/10 text-green-600 text-xs font-semibold">
@@ -460,98 +644,17 @@ export default function Home() {
         </div>
       </section>
 
-      {/* TECHNOLOGY SECTION */}
-      <section className="py-24 bg-[#0B0F1A] relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(6,182,212,0.08),transparent_50%)]" />
-
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div className="space-y-8">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/30">
-                <Database className="w-4 h-4 text-cyan-400" />
-                <span className="text-cyan-400 text-sm font-semibold tracking-wide uppercase">Technology</span>
-              </div>
-
-              <h2 className="text-4xl lg:text-5xl font-bold leading-tight">
-                The infrastructure layer for{" "}
-                <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
-                  talent markets
-                </span>
-              </h2>
-
-              <p className="text-xl text-gray-400 leading-relaxed">
-                Behind every great hire is a mess of spreadsheets, emails, and coordination. 
-                We're replacing that with APIs, intelligence, and automation.
-              </p>
-
-              <div className="space-y-4">
-                {[
-                  { icon: Brain, text: "NLP-powered requirement parsing" },
-                  { icon: Target, text: "Graph-based candidate matching" },
-                  { icon: Zap, text: "Real-time vendor coordination" },
-                  { icon: Shield, text: "Enterprise-grade compliance" }
-                ].map((item, i) => (
-                  <div key={i} className="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10">
-                    <item.icon className="w-6 h-6 text-cyan-400" />
-                    <span className="text-gray-300">{item.text}</span>
-                  </div>
-                ))}
-              </div>
-
-              <button
-                onClick={() => navigate({ to: "/about" })}
-                className="group inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl font-semibold hover:shadow-2xl hover:shadow-cyan-500/30 transition-all"
-              >
-                Read The Vision
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </button>
-            </div>
-
-            <div className="relative">
-              <div className="absolute -inset-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-[2rem] opacity-20 blur-2xl" />
-              <div className="relative bg-[#0f1623] rounded-3xl border border-white/10 p-8 shadow-2xl">
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center gap-3">
-                    <div className="flex gap-2">
-                      <div className="w-3 h-3 rounded-full bg-red-500" />
-                      <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                      <div className="w-3 h-3 rounded-full bg-green-500" />
-                    </div>
-                    <span className="text-gray-400 text-sm">HireNest OS Architecture</span>
-                  </div>
-                </div>
-
-                <div className="space-y-4 font-mono text-sm">
-                  <div className="p-4 rounded-lg bg-green-500/10 border border-green-500/30 text-green-400">
-                    ✓ Client OS API
-                  </div>
-                  <div className="p-4 rounded-lg bg-green-500/10 border border-green-500/30 text-green-400">
-                    ✓ Vendor OS API
-                  </div>
-                  <div className="p-4 rounded-lg bg-green-500/10 border border-green-500/30 text-green-400">
-                    ✓ Matching Engine v2.0
-                  </div>
-                  <div className="p-4 rounded-lg bg-blue-500/10 border border-blue-500/30 text-blue-400 animate-pulse">
-                    → Deploying Talent OS...
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* FINAL CTA */}
       <section className="py-24 bg-[#0B0F1A] relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(6,182,212,0.15),_transparent_50%)]" />
 
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-            Stop hiring like it's 2010.
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight text-white">
+            Ready to Transform<br />Your Hiring?
           </h2>
           <p className="text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
-            Join 20+ companies already running on HireNest OS. 
-            Early access includes dedicated onboarding and lifetime preferred pricing.
+            Join 500+ companies building their teams with HireNest Workforce. 
+            HireNest OS included with every partnership.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -560,7 +663,7 @@ export default function Home() {
               className="group px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl text-white font-semibold text-lg hover:shadow-2xl hover:shadow-cyan-500/40 transition-all hover:-translate-y-1 flex items-center justify-center gap-3"
             >
               <Rocket className="w-6 h-6" />
-              Get Early Access
+              Start Hiring with HireNest
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
             <button
@@ -568,12 +671,12 @@ export default function Home() {
               className="px-8 py-4 rounded-2xl font-semibold text-lg text-white border-2 border-white/20 hover:bg-white/10 hover:border-white/40 transition-all hover:-translate-y-1 flex items-center justify-center gap-3"
             >
               <Network className="w-6 h-6" />
-              Join as Vendor
+              Join as Vendor Partner
             </button>
           </div>
 
           <p className="mt-8 text-sm text-gray-500">
-            Limited to 100 companies for v2.0 launch. 80 spots remaining.
+            No commitment required • Free consultation • HireNest OS included
           </p>
         </div>
       </section>
