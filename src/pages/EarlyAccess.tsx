@@ -1,4 +1,4 @@
-// src/pages/EarlyAccess.tsx
+// src/pages/EarlyAccess.jsx
 import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabase";
 import Layout from "../components/Layout";
@@ -14,12 +14,14 @@ export default function EarlyAccess() {
   const [form, setForm] = useState({
     role: "",
     goal: "",
-    features: [] as string[],
+    features: [],
     demo: "",
     name: "",
     email: "",
     phone: "",
     company: "",
+    companySize: "",
+    industry: "",
   });
 
   const totalSteps = 5;
@@ -30,7 +32,7 @@ export default function EarlyAccess() {
     { title: "Recruiter", desc: "Submit & track candidates", icon: User },
   ];
 
-  const goals: Record<string, string[]> = {
+  const goals = {
     Client: ["Hire faster", "Get quality candidates", "Reduce hiring chaos"],
     Vendor: ["Get more requirements", "Submit candidates faster", "Increase closures"],
     Recruiter: ["Track candidates", "Improve submissions", "Close more roles"],
@@ -43,12 +45,30 @@ export default function EarlyAccess() {
     "Resume Scoring",
   ];
 
-  // Generate reference ID on mount
+  const companySizes = [
+    "1-10 employees",
+    "11-50 employees", 
+    "51-200 employees",
+    "201-500 employees",
+    "501-1000 employees",
+    "1000+ employees"
+  ];
+
+  const industries = [
+    "Technology",
+    "Finance",
+    "Healthcare",
+    "E-commerce",
+    "Manufacturing",
+    "Consulting",
+    "Other"
+  ];
+
   useEffect(() => {
     setReferenceId("HN-" + Math.random().toString(36).substr(2, 9).toUpperCase());
   }, []);
 
-  const toggleFeature = (f: string) => {
+  const toggleFeature = (f) => {
     setForm((prev) => ({
       ...prev,
       features: prev.features.includes(f)
@@ -57,7 +77,7 @@ export default function EarlyAccess() {
     }));
   };
 
-  const updateForm = (key: string, value: string) => {
+  const updateForm = (key, value) => {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
@@ -86,7 +106,7 @@ export default function EarlyAccess() {
         }
         return true;
       case 3:
-        return true; // Features optional
+        return true;
       case 4:
         if (!form.demo) {
           showToast("Please select demo preference", "error");
@@ -98,14 +118,17 @@ export default function EarlyAccess() {
           showToast("Please enter name and email", "error");
           return false;
         }
+        if (form.role === "Client" && (!form.companySize || !form.industry)) {
+          showToast("Please fill in all required fields", "error");
+          return false;
+        }
         return true;
       default:
         return true;
     }
   };
 
-  const showToast = (message: string, type: "success" | "error" = "success") => {
-    // Simple toast implementation
+  const showToast = (message, type = "success") => {
     const toast = document.createElement("div");
     toast.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg text-white font-medium animate-fadeIn ${
       type === "error" ? "bg-red-500" : "bg-green-500"
@@ -117,14 +140,12 @@ export default function EarlyAccess() {
     }, 3000);
   };
 
-  const handleDemoSelection = async (wantsDemo: boolean) => {
+  const handleDemoSelection = async (wantsDemo) => {
     updateForm("demo", wantsDemo ? "Yes" : "No");
     
     if (wantsDemo) {
-      // Show calendar modal
       setShowCalendar(true);
     } else {
-      // Skip to step 5
       setStep(5);
     }
   };
@@ -142,40 +163,65 @@ export default function EarlyAccess() {
     setLoading(true);
 
     try {
-      // Determine lead type based on role
-      let tableName = "early_access_leads";
-      if (form.role === "Vendor") tableName = "vendor_leads";
-      else if (form.role === "Client") tableName = "client_leads";
+      let result;
+      
+      // Route to correct table based on role with exact schema match
+      if (form.role === "Vendor") {
+        // vendor_leads table schema
+        result = await supabase.from("vendor_leads").insert([{
+          company_name: form.company || "Not provided",
+          contact_name: form.name,
+          email: form.email,
+          phone: form.phone || null,
+          website: null,
+          specialization: form.goal,
+          team_size: form.companySize || null,
+          source: "early_access_form",
+          utm_source: "website",
+          status: "pending_verification",
+          lead_score: calculateLeadScore(),
+        }]);
+      } 
+      else if (form.role === "Client") {
+        // client_leads table schema
+        result = await supabase.from("client_leads").insert([{
+          company_name: form.company || "Not provided",
+          contact_name: form.name,
+          email: form.email,
+          phone: form.phone || null,
+          industry: form.industry || "Technology",
+          hiring_needs: form.goal,
+          company_size: form.companySize || null,
+          source: "early_access_form",
+          utm_source: "website",
+          status: form.demo === "Yes" ? "demo_scheduled" : "qualified",
+          lead_score: calculateLeadScore(),
+        }]);
+      } 
+      else {
+        // early_access_leads table schema (Recruiter or other)
+        result = await supabase.from("early_access_leads").insert([{
+          name: form.name,
+          email: form.email,
+          company: form.company || null,
+          phone: form.phone || null,
+          role: form.role,
+          code: referenceId,
+          source: "early_access_form",
+          utm_source: "website",
+          status: form.demo === "Yes" ? "demo_scheduled" : "new",
+          lead_score: calculateLeadScore(),
+        }]);
+      }
 
-      const leadData = {
-        name: form.name,
-        email: form.email,
-        phone: form.phone || null,
-        company: form.company || null,
-        role: form.role,
-        source: "early_access_form",
-        status: form.demo === "Yes" ? "demo_scheduled" : "new",
-        lead_score: calculateLeadScore(),
-        metadata: {
-          goal: form.goal,
-          features: form.features,
-          demo_requested: form.demo === "Yes",
-          demo_booked: demoBooked,
-          reference_id: referenceId,
-        },
-        created_at: new Date().toISOString(),
-      };
+      if (result.error) throw result.error;
 
-      const { error } = await supabase.from(tableName).insert([leadData]);
-
-      if (error) throw error;
-
-      // Success - move to success step
-      setStep(6); // Success step
+      // Success
+      setStep(6);
       
     } catch (error) {
       console.error("Submission error:", error);
-      showToast("Failed to save. Please try again.", "error");
+      showToast(error.message || "Failed to save. Please try again.", "error");
     } finally {
       setLoading(false);
     }
@@ -190,12 +236,12 @@ export default function EarlyAccess() {
     if (form.demo === "Yes") score += 25;
     if (form.features.length > 0) score += 10;
     if (form.goal) score += 10;
+    if (form.companySize) score += 5;
     return score;
   };
 
   const progressPercent = (step / totalSteps) * 100;
 
-  // Success Step
   if (step === 6) {
     return (
       <Layout>
@@ -234,13 +280,11 @@ export default function EarlyAccess() {
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white py-12 px-4">
         <div className="max-w-2xl mx-auto">
           
-          {/* Header */}
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold mb-3">HireNest OS Early Access</h1>
             <p className="text-gray-300">Join our exclusive early access program</p>
           </div>
 
-          {/* Progress Bar */}
           <div className="mb-8">
             <div className="flex justify-between text-sm text-gray-400 mb-2">
               <span>Step {step} of {totalSteps}</span>
@@ -254,10 +298,8 @@ export default function EarlyAccess() {
             </div>
           </div>
 
-          {/* Card */}
           <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-8 shadow-2xl">
             
-            {/* STEP 1: Role Selection */}
             {step === 1 && (
               <div className="animate-fadeIn">
                 <h2 className="text-2xl font-semibold mb-6">Who are you?</h2>
@@ -295,7 +337,6 @@ export default function EarlyAccess() {
               </div>
             )}
 
-            {/* STEP 2: Goal Selection */}
             {step === 2 && (
               <div className="animate-fadeIn">
                 <h2 className="text-2xl font-semibold mb-6">What's your main goal?</h2>
@@ -330,7 +371,6 @@ export default function EarlyAccess() {
               </div>
             )}
 
-            {/* STEP 3: Features */}
             {step === 3 && (
               <div className="animate-fadeIn">
                 <h2 className="text-2xl font-semibold mb-2">Select features you're interested in</h2>
@@ -372,7 +412,6 @@ export default function EarlyAccess() {
               </div>
             )}
 
-            {/* STEP 4: Demo Booking - FIXED */}
             {step === 4 && (
               <div className="animate-fadeIn">
                 <h2 className="text-2xl font-semibold mb-2">Would you like a demo?</h2>
@@ -414,7 +453,6 @@ export default function EarlyAccess() {
               </div>
             )}
 
-            {/* STEP 5: Contact Details - FIXED */}
             {step === 5 && (
               <div className="animate-fadeIn">
                 <h2 className="text-2xl font-semibold mb-2">Almost there!</h2>
@@ -455,7 +493,7 @@ export default function EarlyAccess() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-2">Company (optional)</label>
+                    <label className="block text-sm font-medium mb-2">Company Name</label>
                     <input
                       type="text"
                       placeholder="Acme Inc"
@@ -464,6 +502,40 @@ export default function EarlyAccess() {
                       className="w-full p-4 rounded-lg bg-white text-gray-900 placeholder-gray-500 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
+
+                  {(form.role === "Client" || form.role === "Vendor") && (
+                    <>
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Company Size</label>
+                        <select
+                          value={form.companySize}
+                          onChange={(e) => updateForm("companySize", e.target.value)}
+                          className="w-full p-4 rounded-lg bg-white text-gray-900 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                          <option value="">Select size</option>
+                          {companySizes.map((size) => (
+                            <option key={size} value={size}>{size}</option>
+                          ))}
+                        </select>
+                      </div>
+
+                      {form.role === "Client" && (
+                        <div>
+                          <label className="block text-sm font-medium mb-2">Industry</label>
+                          <select
+                            value={form.industry}
+                            onChange={(e) => updateForm("industry", e.target.value)}
+                            className="w-full p-4 rounded-lg bg-white text-gray-900 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          >
+                            <option value="">Select industry</option>
+                            {industries.map((ind) => (
+                              <option key={ind} value={ind}>{ind}</option>
+                            ))}
+                          </select>
+                        </div>
+                      )}
+                    </>
+                  )}
                 </div>
 
                 <div className="flex justify-between mt-8">
@@ -493,42 +565,28 @@ export default function EarlyAccess() {
           </div>
         </div>
 
-        {/* CALENDAR MODAL - FIXED */}
         {showCalendar && (
           <div className="fixed inset-0 bg-black/90 backdrop-blur-md flex items-center justify-center z-50 p-4">
             <div className="bg-gray-900 rounded-2xl w-full max-w-4xl p-6 relative shadow-2xl border border-white/10 max-h-[90vh] overflow-y-auto">
               <button
                 onClick={() => setShowCalendar(false)}
-                className="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl font-bold z-10"
+                className="absolute top-4 right-4 text-gray-400 hover:text-white z-10"
               >
                 <X className="w-6 h-6" />
               </button>
 
               <h3 className="text-2xl font-semibold mb-2">Book Your Demo Call</h3>
-              <p className="text-sm text-gray-400 mb-4">
-                Select a time that works for you • 15 minutes
-              </p>
+              <p className="text-sm text-gray-400 mb-4">Select a time • 15 minutes</p>
 
               <div className="bg-white rounded-lg overflow-hidden">
                 <iframe
                   src={`https://cal.com/gopala-krishna-ergovq/hire-nest-demo?embed=true&name=${encodeURIComponent(
                     form.name || "Guest"
-                  )}&email=${encodeURIComponent(
-                    form.email || ""
-                  )}&notes=${encodeURIComponent(
-                    `Role: ${form.role} | Goal: ${form.goal} | Features: ${form.features.join(", ")}`
-                  )}`}
+                  )}&email=${encodeURIComponent(form.email || "")}`}
                   width="100%"
                   height="600"
                   frameBorder="0"
                   className="rounded-lg"
-                  onLoad={() => {
-                    // Listen for booking completion (simulated)
-                    setTimeout(() => {
-                      // In production, use Cal.com webhooks or embed API
-                      // For now, user clicks "Done" below
-                    }, 1000);
-                  }}
                 />
               </div>
 
@@ -550,7 +608,6 @@ export default function EarlyAccess() {
           </div>
         )}
 
-        {/* LOADING OVERLAY - FIXED */}
         {loading && (
           <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50">
             <div className="bg-gray-900 rounded-2xl p-8 text-center border border-white/10">
