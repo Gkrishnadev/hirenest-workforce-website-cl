@@ -34,6 +34,19 @@ export default function Header() {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 flex-shrink-0">
             <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center">
+                 <img 
+      src="images/Logo.png" 
+      alt="HireNest" 
+      className="w-full h-full object-contain hidden"
+      onLoad={(e) => {
+        e.currentTarget.classList.remove('hidden');
+        e.currentTarget.nextElementSibling?.classList.add('hidden');
+      }}
+      onError={(e) => {
+        // Keep "H" visible if image fails
+        e.currentTarget.classList.add('hidden');
+      }}
+    />
               <span className="text-white font-bold text-lg">H</span>
             </div>
             <div className="hidden sm:block">
