@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabase";
 import {
@@ -154,8 +154,8 @@ const testimonials = [
 
 // Stats
 const stats = [
-  { number: "50+", label: "Enterprise Clients", suffix: "" },
-  { number: "500+", label: "Placements Made", suffix: "" },
+  { number: "20+", label: "Enterprise Clients", suffix: "" },
+  { number: "50+", label: "Placements Made", suffix: "" },
   { number: "95%", label: "Client Retention", suffix: "" },
   { number: "24h", label: "Avg. Time to Match", suffix: "" },
 ];
@@ -204,45 +204,9 @@ const navItems = [
 ];
 
 export default function Home() {
-  // Modal states
-  const [showEarlyAccess, setShowEarlyAccess] = useState(false);
-  const [showVendorSignup, setShowVendorSignup] = useState(false);
-  const [showClientSignup, setShowClientSignup] = useState(false);
-  const [activeTab, setActiveTab] = useState("clients");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+  const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  // Form states
-  const [earlyAccessForm, setEarlyAccessForm] = useState({
-    name: "",
-    email: "",
-    company: "",
-    phone: "",
-    role: "",
-    code: "",
-  });
-
-  const [vendorForm, setVendorForm] = useState({
-    company_name: "",
-    contact_name: "",
-    email: "",
-    phone: "",
-    website: "",
-    specialization: "",
-    team_size: "",
-  });
-
-  const [clientForm, setClientForm] = useState({
-    company_name: "",
-    contact_name: "",
-    email: "",
-    phone: "",
-    industry: "",
-    hiring_needs: "",
-    company_size: "",
-  });
 
   // Scroll effect for navbar
   useEffect(() => {
@@ -261,196 +225,6 @@ export default function Home() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
-  // Email notification function
-  const sendNotification = async (type: string, data: any, formName: string) => {
-    try {
-      await fetch(
-        "https://hjeukduwzdginoqjjgod.supabase.co/functions/v1/send-email",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-api-key": "hirenest-secure-key-2026",
-          },
-          body: JSON.stringify({
-            type,
-            formName,
-            data,
-            timestamp: new Date().toISOString(),
-            source: window.location.href,
-          }),
-        }
-      );
-    } catch (error) {
-      console.error("Notification error:", error);
-    }
-  };
-
-  // Early Access Form Submit - SENDS CONFIRMATION EMAIL
-  const captureEarlyAccessLead = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setSubmitStatus("idle");
-
-    try {
-      const { data, error } = await supabase
-        .from("early_access_leads")
-        .insert([
-          {
-            ...earlyAccessForm,
-            source: "homepage_early_access_modal",
-            utm_source: new URLSearchParams(window.location.search).get("utm_source") || "organic",
-            created_at: new Date().toISOString(),
-            status: "new",
-            lead_score: calculateLeadScore(earlyAccessForm),
-          },
-        ])
-        .select();
-
-      if (error) throw error;
-
-      // Send confirmation email notification
-      await sendNotification("early_access", earlyAccessForm, "🚀 HireNest OS Early Access - Confirmation");
-
-      setSubmitStatus("success");
-      setTimeout(() => {
-        setShowEarlyAccess(false);
-        setEarlyAccessForm({ name: "", email: "", company: "", phone: "", role: "", code: "" });
-        setSubmitStatus("idle");
-      }, 2000);
-    } catch (error) {
-      console.error("Lead capture error:", error);
-      setSubmitStatus("error");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  // Vendor Form Submit
-  const captureVendorLead = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setSubmitStatus("idle");
-
-    try {
-      const { data, error } = await supabase
-        .from("vendor_leads")
-        .insert([
-          {
-            ...vendorForm,
-            source: "homepage_vendor_signup",
-            utm_source: new URLSearchParams(window.location.search).get("utm_source") || "organic",
-            created_at: new Date().toISOString(),
-            status: "pending_verification",
-            lead_score: calculateVendorLeadScore(vendorForm),
-          },
-        ])
-        .select();
-
-      if (error) throw error;
-
-      await sendNotification("vendor", vendorForm, "🤝 Vendor Network Application - HireNest Workforce");
-
-      setSubmitStatus("success");
-      setTimeout(() => {
-        setShowVendorSignup(false);
-        setVendorForm({
-          company_name: "",
-          contact_name: "",
-          email: "",
-          phone: "",
-          website: "",
-          specialization: "",
-          team_size: "",
-        });
-        setSubmitStatus("idle");
-      }, 2000);
-    } catch (error) {
-      console.error("Vendor lead capture error:", error);
-      setSubmitStatus("error");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  // Client Form Submit
-  const captureClientLead = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setSubmitStatus("idle");
-
-    try {
-      const { data, error } = await supabase
-        .from("client_leads")
-        .insert([
-          {
-            ...clientForm,
-            source: "homepage_client_signup",
-            utm_source: new URLSearchParams(window.location.search).get("utm_source") || "organic",
-            created_at: new Date().toISOString(),
-            status: "qualified",
-            lead_score: calculateClientLeadScore(clientForm),
-          },
-        ])
-        .select();
-
-      if (error) throw error;
-
-      await sendNotification("client", clientForm, "💼 Client Requirement - HireNest Workforce");
-
-      setSubmitStatus("success");
-      setTimeout(() => {
-        setShowClientSignup(false);
-        setClientForm({
-          company_name: "",
-          contact_name: "",
-          email: "",
-          phone: "",
-          industry: "",
-          hiring_needs: "",
-          company_size: "",
-        });
-        setSubmitStatus("idle");
-      }, 2000);
-    } catch (error) {
-      console.error("Client lead capture error:", error);
-      setSubmitStatus("error");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  // Lead scoring functions
-  const calculateLeadScore = (form: any) => {
-    let score = 0;
-    if (form.company && form.company.length > 2) score += 20;
-    if (form.email && !form.email.includes("gmail") && !form.email.includes("yahoo")) score += 25;
-    if (form.phone && form.phone.length > 8) score += 15;
-    if (form.role && form.role !== "") score += 20;
-    if (form.code && form.code !== "") score += 20;
-    return Math.min(100, score);
-  };
-
-  const calculateVendorLeadScore = (form: any) => {
-    let score = 0;
-    if (form.team_size && parseInt(form.team_size) > 10) score += 25;
-    if (form.website && form.website.length > 5) score += 20;
-    if (form.specialization?.includes("AI") || form.specialization?.includes("Data")) score += 25;
-    if (form.email && !form.email.includes("gmail") && !form.email.includes("yahoo")) score += 15;
-    if (form.company_name && form.company_name.length > 3) score += 15;
-    return Math.min(100, score);
-  };
-
-  const calculateClientLeadScore = (form: any) => {
-    let score = 0;
-    if (form.company_size && parseInt(form.company_size) > 100) score += 30;
-    if (form.hiring_needs && parseInt(form.hiring_needs) > 5) score += 25;
-    if (form.industry?.includes("Technology") || form.industry?.includes("Finance")) score += 20;
-    if (form.email && !form.email.includes("gmail") && !form.email.includes("yahoo")) score += 15;
-    if (form.company_name && form.company_name.length > 3) score += 10;
-    return Math.min(100, score);
-  };
 
   return (
     <div className="min-h-screen bg-[#0B0F1A] font-sans selection:bg-cyan-500/30">
@@ -496,16 +270,16 @@ export default function Home() {
             {/* Desktop CTA */}
             <div className="hidden lg:flex items-center gap-3 flex-shrink-0">
               <button
-                onClick={() => setShowVendorSignup(true)}
+                onClick={() => navigate({ to: "/vendor-signup" })}
                 className="px-4 py-2 text-sm font-medium text-cyan-400 border border-cyan-500/30 rounded-lg hover:bg-cyan-500/10 transition-all"
               >
                 Join as Vendor
               </button>
               <button
-                onClick={() => setShowEarlyAccess(true)}
+                onClick={() => navigate({ to: "/early-access" })}
                 className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg hover:shadow-lg hover:shadow-cyan-500/25 transition-all"
               >
-                Hire Developers
+                Early Access
               </button>
             </div>
 
@@ -539,7 +313,7 @@ export default function Home() {
               <div className="flex flex-col gap-3 pt-4 border-t border-white/10">
                 <button
                   onClick={() => {
-                    setShowVendorSignup(true);
+                    navigate({ to: "/vendor-signup" });
                     setMobileMenuOpen(false);
                   }}
                   className="w-full px-4 py-3 text-sm font-medium text-cyan-400 border border-cyan-500/30 rounded-lg hover:bg-cyan-500/10 transition-all"
@@ -548,12 +322,12 @@ export default function Home() {
                 </button>
                 <button
                   onClick={() => {
-                    setShowEarlyAccess(true);
+                    navigate({ to: "/early-access" });
                     setMobileMenuOpen(false);
                   }}
                   className="w-full px-4 py-3 text-sm font-medium text-white bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg"
                 >
-                  Hire Developers
+                  Early Access
                 </button>
               </div>
             </div>
@@ -609,7 +383,7 @@ export default function Home() {
 
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2">
                 <button
-                  onClick={() => setShowClientSignup(true)}
+                  onClick={() => navigate({ to: "/hire-developers-india" })}
                   className="group relative px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl font-semibold text-white shadow-2xl shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all duration-300 hover:-translate-y-1 overflow-hidden flex items-center justify-center gap-2"
                 >
                   <Rocket className="w-5 h-5" />
@@ -618,7 +392,7 @@ export default function Home() {
                 </button>
 
                 <button
-                  onClick={() => setShowVendorSignup(true)}
+                  onClick={() => navigate({ to: "/vendor-signup" })}
                   className="px-6 sm:px-8 py-3 sm:py-4 rounded-2xl font-semibold text-white border-2 border-white/20 hover:bg-white/10 hover:border-white/40 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 flex items-center justify-center gap-2 group"
                 >
                   <Network className="w-5 h-5 group-hover:rotate-12 transition-transform" />
@@ -757,7 +531,7 @@ export default function Home() {
                     </div>
                     <p className="text-gray-600 leading-relaxed mb-3 text-sm">{service.desc}</p>
                     <button
-                      onClick={() => setShowClientSignup(true)}
+                      onClick={() => navigate({ to: "/hire-developers-india" })}
                       className="inline-flex items-center text-cyan-600 font-semibold group-hover:gap-3 transition-all gap-2 text-sm"
                     >
                       Get Started <ArrowRight className="w-4 h-4" />
@@ -905,7 +679,7 @@ export default function Home() {
               </div>
 
               <button
-                onClick={() => setShowEarlyAccess(true)}
+                onClick={() => navigate({ to: "/early-access" })}
                 className="group inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl text-white font-semibold hover:shadow-2xl hover:shadow-cyan-500/30 transition-all hover:-translate-y-1"
               >
                 <Sparkles className="w-5 h-5 group-hover:rotate-12 transition-transform" />
@@ -990,14 +764,14 @@ export default function Home() {
 
           <div className="flex flex-wrap justify-center gap-4">
             <button
-              onClick={() => setShowClientSignup(true)}
+              onClick={() => navigate({ to: "/hire-developers-india" })}
               className="group px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl text-white font-semibold text-lg hover:shadow-2xl hover:shadow-cyan-500/40 transition-all hover:-translate-y-1 flex items-center gap-3"
             >
               <Rocket className="w-6 h-6" />
               Start Hiring Now
             </button>
             <button
-              onClick={() => setShowVendorSignup(true)}
+              onClick={() => navigate({ to: "/vendor-signup" })}
               className="px-8 py-4 rounded-2xl font-semibold text-lg text-white border-2 border-white/20 hover:bg-white/10 hover:border-white/40 transition-all hover:-translate-y-1 flex items-center gap-3"
             >
               <Network className="w-6 h-6" />
@@ -1008,261 +782,6 @@ export default function Home() {
       </section>
 
       {/* NO FOOTER HERE - It's in components/Footer.tsx and used in Layout */}
-      {/* EARLY ACCESS MODAL - Sends Confirmation Email */}
-      {showEarlyAccess && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="relative w-full max-w-lg bg-[#0f1623] rounded-3xl border border-white/10 shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto">
-            <div className="relative h-36 bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center">
-              <div className="text-center relative z-10">
-                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-2 backdrop-blur-sm border border-white/30">
-                  <Rocket className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold text-white">HireNest OS Early Access</h3>
-              </div>
-              <button
-                onClick={() => setShowEarlyAccess(false)}
-                className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white hover:bg-white/30 transition-colors border border-white/30"
-              >
-                <X className="w-6 h-6" />
-              </button>
-            </div>
-
-            <div className="p-8">
-              {submitStatus === "success" ? (
-                <div className="text-center py-6">
-                  <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <CheckCircle className="w-8 h-8 text-green-400" />
-                  </div>
-                  <h4 className="text-xl font-bold text-white mb-2">You&apos;re on the list!</h4>
-                  <p className="text-gray-400 text-sm">We&apos;ll send you a confirmation email with next steps.</p>
-                </div>
-              ) : (
-                <form onSubmit={captureEarlyAccessLead} className="space-y-4">
-                  <p className="text-gray-400 text-center mb-6 text-sm">
-                    Be the first to experience HireNest OS 2.0. We&apos;ll send you a confirmation email with next steps.
-                  </p>
-                  
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-1">Full Name *</label>
-                      <div className="relative">
-                        <User className="absolute left-3 top-3 w-4 h-4 text-gray-500" />
-                        <input
-                          type="text"
-                          required
-                          placeholder="John Doe"
-                          className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all text-sm"
-                          value={earlyAccessForm.name}
-                          onChange={(e) => setEarlyAccessForm({...earlyAccessForm, name: e.target.value })}
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-1">Work Email *</label>
-                      <div className="relative">
-                        <Mail className="absolute left-3 top-3 w-4 h-4 text-gray-500" />
-                        <input
-                          type="email"
-                          required
-                          placeholder="john@company.com"
-                          className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all text-sm"
-                          value={earlyAccessForm.email}
-                          onChange={(e) => setEarlyAccessForm({...earlyAccessForm, email: e.target.value })}
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">Company *</label>
-                    <div className="relative">
-                      <Building2 className="absolute left-3 top-3 w-4 h-4 text-gray-500"/>
-                      <input
-                        type="text"
-                        required
-                        placeholder="Your Company"
-                        className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all text-sm"
-                        value={earlyAccessForm.company}
-                        onChange={(e) => setEarlyAccessForm({...earlyAccessForm, company: e.target.value })}
-                      />
-                    </div>
-                  </div>
-
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl text-white font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed mt-4"
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <Loader2 className="w-5 h-5 animate-spin"/>
-                        Submitting…
-                      </>
-                    ) : (
-                      <>
-                        <Sparkles className="w-5 h-5"/>
-                        Request Early Access
-                      </>
-                    )}
-                  </button>
-                  
-                  <p className="text-xs text-gray-500 text-center mt-4">
-                    We&apos;ll send you a confirmation email. No spam, ever.
-                  </p>
-                </form>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* VENDOR SIGNUP MODAL */}
-      {showVendorSignup && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="relative w-full max-w-lg bg-[#0f1623] rounded-3xl border border-white/10 shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto">
-            <div className="relative h-28 bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center">
-              <div className="text-center relative z-10">
-                <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-2 backdrop-blur-sm">
-                  <Network className="w-7 h-7 text-white"/>
-                </div>
-                <h3 className="text-xl font-bold text-white">Join Vendor Network</h3>
-              </div>
-              <button
-                onClick={() => setShowVendorSignup(false)}
-                className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white hover:bg-white/30 transition-colors"
-              >
-                <X className="w-5 h-5"/>
-              </button>
-            </div>
-
-            <div className="p-6">
-              {submitStatus === "success" ? (
-                <div className="text-center py-6">
-                  <CheckCircle className="w-14 h-14 text-green-400 mx-auto mb-3"/>
-                  <h4 className="text-lg font-bold text-white mb-2">Application Received!</h4>
-                  <p className="text-gray-400 text-sm">We&apos;ll review and get back within 48 hours.</p>
-                </div>
-              ) : (
-                <form onSubmit={captureVendorLead} className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">Company Name *</label>
-                    <input
-                      type="text"
-                      required
-                      className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 text-sm"
-                      value={vendorForm.company_name}
-                      onChange={(e) => setVendorForm({...vendorForm, company_name: e.target.value })}
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-1">Contact Name *</label>
-                      <input
-                        type="text"
-                        required
-                        className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 text-sm"
-                        value={vendorForm.contact_name}
-                        onChange={(e) => setVendorForm({...vendorForm, contact_name: e.target.value })}
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-1">Email *</label>
-                      <input
-                        type="email"
-                        required
-                        className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 text-sm"
-                        value={vendorForm.email}
-                        onChange={(e) => setVendorForm({...vendorForm, email: e.target.value })}
-                      />
-                    </div>
-                  </div>
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full py-3 bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl text-white font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2 mt-4 disabled:opacity-50 text-sm"
-                  >
-                    {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin"/> : "Submit Application"}
-                  </button>
-                </form>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* CLIENT SIGNUP MODAL */}
-      {showClientSignup && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="relative w-full max-w-lg bg-[#0f1623] rounded-3xl border border-white/10 shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto">
-            <div className="relative h-28 bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
-              <div className="text-center relative z-10">
-                <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-2 backdrop-blur-sm">
-                  <Building2 className="w-7 h-7 text-white"/>
-                </div>
-                <h3 className="text-xl font-bold text-white">Hire Top Talent</h3>
-              </div>
-              <button
-                onClick={() => setShowClientSignup(false)}
-                className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white hover:bg-white/30 transition-colors"
-              >
-                <X className="w-5 h-5"/>
-              </button>
-            </div>
-
-            <div className="p-6">
-              {submitStatus === "success" ? (
-                <div className="text-center py-6">
-                  <CheckCircle className="w-14 h-14 text-green-400 mx-auto mb-3"/>
-                  <h4 className="text-lg font-bold text-white mb-2">Request Submitted!</h4>
-                  <p className="text-gray-400 text-sm">Our team will contact you within 24 hours.</p>
-                </div>
-              ) : (
-                <form onSubmit={captureClientLead} className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">Company Name *</label>
-                    <input
-                      type="text"
-                      required
-                      className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 text-sm"
-                      value={clientForm.company_name}
-                      onChange={(e) => setClientForm({...clientForm, company_name: e.target.value })}
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-1">Contact Name *</label>
-                      <input
-                        type="text"
-                        required
-                        className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 text-sm"
-                        value={clientForm.contact_name}
-                        onChange={(e) => setClientForm({...clientForm, contact_name: e.target.value })}
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-1">Email *</label>
-                      <input
-                        type="email"
-                        required
-                        className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 text-sm"
-                        value={clientForm.email}
-                        onChange={(e) => setClientForm({...clientForm, email: e.target.value })}
-                      />
-                    </div>
-                  </div>
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full py-3 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl text-white font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2 mt-4 disabled:opacity-50 text-sm"
-                  >
-                    {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin"/> : "Submit Requirement"}
-                  </button>
-                </form>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
