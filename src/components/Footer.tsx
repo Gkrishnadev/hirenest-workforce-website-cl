@@ -112,46 +112,7 @@ export default function Footer() {
               </ul>
             </div>
           </div>
-
-          {/* Bottom bar */}
-          <div className="mt-12 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
-            <p>© {year} HireNest Workforce. All rights reserved.</p>
-            <div className="flex items-center gap-4">
-              <span className="hover:text-white transition-colors cursor-pointer">
-                Privacy Policy
-              </span>
-              <span>|</span>
-              <span className="hover:text-white transition-colors cursor-pointer">
-                Terms of Service
-              </span>
-              <span>|</span>
-              <a
-                href="https://www.linkedin.com/company/hirenest-workforce-pvt-ltd"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-white transition-colors inline-flex items-center gap-1"
-              >
-                <Linkedin className="w-3.5 h-3.5" />
-                LinkedIn
-              </a>
-            </div>
-            <p>
-              Built with ❤️ using{" "}
-              <a
-                href={caffeineUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-white transition-colors underline underline-offset-2"
-              >
-                caffeine.ai
-              </a>
-            </p>
-          </div>
-        </div>
-      </footer>
-    );
-  }
-
+          
   // Light Theme Footer (for functional pages)
   return (
     <footer className="bg-gray-900 text-white">
