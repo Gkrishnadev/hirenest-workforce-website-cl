@@ -10,7 +10,7 @@ export default function EarlyAccess() {
   const [form, setForm] = useState({
     role: "",
     goal: "",
-    features: [] as string[],
+    features: [],
     demo: "",
     name: "",
     email: "",
@@ -22,7 +22,7 @@ export default function EarlyAccess() {
     { title: "Recruiter", desc: "Submit & track candidates" },
   ];
 
-  const goals: Record<string, string[]> = {
+  const goals = {
     Client: ["Hire faster", "Get quality candidates", "Reduce hiring chaos"],
     Vendor: ["Get more requirements", "Submit candidates faster", "Increase closures"],
     Recruiter: ["Track candidates", "Improve submissions", "Close more roles"],
@@ -35,7 +35,7 @@ export default function EarlyAccess() {
     "Resume Scoring",
   ];
 
-  const toggleFeature = (f: string) => {
+  const toggleFeature = (f) => {
     setForm((prev) => ({
       ...prev,
       features: prev.features.includes(f)
@@ -163,7 +163,7 @@ export default function EarlyAccess() {
             </div>
           )}
 
-          {/* STEP 4 - FIXED */}
+          {/* STEP 4 */}
           {step === 4 && (
             <div className="animate-fadeIn">
               <p className="mb-4 text-lg">Want a demo?</p>
