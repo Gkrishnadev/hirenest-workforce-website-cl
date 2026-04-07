@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabase";
+import Layout from "../components/Layout";
 import {
   ArrowRight,
   Brain,
@@ -227,6 +228,12 @@ export default function Home() {
   }, []);
 
   return (
+    <Layout>
+      {/* Your home page content */}
+      <div className="hero-section">...</div>
+    </Layout>
+  );
+}
     <div className="min-h-screen bg-[#0B0F1A] font-sans selection:bg-cyan-500/30">
       {/* Navigation */}
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
