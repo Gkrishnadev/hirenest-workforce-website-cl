@@ -1,3 +1,4 @@
+// src/components/Footer.tsx
 import { Link } from "@tanstack/react-router";
 import { Linkedin, Mail, MapPin, Phone } from "lucide-react";
 import { useRouter } from "@tanstack/react-router";
@@ -11,7 +12,7 @@ export default function Footer() {
   const currentPath = router.state.location.pathname;
 
   // Pages that should use the premium dark footer
-  const premiumDarkPages = ["/", "/services", "/about", "/hire-developers-india", "/vendor-network", "/contact", "/careers"];
+  const premiumDarkPages = ["/", "/services", "/about", "/hire-developers-india", "/vendor-network", "/contact", "/careers", "/early-access"];
   const isPremiumDark = premiumDarkPages.includes(currentPath);
 
   // Premium Dark Footer (matches homepage)
@@ -28,7 +29,7 @@ export default function Footer() {
                 </div>
                 <div>
                   <div className="text-xl font-bold text-white">HireNest</div>
-                  <div className="text-[10px] text-gray-400 uppercase tracking-wider">Workforce</div>
+                  <div className="text-[10px] text-gray-400 uppercase tracking-wider">WORKFORCE</div>
                 </div>
               </div>
               <p className="text-sm text-gray-400 leading-relaxed">
@@ -113,7 +114,7 @@ export default function Footer() {
             </div>
           </div>
           
-          {/* Bottom bar - ADDED MISSING SECTION */}
+          {/* Bottom bar */}
           <div className="mt-12 pt-6 border-t border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
             <p>© {year} HireNest Workforce. All rights reserved.</p>
             <div className="flex items-center gap-4">
@@ -147,13 +148,12 @@ export default function Footer() {
               </a>
             </p>
           </div>
-          
         </div>
       </footer>
-    );  // ← FIXED: Added missing closing parenthesis and semicolon
-  }  // ← FIXED: Added missing closing brace for if statement
+    );
+  }
 
-  // Light Theme Footer (for functional pages) - MOVED OUTSIDE JSX
+  // Light Theme Footer (for functional pages)
   return (
     <footer className="bg-gray-900 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-10">
@@ -161,11 +161,13 @@ export default function Footer() {
           {/* Col 1 - Brand */}
           <div>
             <div className="flex items-center gap-2.5 mb-4">
-              <img
-                src="/images/Logo.png"
-                alt="HireNest Workforce"
-                className="h-12 w-auto object-contain"
-              />
+              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center">
+                <span className="text-white font-bold text-lg">H</span>
+              </div>
+              <div>
+                <div className="text-xl font-bold text-white">HireNest</div>
+                <div className="text-[10px] text-gray-400 uppercase tracking-wider">WORKFORCE</div>
+              </div>
             </div>
             <p className="text-sm text-gray-400 leading-relaxed">
               Connecting world-class companies with elite talent through an
