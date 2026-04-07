@@ -1,4 +1,4 @@
-// src/pages/About.jsx - HireNest Workforce Primary Positioning
+// src/pages/About.tsx - HireNest Workforce Primary Positioning
 import { Link } from "@tanstack/react-router";
 import { 
   Cpu, 
@@ -17,7 +17,8 @@ import {
   Shield,
   Users,
   Building2,
-  Layers
+  Layers,
+  ExternalLink
 } from "lucide-react";
 
 const whyWeExist = [
@@ -76,6 +77,13 @@ const traction = [
 ];
 
 export default function About() {
+  // Robust external link handler
+  const handleExternalLink = (url: string) => {
+    if (typeof window !== 'undefined') {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#0B0F1A] text-white overflow-hidden">
       
@@ -102,7 +110,7 @@ export default function About() {
               </h1>
               
               <p className="text-xl text-gray-400 leading-relaxed mb-8 max-w-xl">
-                We're a technology-first workforce solutions provider founded in 2026. 
+                We are a technology-first workforce solutions provider founded in 2026. 
                 Our mission: connect ambitious companies with exceptional talent through 
                 the perfect blend of human expertise and intelligent technology.
               </p>
@@ -280,7 +288,7 @@ export default function About() {
 
           <div className="mt-12 p-6 rounded-2xl bg-gradient-to-r from-cyan-500/10 to-blue-600/10 border border-cyan-500/20 text-center">
             <p className="text-lg text-gray-300">
-              <strong className="text-white">You don't buy HireNest OS.</strong> You get it automatically when you partner with HireNest Workforce.
+              <strong className="text-white">You do not buy HireNest OS.</strong> You get it automatically when you partner with HireNest Workforce.
             </p>
           </div>
         </div>
@@ -314,30 +322,32 @@ export default function About() {
                   />
                 </div>
                 
-                {/* Social Links */}
-<div className="flex justify-center gap-4 mt-6">
-  <a 
-    href="https://www.linkedin.com/in/gopala-krishna-sathikela-venkata-668251255/" 
-    target="_blank" 
-    rel="noopener noreferrer"
-    className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-cyan-500 transition-colors"
-  >
-    <Linkedin className="w-5 h-5" />
-  </a>
-</div>
-
-{/* ADD THIS BELOW THE SOCIAL ICONS */}
-<p className="mt-4 text-center">
-  <a 
-    href="https://www.linkedin.com/in/gopala-krishna-sathikela-venkata-668251255/"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="text-cyan-400 hover:text-cyan-300 underline text-sm"
-  >
-    Connect on LinkedIn →
-  </a>
-</p>
-
+                {/* Social Links - FIXED */}
+                <div className="flex justify-center gap-4 mt-6">
+                  <button
+                    onClick={() => handleExternalLink('https://www.linkedin.com/in/gopala-krishna-sathikela-venkata-668251255/')}
+                    className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-cyan-500 transition-colors cursor-pointer"
+                    title="LinkedIn Profile"
+                    type="button"
+                  >
+                    <Linkedin className="w-5 h-5" />
+                  </button>
+                </div>
+                
+                {/* Direct Link Text */}
+                <p className="text-center text-xs text-gray-500 mt-3">
+                  Connect on{' '}
+                  <a 
+                    href="https://www.linkedin.com/in/gopala-krishna-sathikela-venkata-668251255/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-cyan-400 hover:underline"
+                  >
+                    LinkedIn
+                  </a>
+                </p>
+              </div>
+            </div>
 
             {/* Founder Story */}
             <div className="lg:col-span-3">
@@ -354,7 +364,7 @@ export default function About() {
                 </p>
                 
                 <p>
-                  The "solution" was always "more recruiters." But the problem wasn't people—it was 
+                  The "solution" was always "more recruiters." But the problem was not people—it was 
                   infrastructure. No operating system to coordinate demand and supply. No intelligence 
                   layer to learn from outcomes. No network effects to compound value.
                 </p>
@@ -366,7 +376,7 @@ export default function About() {
                 </p>
 
                 <p className="text-cyan-400 font-medium">
-                  We're not here to be another staffing vendor. We're here to prove that technology-enabled 
+                  We are not here to be another staffing vendor. We are here to prove that technology-enabled 
                   service is the future of workforce solutions.
                 </p>
               </div>
@@ -374,7 +384,7 @@ export default function About() {
               <blockquote className="mt-8 p-6 rounded-2xl bg-white/5 border-l-4 border-cyan-500">
                 <Quote className="w-8 h-8 text-cyan-500/50 mb-2" />
                 <p className="text-xl italic text-gray-300">
-                  "The future of work isn't about who you know. It's about what your workforce partner's OS knows."
+                  "The future of work is not about who you know. It is about what your workforce partner's OS knows."
                 </p>
               </blockquote>
             </div>
@@ -458,7 +468,7 @@ export default function About() {
           </h2>
           <p className="text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
             Whether you need to hire top talent, join our vendor network, or explore career opportunities—
-            we're ready to help. HireNest OS included with every partnership.
+            we are ready to help. HireNest OS included with every partnership.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
