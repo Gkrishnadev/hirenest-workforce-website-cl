@@ -44,17 +44,23 @@ export default function Vendors() {
 
       try {
         await fetch("https://hjeukduwzdginoqjjgod.supabase.co/functions/v1/send-email", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            type: "Vendor Network Application",
-            data: {
-              name: form.contactPerson,
-              email: form.email,
-              company: form.companyName,
-            },
-          }),
-        });
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "x-api-key": "hirenest-secure-key-2026", // ✅ REQUIRED
+  },
+  body: JSON.stringify({
+    type: "Vendor Application", // ✅ CORRECT TYPE
+    data: {
+      name: form.contactPerson,
+      email: form.email,
+      phone: form.phone,
+      company: form.companyName,
+      services: form.technologies,
+      benchSize: form.benchSize,
+    },
+  }),
+});
       } catch (err) {
         console.error(err);
       }
