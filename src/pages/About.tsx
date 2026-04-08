@@ -70,10 +70,10 @@ const osAdvantages = [
 ];
 
 const traction = [
-  { metric: "500+", label: "Companies Trusting HireNest Workforce", suffix: "" },
-  { metric: "$2.4M", label: "Talent Placed Value", suffix: "" },
+  { metric: "50+", label: "Companies Trusting HireNest Workforce", suffix: "" },
+  { metric: "5L", label: "Talent Placed Value", suffix: "" },
   { metric: "94%", label: "Match Accuracy", suffix: "" },
-  { metric: "48h", label: "Avg. Time-to-Hire", suffix: "" }
+  { metric: "24h", label: "Avg. Time-to-Hire", suffix: "" }
 ];
 
 export default function About() {
@@ -188,7 +188,7 @@ export default function About() {
 
                 <div className="mt-6 p-4 rounded-xl bg-white/5 border border-white/10 text-center">
                   <p className="text-sm text-gray-400">
-                    <span className="text-cyan-400 font-semibold">HireNest OS</span> is included with every partnership
+                    <span className="text-cyan-400 font-semibold">HireNest OS</span> powers every placement
                   </p>
                 </div>
               </div>
@@ -260,7 +260,7 @@ export default function About() {
               The HireNest OS Difference
             </h2>
             <p className="text-xl text-gray-400 mt-4 max-w-3xl mx-auto">
-              Most staffing agencies use the same tools as everyone else. We built our own—and you get it included.
+              Most staffing agencies use the same tools as everyone else. We built our own—and it gives us a competitive edge.
             </p>
           </div>
 
@@ -288,7 +288,7 @@ export default function About() {
 
           <div className="mt-12 p-6 rounded-2xl bg-gradient-to-r from-cyan-500/10 to-blue-600/10 border border-cyan-500/20 text-center">
             <p className="text-lg text-gray-300">
-              <strong className="text-white">You do not buy HireNest OS.</strong> You get it automatically when you partner with HireNest Workforce.
+              <strong className="text-white">HireNest OS</strong> is our proprietary technology that powers every HireNest Workforce solution.
             </p>
           </div>
         </div>
@@ -371,7 +371,7 @@ export default function About() {
 
                 <p>
                   So I built <strong className="text-white">HireNest Workforce</strong> with <strong className="text-cyan-400">HireNest OS</strong> at its core. 
-                  Not software to sell, but technology to power better service. The result? 
+                  Our proprietary technology powers better service delivery. The result? 
                   Faster placements, better matches, and complete visibility for our clients.
                 </p>
 
@@ -436,7 +436,7 @@ export default function About() {
               </div>
             </div>
 
-            {/* 2027 - Intelligence */}
+            {/* 2026 - Intelligence */}
             <div className="flex gap-6">
               <div className="flex-shrink-0 w-12 h-12 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold">→</div>
               <div>
@@ -445,7 +445,7 @@ export default function About() {
               </div>
             </div>
 
-            {/* 2028 - Global */}
+            {/* 2027 - Global */}
             <div className="flex gap-6 opacity-50">
               <div className="flex-shrink-0 w-12 h-12 rounded-full bg-white/10 text-gray-500 flex items-center justify-center font-bold">○</div>
               <div>
@@ -468,7 +468,7 @@ export default function About() {
           </h2>
           <p className="text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
             Whether you need to hire top talent, join our vendor network, or explore career opportunities—
-            we are ready to help. HireNest OS included with every partnership.
+            we are ready to help.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -480,7 +480,7 @@ export default function About() {
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Link>
             <a
-              href="mailto:gopala@hirenestworkforce.com"
+              href="mailto:info@hirenestworkforce.com"
               className="inline-flex items-center justify-center gap-2 px-8 py-4 border border-white/20 rounded-2xl font-semibold hover:bg-white/5 transition-all"
             >
               Contact Our Team
@@ -488,7 +488,7 @@ export default function About() {
           </div>
 
           <p className="mt-8 text-sm text-gray-500">
-            Currently serving 500+ companies • HireNest OS included • No software to buy
+            Currently serving 25+ companies
           </p>
         </div>
       </section>
