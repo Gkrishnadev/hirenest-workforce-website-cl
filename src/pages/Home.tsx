@@ -95,9 +95,9 @@ const whoWeServe = [
 
 // Social proof - Real metrics
 const traction = [
-  { number: "500+", label: "Companies Trusting HireNest", suffix: "" },
+  { number: "50+", label: "Companies Trusting HireNest", suffix: "" },
   { number: "94%", label: "Match Accuracy", suffix: "" },
-  { number: "48h", label: "Avg. Time-to-Hire", suffix: "" },
+  { number: "24h", label: "Avg. Time-to-Hire", suffix: "" },
   { number: "3x", label: "Faster vs Traditional", suffix: "" }
 ];
 
@@ -413,12 +413,6 @@ export default function Home() {
                 What makes us different? Our proprietary operating system. While competitors juggle spreadsheets and email chains, HireNest OS unifies your entire hiring pipeline—vendors, candidates, and analytics—in one intelligent platform.
               </p>
 
-              <div className="p-4 rounded-xl bg-cyan-50 border border-cyan-200">
-                <p className="text-sm text-cyan-800">
-                  <strong>Included with every HireNest Workforce partnership.</strong> No separate software to buy.
-                </p>
-              </div>
-
               <div className="space-y-4">
                 {[
                   { icon: Brain, text: "AI-powered candidate ranking" },
@@ -609,7 +603,7 @@ export default function Home() {
           <div className="text-center mb-16">
             <span className="text-cyan-600 font-semibold text-sm uppercase tracking-[0.2em]">Testimonials</span>
             <h2 className="text-4xl font-bold text-gray-900 mt-4 mb-4">
-              Trusted by 500+ Companies
+              Trusted by 50+ Companies as of now!
             </h2>
           </div>
 
@@ -653,8 +647,7 @@ export default function Home() {
             Ready to Transform<br />Your Hiring?
           </h2>
           <p className="text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
-            Join 500+ companies building their teams with HireNest Workforce. 
-            HireNest OS included with every partnership.
+            Join 50+ companies building their teams with HireNest Workforce.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -676,7 +669,7 @@ export default function Home() {
           </div>
 
           <p className="mt-8 text-sm text-gray-500">
-            No commitment required • Free consultation • HireNest OS included
+            No commitment required • Free consultation
           </p>
         </div>
       </section>
