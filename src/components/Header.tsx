@@ -79,10 +79,10 @@ export default function Header() {
               Join as Vendor
             </Link>
             <Link
-              to="/early-access"
+              to="/partner"
               className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg hover:shadow-lg hover:shadow-cyan-500/25 transition-all"
             >
-              Early Access
+              Partner With Us
             </Link>
           </div>
 
