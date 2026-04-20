@@ -164,7 +164,9 @@ export default function EarlyAccess() {
   };
 
   const scrollToForm = () => {
-    formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setTimeout(() => {
+      formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
   };
 
   const handleEmailChange = useCallback((email: string) => {
@@ -215,7 +217,7 @@ export default function EarlyAccess() {
     setSelectedRole(roleId);
     setForm(prev => ({ ...prev, role: roleId }));
     setStep(2);
-    setTimeout(() => scrollToForm(), 100);
+    scrollToForm();
   };
 
   const handleSubmit = async () => {
@@ -389,6 +391,7 @@ export default function EarlyAccess() {
                 No more spreadsheet juggling. No more lost candidates.
               </p>
 
+              {/* MAIN CTA — Scrolls to Role Selection */}
               <button 
                 onClick={scrollToRoles}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all inline-flex items-center gap-2 mb-16"
@@ -442,7 +445,7 @@ export default function EarlyAccess() {
           </div>
         )}
 
-        {/* ROLE SELECTION */}
+        {/* ROLE SELECTION — "Who Are You?" */}
         <div ref={rolesRef} className="max-w-6xl mx-auto px-6 pb-20">
           {step === 1 && (
             <>
@@ -485,8 +488,9 @@ export default function EarlyAccess() {
                         ))}
                       </ul>
 
+                      {/* THIS "Apply Now" GOES TO FORM FOR THIS SPECIFIC ROLE */}
                       <div className="flex items-center text-blue-400 font-semibold group-hover:translate-x-2 transition-transform">
-                        Apply Now
+                        Apply as {role.title.split('/')[0].trim()}
                         <ArrowRight className="w-5 h-5 ml-2" />
                       </div>
                     </div>
@@ -602,7 +606,7 @@ export default function EarlyAccess() {
           </div>
         )}
 
-        {/* APPLICATION FORM */}
+        {/* APPLICATION FORM — Pre-filled with selected role */}
         {step === 2 && (
           <div ref={formRef} className="max-w-xl mx-auto px-6 py-12">
             <button 
@@ -610,10 +614,18 @@ export default function EarlyAccess() {
               className="text-gray-500 hover:text-white text-sm mb-8 flex items-center gap-2 transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
-              Back to home
+              Back to roles
             </button>
 
             <div className="mb-8">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm mb-4">
+                {roles.find(r => r.id === selectedRole)?.icon && (
+                  <div className="w-4 h-4">
+                    {/* Icon would render here */}
+                  </div>
+                )}
+                {roles.find(r => r.id === selectedRole)?.stats}
+              </div>
               <h2 className="text-3xl font-bold mb-2">
                 Apply as {roles.find(r => r.id === selectedRole)?.title}
               </h2>
