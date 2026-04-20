@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { supabase } from "../lib/supabase";
 import { validateEmail, isRoleBasedEmail } from "../utils/emailValidation";
 import Layout from "../components/Layout";
@@ -30,7 +30,8 @@ import {
   Phone,
   X,
   MessageSquare,
-  Quote
+  Quote,
+  Send
 } from "lucide-react";
 
 export default function EarlyAccess() {
@@ -40,6 +41,11 @@ export default function EarlyAccess() {
   const [emailError, setEmailError] = useState("");
   const [emailWarning, setEmailWarning] = useState("");
   const [selectedRole, setSelectedRole] = useState("");
+  const [waitlistEmail, setWaitlistEmail] = useState("");
+  const [waitlistError, setWaitlistError] = useState("");
+
+  const rolesRef = useRef<HTMLDivElement>(null);
+  const formRef = useRef<HTMLDivElement>(null);
 
   const [form, setForm] = useState({
     role: "",
@@ -66,7 +72,7 @@ export default function EarlyAccess() {
         "Access 50+ verified vendor networks instantly",
         "AI-powered candidate matching (not keyword search)",
         "Single dashboard for all vendor submissions",
-        "Bench talent pool with 48hr availability",
+        "Bench talent pool with 48-hour availability",
         "Zero platform fees — pay only on success"
       ],
       painPoint: "Tired of managing 20+ vendor emails and spreadsheets?"
@@ -106,7 +112,7 @@ export default function EarlyAccess() {
     {
       id: "candidate",
       title: "Job Seeker / Talent",
-      subtitle: "I'm looking for remote & freshers",
+      subtitle: "I'm looking for remote & fresher roles",
       icon: Laptop,
       color: "from-amber-500 to-orange-600",
       stats: "Profile seen by 50+ recruiters",
@@ -153,6 +159,14 @@ export default function EarlyAccess() {
     }
   ];
 
+  const scrollToRoles = () => {
+    rolesRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const scrollToForm = () => {
+    formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   const handleEmailChange = useCallback((email: string) => {
     setForm(prev => ({ ...prev, email }));
     setEmailError("");
@@ -169,10 +183,39 @@ export default function EarlyAccess() {
     }
   }, []);
 
+  const handleWaitlistSubmit = async () => {
+    const validation = validateEmail(waitlistEmail);
+    if (!validation.valid) {
+      setWaitlistError(validation.message);
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const { error } = await supabase.from("waitlist").insert([{
+        email: waitlistEmail.toLowerCase().trim(),
+        source: "early_access_page",
+        created_at: new Date().toISOString(),
+      }]);
+
+      if (error) throw error;
+      
+      alert("You're on the waitlist! We'll notify you when we launch.");
+      setWaitlistEmail("");
+      setWaitlistError("");
+    } catch (error) {
+      console.error(error);
+      alert("Already registered or error occurred.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const selectRole = (roleId: string) => {
     setSelectedRole(roleId);
     setForm(prev => ({ ...prev, role: roleId }));
     setStep(2);
+    setTimeout(() => scrollToForm(), 100);
   };
 
   const handleSubmit = async () => {
@@ -263,9 +306,9 @@ export default function EarlyAccess() {
             <div className="w-24 h-24 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-8">
               <CheckCircle className="w-12 h-12 text-emerald-400" />
             </div>
-            <h2 className="text-4xl font-bold mb-4 text-white">You're In!</h2>
+            <h2 className="text-4xl font-bold mb-4 text-white">Application Received!</h2>
             <p className="text-gray-400 text-lg mb-2">
-              Welcome to the HireNest OS ecosystem
+              Thank you for your interest in HireNest OS.
             </p>
             <div className="bg-white/5 border border-white/10 rounded-xl p-4 mb-8">
               <p className="text-sm text-gray-500 mb-1">Your Reference ID</p>
@@ -280,19 +323,19 @@ export default function EarlyAccess() {
               <ul className="space-y-4 text-gray-400">
                 <li className="flex items-start gap-3">
                   <Clock className="w-5 h-5 text-blue-400 mt-0.5 shrink-0" />
-                  <span>Verification email sent to <span className="text-white">{form.email}</span> within 5 minutes</span>
+                  <span>We've received your application and will review it within 24 hours.</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <Shield className="w-5 h-5 text-emerald-400 mt-0.5 shrink-0" />
-                  <span>Profile review (2-4 hours for vendors, instant for candidates)</span>
+                  <span>You'll receive a verification email at <span className="text-white">{form.email}</span> shortly.</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <Rocket className="w-5 h-5 text-violet-400 mt-0.5 shrink-0" />
-                  <span>Platform credentials + onboarding based on your role</span>
+                  <span>Once approved, you'll get platform credentials and a personalized onboarding session.</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <Zap className="w-5 h-5 text-amber-400 mt-0.5 shrink-0" />
-                  <span>Start using HireNest OS immediately</span>
+                  <span>Start transforming your hiring process with HireNest OS immediately.</span>
                 </li>
               </ul>
             </div>
@@ -347,7 +390,7 @@ export default function EarlyAccess() {
               </p>
 
               <button 
-                onClick={() => document.getElementById('roles')?.scrollIntoView({ behavior: 'smooth' })}
+                onClick={scrollToRoles}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all inline-flex items-center gap-2 mb-16"
               >
                 Transform Hiring Now
@@ -400,57 +443,59 @@ export default function EarlyAccess() {
         )}
 
         {/* ROLE SELECTION */}
-        {step === 1 && (
-          <div id="roles" className="max-w-6xl mx-auto px-6 pb-20">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">Who Are You?</h2>
-              <p className="text-gray-400">Select your role to get personalized early access</p>
-            </div>
+        <div ref={rolesRef} className="max-w-6xl mx-auto px-6 pb-20">
+          {step === 1 && (
+            <>
+              <div className="text-center mb-12">
+                <h2 className="text-3xl font-bold mb-4">Who Are You?</h2>
+                <p className="text-gray-400">Select your role to get personalized early access</p>
+              </div>
 
-            <div className="grid md:grid-cols-2 gap-6">
-              {roles.map((role) => (
-                <button
-                  key={role.id}
-                  onClick={() => selectRole(role.id)}
-                  className="group relative p-8 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all duration-300 text-left hover:border-white/20 hover:scale-[1.02] overflow-hidden"
-                >
-                  <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${role.color} opacity-10 rounded-full blur-2xl group-hover:opacity-20 transition-opacity`} />
-                  
-                  <div className="relative">
-                    <div className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${role.color} mb-4`}>
-                      <role.icon className="w-6 h-6 text-white" />
-                    </div>
+              <div className="grid md:grid-cols-2 gap-6">
+                {roles.map((role) => (
+                  <button
+                    key={role.id}
+                    onClick={() => selectRole(role.id)}
+                    className="group relative p-8 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all duration-300 text-left hover:border-white/20 hover:scale-[1.02] overflow-hidden"
+                  >
+                    <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${role.color} opacity-10 rounded-full blur-2xl group-hover:opacity-20 transition-opacity`} />
                     
-                    <div className="absolute top-0 right-0">
-                      <span className="text-xs font-medium px-3 py-1 rounded-full bg-white/10 text-gray-300 border border-white/10">
-                        {role.stats}
-                      </span>
+                    <div className="relative">
+                      <div className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${role.color} mb-4`}>
+                        <role.icon className="w-6 h-6 text-white" />
+                      </div>
+                      
+                      <div className="absolute top-0 right-0">
+                        <span className="text-xs font-medium px-3 py-1 rounded-full bg-white/10 text-gray-300 border border-white/10">
+                          {role.stats}
+                        </span>
+                      </div>
+
+                      <h3 className="text-2xl font-bold mb-1">{role.title}</h3>
+                      <p className="text-gray-400 mb-4">{role.subtitle}</p>
+                      
+                      <p className="text-sm text-blue-400 mb-4 italic">"{role.painPoint}"</p>
+
+                      <ul className="space-y-2 mb-6">
+                        {role.benefits.slice(0, 3).map((benefit, i) => (
+                          <li key={i} className="flex items-start gap-2 text-sm text-gray-400">
+                            <ChevronRight className="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" />
+                            {benefit}
+                          </li>
+                        ))}
+                      </ul>
+
+                      <div className="flex items-center text-blue-400 font-semibold group-hover:translate-x-2 transition-transform">
+                        Apply Now
+                        <ArrowRight className="w-5 h-5 ml-2" />
+                      </div>
                     </div>
-
-                    <h3 className="text-2xl font-bold mb-1">{role.title}</h3>
-                    <p className="text-gray-400 mb-4">{role.subtitle}</p>
-                    
-                    <p className="text-sm text-blue-400 mb-4 italic">"{role.painPoint}"</p>
-
-                    <ul className="space-y-2 mb-6">
-                      {role.benefits.slice(0, 3).map((benefit, i) => (
-                        <li key={i} className="flex items-start gap-2 text-sm text-gray-400">
-                          <ChevronRight className="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" />
-                          {benefit}
-                        </li>
-                      ))}
-                    </ul>
-
-                    <div className="flex items-center text-blue-400 font-semibold group-hover:translate-x-2 transition-transform">
-                      Apply Now
-                      <ArrowRight className="w-5 h-5 ml-2" />
-                    </div>
-                  </div>
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
 
         {/* TESTIMONIALS */}
         {step === 1 && (
@@ -512,22 +557,29 @@ export default function EarlyAccess() {
               
               <div className="flex gap-3">
                 <input
-                  type="text"
-                  placeholder="First Name"
-                  className="flex-1 p-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
-                />
-                <input
                   type="email"
                   placeholder="Enter your email"
-                  className="flex-1 p-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+                  value={waitlistEmail}
+                  onChange={(e) => {
+                    setWaitlistEmail(e.target.value);
+                    setWaitlistError("");
+                  }}
+                  className={`flex-1 p-4 rounded-xl bg-white/10 border text-white placeholder-gray-500 focus:outline-none transition-colors ${
+                    waitlistError ? 'border-red-500' : 'border-white/20 focus:border-blue-500'
+                  }`}
                 />
+                <button 
+                  onClick={handleWaitlistSubmit}
+                  disabled={loading || !waitlistEmail}
+                  className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-700 text-white px-6 py-4 rounded-xl font-semibold transition-all flex items-center gap-2"
+                >
+                  {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
+                  Join
+                </button>
               </div>
-              <button 
-                onClick={() => document.getElementById('roles')?.scrollIntoView({ behavior: 'smooth' })}
-                className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl font-semibold transition-all"
-              >
-                Join Waitlist
-              </button>
+              {waitlistError && (
+                <p className="mt-2 text-red-400 text-sm text-left">{waitlistError}</p>
+              )}
               <p className="text-xs text-gray-500 mt-4">We respect your privacy. Unsubscribe anytime.</p>
             </div>
           </div>
@@ -540,7 +592,7 @@ export default function EarlyAccess() {
               <h2 className="text-3xl font-bold mb-4">Revolutionize Your Hiring Today</h2>
               <p className="text-gray-400 mb-8">Join the many companies already benefiting from a unified hiring system.</p>
               <button 
-                onClick={() => document.getElementById('roles')?.scrollIntoView({ behavior: 'smooth' })}
+                onClick={scrollToRoles}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all inline-flex items-center gap-2"
               >
                 Transform Hiring Now
@@ -552,7 +604,7 @@ export default function EarlyAccess() {
 
         {/* APPLICATION FORM */}
         {step === 2 && (
-          <div className="max-w-xl mx-auto px-6 py-12">
+          <div ref={formRef} className="max-w-xl mx-auto px-6 py-12">
             <button 
               onClick={() => setStep(1)} 
               className="text-gray-500 hover:text-white text-sm mb-8 flex items-center gap-2 transition-colors"
