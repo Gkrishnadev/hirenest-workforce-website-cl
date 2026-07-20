@@ -26,6 +26,8 @@ import VendorNetwork from "./pages/VendorNetwork";
 import Vendors from "./pages/Vendors";
 import HireDevelopers from "./pages/HireDevelopers";
 import EarlyAccess from "./pages/EarlyAccess";
+import Industries from "./pages/Industries";
+import TechnologyStack from "./pages/TechnologyStack";
 
 // ================= ROOT ROUTE WITH HEADER/FOOTER =================
 
@@ -134,6 +136,18 @@ const earlyAccessRoute = createRoute({
   component: EarlyAccess,
 });
 
+const industriesRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/industries",
+  component: Industries,
+});
+
+const technologyStackRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/technology-stack",
+  component: TechnologyStack,
+});
+
 // ================= ROUTE TREE =================
 
 const routeTree = rootRoute.addChildren([
@@ -152,6 +166,8 @@ const routeTree = rootRoute.addChildren([
   jobDetailRoute,
   applyRoute,
   earlyAccessRoute,
+  industriesRoute,
+  technologyStackRoute,
 ]);
 
 const router = createRouter({ routeTree });
