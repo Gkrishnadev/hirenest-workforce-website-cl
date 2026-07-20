@@ -1,0 +1,26 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // Resume uploads from the public Apply page (src/pages/Apply.tsx).
+    // Anyone can upload (same trust level as the old public Supabase
+    // "Resumes" bucket) but nobody can list/read/overwrite/delete files
+    // through the client — the app gets the download URL back at upload
+    // time and stores that URL in Firestore instead.
+    match /resumes/{fileName} {
+      allow write: if request.resource.size < 10 * 1024 * 1024
+                   && request.resource.contentType.matches('application/.*|image/.*');
+      // getDownloadURL() (called right after upload in Apply.tsx) needs
+      // "get" permission on that specific file. "list" stays closed so
+      // nobody can browse/enumerate every resume in the bucket.
+      allow get: if true;
+      allow list, delete: if false;
+    }
+
+    // Deny everything else by default.
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

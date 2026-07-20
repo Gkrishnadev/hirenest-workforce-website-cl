@@ -1,0 +1,9 @@
+{
+  "firestore": {
+    "database": "hirenestwebsiteleads",
+    "rules": "firestore.rules"
+  },
+  "storage": {
+    "rules": "storage.rules"
+  }
+}

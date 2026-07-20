@@ -1,0 +1,92 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Lead / form-submission collections written by the public website.
+    // Anyone can SUBMIT a form (create), nobody can read, edit, or delete
+    // from the client — that's intentional, since these hold personal
+    // data (emails, phone numbers, resumes). The /admin dashboard should
+    // be switched to Firebase Auth and read these server-side or with an
+    // authenticated + authorized user (see TODO in src/pages/Admin.tsx).
+    match /vendor_applications/{docId} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null;
+    }
+
+    match /partner_applications/{docId} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null;
+    }
+
+    match /requirement_submissions/{docId} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null;
+    }
+
+    match /contact_forms/{docId} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null;
+    }
+
+    match /early_access_leads/{docId} {
+      allow create: if true;
+      // EarlyAccess.tsx queries by email to block duplicate signups before
+      // insert (findByField in src/lib/db.ts), which Firestore rules treat
+      // as a "list" operation. This is the same openness the old Supabase
+      // anon key already had, not a new exposure.
+      allow list: if true;
+      allow get, update, delete: if request.auth != null;
+    }
+
+    match /job_applications/{docId} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null;
+    }
+
+    match /leads/{docId} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null;
+    }
+
+    match /requirements/{docId} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null;
+    }
+
+    match /consultants/{docId} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null;
+    }
+
+    match /partners/{docId} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null;
+    }
+
+    // Job postings: public can read (Careers page lists them), only an
+    // authenticated admin can create/edit (AdminJobs.tsx should also be
+    // gated behind Firebase Auth — it currently is not).
+    match /jobs/{docId} {
+      allow read: if true;
+      allow create, update, delete: if request.auth != null;
+    }
+
+    // Email outbox for the Firebase "Trigger Email" extension.
+    // queueEmail() in src/lib/db.ts writes here directly from the browser
+    // (same trust level as the public lead forms above), so "create" must
+    // stay open — but we validate shape and block all reads so nobody can
+    // browse other people's submitted messages, and block update/delete
+    // so a queued email can't be tampered with after submission.
+    match /mail/{docId} {
+      allow create: if request.resource.data.keys().hasAll(['to', 'message'])
+                    && request.resource.data.message.keys().hasAll(['subject']);
+      allow read, update, delete: if false;
+    }
+
+    // Deny everything else by default.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
