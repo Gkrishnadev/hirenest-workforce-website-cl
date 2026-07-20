@@ -1,7 +1,7 @@
 # HireNest Workforce Website
 
 ## Current State
-A complete multi-page IT staffing platform website. The Caffeine/ICP live version uses a Motoko backend for form submissions and admin dashboard. A parallel `vercel-deploy/` folder contains the identical UI rebuilt for Vercel + Supabase deployment.
+A complete multi-page IT staffing, software development, and AI solutions platform website. The Caffeine/ICP live version uses a Motoko backend for form submissions and admin dashboard. The Vercel deployment (this repo's `src/` app) runs on Firebase (Firestore + Firebase Storage) — see MIGRATION.md.
 
 ## Requested Changes (Diff)
 

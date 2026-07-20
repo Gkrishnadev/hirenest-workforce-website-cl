@@ -1402,7 +1402,7 @@
             const dbData = prepareDatabasePayload();
             
             try {
-                // Simulate API call (replace with actual Supabase/Backend call)
+                // Simulate API call (replace with actual Firebase/Backend call)
                 await submitToDatabase(dbData);
                 
                 // Hide loading
@@ -1475,10 +1475,8 @@
             // Simulate network delay
             await new Promise(resolve => setTimeout(resolve, 2000));
             
-            // In production, use:
-            // const { data: result, error } = await supabase
-            //     .from('early_access_leads')
-            //     .insert([data]);
+            // In production, use the Firebase helpers in src/lib/db.ts:
+            // await addRecord('early_access_leads', data);
             
             // For vendor_leads or client_leads, adjust the payload structure:
             if (formData.leadType === 'vendor_leads') {
@@ -1499,7 +1497,7 @@
                     created_at: data.created_at
                 };
                 console.log('Vendor lead data:', vendorData);
-                // await supabase.from('vendor_leads').insert([vendorData]);
+                // await addRecord('vendor_leads', vendorData);
             } else if (formData.leadType === 'client_leads') {
                 // Transform to client_leads schema
                 const clientData = {
@@ -1518,10 +1516,10 @@
                     created_at: data.created_at
                 };
                 console.log('Client lead data:', clientData);
-                // await supabase.from('client_leads').insert([clientData]);
+                // await addRecord('client_leads', clientData);
             } else {
                 console.log('Early access lead data:', data);
-                // await supabase.from('early_access_leads').insert([data]);
+                // await addRecord('early_access_leads', data);
             }
             
             return { success: true };
