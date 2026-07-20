@@ -6,6 +6,8 @@ import { Menu, X } from "lucide-react";
 const navItems = [
   { label: "Home", href: "/" },
   { label: "Services", href: "/services" },
+  { label: "Industries", href: "/industries" },
+  { label: "Technology Stack", href: "/technology-stack" },
   { label: "Vendor Network", href: "/vendor-network" },
   { label: "Hire Developers", href: "/hire-developers-india" },
   { label: "About", href: "/about" },
@@ -51,7 +53,7 @@ export default function Header() {
             </div>
             <div className="hidden sm:block">
               <div className="text-xl font-bold text-white">HireNest</div>
-              <div className="text-[10px] text-gray-400 uppercase tracking-wider">Workforce</div>
+              <div className="text-[10px] text-gray-400 uppercase tracking-wider">Staffing · Software · AI</div>
             </div>
           </Link>
 
