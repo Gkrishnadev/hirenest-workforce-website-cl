@@ -1,4 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
+import { addRecord, queueEmail } from "./_firebaseAdmin.js";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -6,70 +6,30 @@ export default async function handler(req, res) {
   }
 
   try {
-    const supabase = createClient(
-      process.env.SUPABASE_URL,
-      process.env.SUPABASE_SERVICE_ROLE_KEY
-    );
-
-    const body =
-      typeof req.body === "string" ? JSON.parse(req.body) : req.body;
-
-    const {
-      name,
-      email,
-      company,
-      phone,
-      technologies,
-      bench_size,
-    } = body;
+    const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
+    const { name, email, company, phone, technologies, bench_size } = body || {};
 
     if (!name || !email) {
-      return res.status(400).json({
-        error: "Name and Email required",
-      });
+      return res.status(400).json({ error: "Name and Email required" });
     }
 
-    // ✅ 1. Save to DB
-    const { error } = await supabase.from("vendors").insert([
-      { name, email, company, phone, technologies, bench_size },
-    ]);
+    // 1. Save to Firestore
+    await addRecord("vendors", { name, email, company, phone, technologies, bench_size });
 
-    if (error) {
-      return res.status(500).json({ error: error.message });
-    }
-
-    // ✅ 2. CALL EDGE FUNCTION (EMAIL TRIGGER)
+    // 2. Queue notification email (requires the Firebase "Trigger Email"
+    // extension installed on the "mail" collection to actually send)
     try {
-     await fetch("/api/vendor", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify(formData),
-       ({
-    type: "Vendor Submission",
-    data: {
-      name,
-      email,
-      phone,
-      role: "Vendor",
-      resumeUrl: "N/A",
-      message: `Company: ${company}, Tech: ${technologies}`,
-    },
-  }),
-});
+      await queueEmail({
+        to: process.env.NOTIFICATION_EMAIL || "gopal@hirenestworkforce.com",
+        subject: "HireNest — New Vendor Submission",
+        text: `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nCompany: ${company}\nTechnologies: ${technologies}\nBench Size: ${bench_size}`,
+      });
     } catch (err) {
       console.error("Email trigger failed:", err);
     }
 
-    return res.status(200).json({
-      success: true,
-      message: "Submitted successfully + email triggered 🚀",
-    });
-
+    return res.status(200).json({ success: true, message: "Submitted successfully 🚀" });
   } catch (err) {
-    return res.status(500).json({
-      error: err.message,
-    });
+    return res.status(500).json({ error: err.message });
   }
 }
