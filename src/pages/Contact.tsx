@@ -9,7 +9,7 @@ import {
   Phone,
 } from "lucide-react";
 import { toast } from "sonner";
-import { supabase } from "../lib/supabase";
+import { addRecord, queueEmail } from "../lib/db";
 
 export default function Contact() {
   const [form, setForm] = useState({
@@ -18,9 +18,17 @@ export default function Contact() {
     company: "",
     message: "",
   });
+  const [intent, setIntent] = useState("Talent");
 
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
+
+  const intentOptions = [
+    { value: "Talent", label: "I need Talent" },
+    { value: "Software Development", label: "I need Software Development" },
+    { value: "AI Solutions", label: "I need AI Solutions" },
+    { value: "Partner", label: "I want to Partner" },
+  ];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,42 +37,27 @@ export default function Contact() {
     const payload = {
       name: form.name,
       email: form.email,
+      intent,
       message: `
 Company: ${form.company}
+Looking for: ${intent}
 
 Message:
 ${form.message}
       `,
     };
 
-    const { error } = await supabase
-      .from("contact_forms")
-      .insert([payload]);
+    try {
+      await addRecord("contact_forms", payload);
 
-    if (error) {
-      console.error("Insert error:", error);
-      toast.error("Something went wrong. Please try again.");
-    } else {
       try {
-        await fetch(
-          "https://hjeukduwzdginoqjjgod.supabase.co/functions/v1/send-email",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "x-api-key": "hirenest-secure-key-2026",
-            },
-            body: JSON.stringify({
-              type: "Contact Form",
-              data: {
-                name: form.name,
-                email: form.email,
-                message: form.message,
-                company: form.company,
-              },
-            }),
-          }
-        );
+        await queueEmail({
+          to:
+            (import.meta.env.VITE_NOTIFICATION_EMAIL as string) ||
+            "gopal@hirenestworkforce.com",
+          subject: `HireNest — New Contact Form Message (${intent})`,
+          text: `Name: ${form.name}\nEmail: ${form.email}\nCompany: ${form.company}\nLooking for: ${intent}\n\nMessage:\n${form.message}`,
+        });
       } catch (err) {
         console.error("Email failed:", err);
       }
@@ -72,6 +65,9 @@ ${form.message}
       setSuccess(true);
       toast.success("Message sent! We'll be in touch within 24 hours.");
       setForm({ name: "", email: "", company: "", message: "" });
+    } catch (error) {
+      console.error("Insert error:", error);
+      toast.error("Something went wrong. Please try again.");
     }
 
     setSubmitting(false);
@@ -131,6 +127,28 @@ ${form.message}
                   onSubmit={handleSubmit}
                   className="space-y-6 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8"
                 >
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-3">
+                      What are you looking for? *
+                    </label>
+                    <div className="grid grid-cols-2 gap-3">
+                      {intentOptions.map((opt) => (
+                        <button
+                          key={opt.value}
+                          type="button"
+                          onClick={() => setIntent(opt.value)}
+                          className={`px-4 py-3 rounded-xl text-sm font-semibold border transition-all ${
+                            intent === opt.value
+                              ? "bg-gradient-to-r from-cyan-500 to-blue-600 border-transparent text-white"
+                              : "bg-white/5 border-white/10 text-gray-300 hover:border-cyan-500/40"
+                          }`}
+                        >
+                          {opt.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
                   <div>
                     <label className="block text-sm font-medium text-gray-300 mb-2">
                       Full Name *

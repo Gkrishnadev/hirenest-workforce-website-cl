@@ -2,7 +2,7 @@ import SEO from "../components/SEO";
 import { useState } from "react";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { supabase } from "../lib/supabase";
+import { addRecord, queueEmail } from "../lib/db";
 
 export default function Vendors() {
   const [form, setForm] = useState({
@@ -30,46 +30,25 @@ export default function Vendors() {
       bench_size: form.benchSize || "",
     };
 
-    const { error } = await supabase
-      .from("vendor_applications")
-      .insert([payload]);
-
-    if (error) {
+    try {
+      await addRecord("vendor_applications", payload);
+    } catch (err) {
+      console.error(err);
       toast.error("Submission failed ❌");
       setSubmitting(false);
       return;
     }
 
     try {
-      const res = await fetch(
-        "https://hjeukduwzdginoqjjgod.supabase.co/functions/v1/send-email",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-api-key": "hirenest-secure-key-2026", // ✅ FIXED
-          },
-          body: JSON.stringify({
-            type: "Vendor Application", // ✅ FIXED
-            data: {
-              name: form.contactPerson,
-              email: form.email,
-              phone: form.phone,
-              company: form.companyName,
-              services: form.technologies,
-              benchSize: form.benchSize,
-            },
-          }),
-        }
-      );
-
-      if (!res.ok) {
-        console.error("Email failed");
-        toast.error("Email sending failed ❌");
-      } else {
-        setSubmitted(true);
-        toast.success("Application submitted 🚀");
-      }
+      await queueEmail({
+        to:
+          (import.meta.env.VITE_NOTIFICATION_EMAIL as string) ||
+          "gopal@hirenestworkforce.com",
+        subject: "HireNest — New Vendor Application",
+        text: `Name: ${form.contactPerson}\nEmail: ${form.email}\nPhone: ${form.phone}\nCompany: ${form.companyName}\nServices: ${form.technologies}\nBench Size: ${form.benchSize}`,
+      });
+      setSubmitted(true);
+      toast.success("Application submitted 🚀");
     } catch (err) {
       console.error(err);
       toast.error("Something went wrong ❌");

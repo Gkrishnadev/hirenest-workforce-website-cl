@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { supabase } from "../lib/supabase";
+import { addRecord, findByField, queueEmail } from "../lib/db";
 import { validateEmail, isRoleBasedEmail } from "../utils/emailValidation";
 import Layout from "../components/Layout";
 import {
@@ -171,11 +171,11 @@ export default function EarlyAccess() {
 
     setLoading(true);
     try {
-      const { data: existing } = await supabase
-        .from("early_access_leads")
-        .select("id")
-        .eq("email", form.email.toLowerCase().trim())
-        .single();
+      const existing = await findByField(
+        "early_access_leads",
+        "email",
+        form.email.toLowerCase().trim()
+      );
 
       if (existing) {
         alert("This email is already registered. Check your inbox or contact support.");
@@ -183,7 +183,7 @@ export default function EarlyAccess() {
         return;
       }
 
-      const result = await supabase.from("early_access_leads").insert([{
+      await addRecord("early_access_leads", {
         name: form.name,
         email: form.email.toLowerCase().trim(),
         phone: form.phone || null,
@@ -192,19 +192,15 @@ export default function EarlyAccess() {
         message: form.message || null,
         code: referenceId,
         source: "early_access_v2",
-        created_at: new Date().toISOString(),
-      }]);
-
-      if (result.error) throw result.error;
+      });
 
       try {
-        await fetch("https://hjeukduwzdginoqjjgod.supabase.co/functions/v1/send-email", {
-          method: "POST",
-          headers: { "Content-Type": "application/json", "x-api-key": "hirenest-secure-key-2026" },
-          body: JSON.stringify({
-            type: "Early Access",
-            data: { name: form.name, email: form.email, phone: form.phone, company: form.company, role: selectedRole, referenceId }
-          }),
+        await queueEmail({
+          to:
+            (import.meta.env.VITE_NOTIFICATION_EMAIL as string) ||
+            "gopal@hirenestworkforce.com",
+          subject: "HireNest — New Early Access Signup",
+          text: `Name: ${form.name}\nEmail: ${form.email}\nPhone: ${form.phone}\nCompany: ${form.company}\nRole: ${selectedRole}\nRef: ${referenceId}`,
         });
       } catch (err) { console.error("Email failed:", err); }
 

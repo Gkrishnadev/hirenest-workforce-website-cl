@@ -2,7 +2,7 @@ import SEO from "../components/SEO";
 import { useState } from "react";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { supabase } from "../lib/supabase";
+import { addRecord, queueEmail } from "../lib/db";
 
 export default function SubmitRequirement() {
   const [form, setForm] = useState({
@@ -39,36 +39,19 @@ Contact Person: ${form.contactName}
       `,
     };
 
-    const { error } = await supabase
-      .from("requirement_submissions")
-      .insert([payload]);
+    try {
+      await addRecord("requirement_submissions", payload);
 
-    if (error) {
-      toast.error("Submission failed. Please try again.");
-    } else {
       setSuccess(true);
       toast.success("Requirement submitted! We'll match you within 24 hours.");
 
       try {
-        await fetch("https://hjeukduwzdginoqjjgod.supabase.co/functions/v1/send-email", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-           "x-api-key": "hirenest-secure-key-2026", 
-          body: JSON.stringify({
-            type: "Requirement",
-            data: {
-              name: form.contactName,
-              email: form.contactEmail,
-              company: form.company,
-              message: `
-Role: ${form.role}
-Skills: ${form.skills}
-Location: ${form.location}
-Engagement: ${form.engagementType}
-Start Date: ${form.startDate}
-              `,
-            },
-          }),
+        await queueEmail({
+          to:
+            (import.meta.env.VITE_NOTIFICATION_EMAIL as string) ||
+            "gopal@hirenestworkforce.com",
+          subject: "HireNest — New Requirement Submission",
+          text: `Name: ${form.contactName}\nEmail: ${form.contactEmail}\nCompany: ${form.company}\nRole: ${form.role}\nSkills: ${form.skills}\nLocation: ${form.location}\nEngagement: ${form.engagementType}\nStart Date: ${form.startDate}`,
         });
       } catch (err) {
         console.error("Email failed:", err);
@@ -84,6 +67,9 @@ Start Date: ${form.startDate}
         contactName: "",
         contactEmail: "",
       });
+    } catch (err) {
+      console.error(err);
+      toast.error("Submission failed. Please try again.");
     }
 
     setSubmitting(false);

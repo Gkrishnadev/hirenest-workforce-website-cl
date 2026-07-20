@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Bell, Loader2, LogOut, ShieldCheck } from "lucide-react";
-import { supabase, type VendorApplication, type PartnerApplication, type RequirementSubmission, type ContactForm } from "../lib/supabase";
+import { listRecords, type VendorApplication, type PartnerApplication, type RequirementSubmission, type ContactForm } from "../lib/db";
 
 function formatDate(dateStr: string): string {
   return new Date(dateStr).toLocaleDateString("en-IN", {
@@ -46,13 +46,12 @@ export default function Admin() {
 
   const fetchData = async () => {
     setLoading(true);
-    const [v, p, r, m] = await Promise.all([
-      supabase.from("vendor_applications").select("*").order("created_at", { ascending: false }),
-      supabase.from("partner_applications").select("*").order("created_at", { ascending: false }),
-      supabase.from("requirement_submissions").select("*").order("created_at", { ascending: false }),
-      supabase.from("contact_forms").select("*").order("created_at", { ascending: false }),
+    const [vd, pd, rd, md] = await Promise.all([
+      listRecords("vendor_applications") as Promise<VendorApplication[]>,
+      listRecords("partner_applications") as Promise<PartnerApplication[]>,
+      listRecords("requirement_submissions") as Promise<RequirementSubmission[]>,
+      listRecords("contact_forms") as Promise<ContactForm[]>,
     ]);
-    const vd = v.data || []; const pd = p.data || []; const rd = r.data || []; const md = m.data || [];
     setVendors(vd); setPartners(pd); setRequirements(rd); setMessages(md);
     const stored = lastSeenCounts;
     if (vd.length > stored.vendors || pd.length > stored.partners || rd.length > stored.requirements || md.length > stored.messages) {
@@ -80,6 +79,11 @@ export default function Admin() {
     { key: "messages", label: "Contact Messages", count: messages.length, prev: lastSeenCounts.messages },
   ];
 
+  // TODO(security): this "login" only flips local UI state — it does not
+  // actually authenticate anyone. Anyone who finds /admin can click through.
+  // Recommended fix: wire this up to Firebase Authentication (email/password
+  // or Google sign-in) and restrict Firestore reads on these collections to
+  // signed-in admins via firestore.rules (see firestore.rules in this repo).
   if (!isLoggedIn) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={bgStyle}>

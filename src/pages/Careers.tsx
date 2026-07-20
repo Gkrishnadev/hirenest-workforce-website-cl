@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { supabase } from "../lib/supabase";
+import { listRecords } from "../lib/db";
 import { useNavigate } from "@tanstack/react-router";
 import SEO from "../components/SEO";
 
@@ -19,12 +19,12 @@ export default function Careers() {
   // ==========================
   useEffect(() => {
     const fetchJobs = async () => {
-      const { data, error } = await supabase
-        .from("jobs")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      if (!error) setJobs(data || []);
+      try {
+        const data = await listRecords("jobs");
+        setJobs(data || []);
+      } catch (err) {
+        console.error("Failed to load jobs:", err);
+      }
     };
 
     fetchJobs();

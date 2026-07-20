@@ -9,7 +9,7 @@ import {
   Users,
 } from "lucide-react";
 import { toast } from "sonner";
-import { supabase } from "../lib/supabase";
+import { addRecord, queueEmail } from "../lib/db";
 
 const benefits = [
   {
@@ -59,38 +59,20 @@ export default function VendorNetwork() {
       bench_size: form.benchSize || "",
     };
 
-    const { error } = await supabase
-      .from("vendor_applications")
-      .insert([payload]);
+    try {
+      await addRecord("vendor_applications", payload);
 
-    if (error) {
-      toast.error("Submission failed. Please try again.");
-    } else {
       setSuccess(true);
       toast.success("Application submitted! We'll reach out within 24 hours.");
 
       try {
-        await fetch(
-          "https://hjeukduwzdginoqjjgod.supabase.co/functions/v1/send-email",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              type: "Vendor Application",
-              data: {
-                name: form.name,
-                email: form.email,
-                company: form.company,
-                message: `
-Technologies: ${form.message}
-Bench Size: ${form.benchSize}
-                `,
-              },
-            }),
-          }
-        );
+        await queueEmail({
+          to:
+            (import.meta.env.VITE_NOTIFICATION_EMAIL as string) ||
+            "gopal@hirenestworkforce.com",
+          subject: "HireNest — New Vendor Network Application",
+          text: `Name: ${form.name}\nEmail: ${form.email}\nCompany: ${form.company}\nTechnologies: ${form.message}\nBench Size: ${form.benchSize}`,
+        });
       } catch (err) {
         console.error("Email failed:", err);
       }
@@ -102,6 +84,9 @@ Bench Size: ${form.benchSize}
         message: "",
         benchSize: "",
       });
+    } catch (err) {
+      console.error(err);
+      toast.error("Submission failed. Please try again.");
     }
 
     setSubmitting(false);

@@ -19,7 +19,7 @@ import {
   Building
 } from "lucide-react";
 import { toast } from "sonner";
-import { supabase } from "../lib/supabase";
+import { addRecord, queueEmail } from "../lib/db";
 
 const benefits = [
   { icon: TrendingUp, title: "Revenue Growth", desc: "Unlock consistent opportunities" },
@@ -121,39 +121,32 @@ export default function Partner() {
     setSubmitting(true);
 
     try {
-      const { data, error } = await supabase
-        .from("partner_applications")
-        .insert([{
-          company_name: form.company,
-          contact_person: form.name,
-          email: form.email,
-          phone: form.phone || null,
-          role: form.role,
-          partnership_type: form.partnerType,
-          message: form.message || "",
-          status: "pending",
-          created_at: new Date().toISOString(),
-        }])
-        .select()
-        .single();
+      const docId = await addRecord("partner_applications", {
+        company_name: form.company,
+        contact_person: form.name,
+        email: form.email,
+        phone: form.phone || null,
+        role: form.role,
+        partnership_type: form.partnerType,
+        message: form.message || "",
+        status: "pending",
+      });
 
-      if (error) throw error;
-
-      const generatedTrackingId = `APP-${data.id.toString().padStart(6, '0')}`;
+      const generatedTrackingId = `APP-${docId.slice(0, 6).toUpperCase()}`;
       setTrackingId(generatedTrackingId);
       setSuccess(true);
       toast.success("Application submitted successfully!");
 
       try {
-        const res = await fetch("https://hjeukduwzdginoqjjgod.supabase.co/functions/v1/send-email", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            type: "Partner Application",
-            data: { ...form, trackingId: generatedTrackingId },
-          }),
+        await queueEmail({
+          to:
+            (import.meta.env.VITE_NOTIFICATION_EMAIL as string) ||
+            "gopal@hirenestworkforce.com",
+          subject: "HireNest — New Partner Application",
+          text: `Tracking ID: ${generatedTrackingId}\n${Object.entries(form)
+            .map(([k, v]) => `${k}: ${v}`)
+            .join("\n")}`,
         });
-        console.log("Email Response:", res.status);
       } catch (err) {
         console.error("Email failed:", err);
       }

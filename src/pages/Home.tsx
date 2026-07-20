@@ -126,6 +126,21 @@ const testimonials = [
   }
 ];
 
+// Industries we serve
+const industries = [
+  "Healthcare", "Banking", "Retail", "Manufacturing", "FinTech",
+  "EdTech", "Logistics", "AI Startups", "Product Companies", "Government"
+];
+
+// Portfolio / what we've built
+const portfolio = [
+  { title: "HireNest OS", desc: "The AI-powered platform running our own hiring pipeline." },
+  { title: "AI CRM", desc: "A CRM layer built for staffing and sales teams." },
+  { title: "Vendor Management Platform", desc: "Coordinating 120+ vendor partners in one dashboard." },
+  { title: "AI Recruitment Platform", desc: "Candidate matching engine behind HireNest OS." },
+  { title: "Future Client Projects", desc: "Coming Soon — your product could be next.", comingSoon: true },
+];
+
 export default function Home() {
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -163,21 +178,21 @@ export default function Home() {
                   <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-500"></span>
                 </span>
                 <span className="text-cyan-400 text-sm font-semibold tracking-wide uppercase">
-                  AI-Powered Talent Solutions
+                  Staffing · Software Development · AI Solutions
                 </span>
               </div>
 
               <div className="space-y-2">
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.05] tracking-tight">
-                  HireNest Workforce
+                  Building Teams.<br />Building Technology.
                 </h1>
                 <p className="text-2xl sm:text-3xl lg:text-4xl text-gray-400 font-light">
-                  AI-Powered Talent Solutions
+                  Your Trusted Technology Workforce Partner
                 </p>
               </div>
 
               <p className="text-xl text-gray-400 leading-relaxed max-w-xl">
-                We connect ambitious companies with exceptional talent faster than traditional staffing—combining human expertise with intelligent technology.
+                We help organizations hire exceptional talent, build scalable software, and accelerate digital transformation through AI-powered solutions.
               </p>
 
               {/* OS Badge */}
@@ -186,22 +201,30 @@ export default function Home() {
                 <span className="text-sm text-gray-400">Built on the <span className="text-cyan-400 font-semibold">HireNest OS</span> platform</span>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row flex-wrap gap-4">
                 <button
-                  onClick={() => navigate({ to: "/early-access" })}
+                  onClick={() => navigate({ to: "/hire-developers-india" })}
                   className="group relative px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl font-semibold text-white shadow-2xl shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all duration-300 hover:-translate-y-1 overflow-hidden flex items-center justify-center gap-3"
                 >
                   <Sparkles className="w-5 h-5" />
-                  <span>Start Hiring with HireNest</span>
+                  <span>Hire Talent</span>
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </button>
 
                 <button
-                  onClick={() => navigate({ to: "/about" })}
+                  onClick={() => navigate({ to: "/services" })}
+                  className="px-8 py-4 rounded-2xl font-semibold text-white border-2 border-white/20 hover:bg-white/10 hover:border-white/40 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 flex items-center justify-center gap-2"
+                >
+                  <Code2 className="w-5 h-5" />
+                  <span>Build Software</span>
+                </button>
+
+                <button
+                  onClick={() => navigate({ to: "/contact" })}
                   className="px-8 py-4 rounded-2xl font-semibold text-white border-2 border-white/20 hover:bg-white/10 hover:border-white/40 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 flex items-center justify-center gap-2"
                 >
                   <Play className="w-5 h-5" />
-                  <span>See How It Works</span>
+                  <span>Book a Consultation</span>
                 </button>
               </div>
 
@@ -546,43 +569,49 @@ export default function Home() {
         </div>
       </section>
 
-      {/* HOW IT WORKS */}
+      {/* HOW IT WORKS - Dual Process */}
       <section className="py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <span className="text-cyan-600 font-semibold text-sm uppercase tracking-[0.2em]">Process</span>
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mt-4 mb-4">
-              How HireNest Workforce Works
+              Two Tracks, One Partner
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Three simple steps to start building your team with AI-powered precision.
+              Whether you need people or product, our process is built for speed and clarity.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                step: "01",
-                title: "Tell Us What You Need",
-                desc: "Share your requirements. Our team + HireNest OS gets to work immediately."
-              },
-              {
-                step: "02",
-                title: "Review Matched Candidates",
-                desc: "AI-powered ranking delivers top candidates in hours, not weeks."
-              },
-              {
-                step: "03",
-                title: "Hire & Scale",
-                desc: "Interview, select, and onboard—with real-time visibility throughout."
-              }
-            ].map((item) => (
-              <div key={item.step} className="relative p-8 bg-white rounded-3xl border border-gray-200 hover:border-cyan-500/30 transition-all duration-500">
-                <div className="text-5xl font-bold text-cyan-200 mb-4">{item.step}</div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">{item.title}</h3>
-                <p className="text-gray-600">{item.desc}</p>
-              </div>
-            ))}
+          <div className="grid lg:grid-cols-2 gap-10">
+            {/* Staffing track */}
+            <div className="p-8 bg-white rounded-3xl border border-gray-200">
+              <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                <Users className="w-5 h-5 text-cyan-600" /> Staffing
+              </h3>
+              <ol className="space-y-4">
+                {["Requirement", "Candidate Screening", "Interview", "Deployment"].map((step, i) => (
+                  <li key={step} className="flex items-center gap-4">
+                    <span className="w-8 h-8 rounded-full bg-cyan-50 text-cyan-600 font-bold text-sm flex items-center justify-center shrink-0">{i + 1}</span>
+                    <span className="text-gray-800 font-medium">{step}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+
+            {/* Software development track */}
+            <div className="p-8 bg-white rounded-3xl border border-gray-200">
+              <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                <Code2 className="w-5 h-5 text-cyan-600" /> Software Development
+              </h3>
+              <ol className="space-y-4">
+                {["Discovery", "Planning", "Design", "Development", "Testing", "Deployment", "Support"].map((step, i) => (
+                  <li key={step} className="flex items-center gap-4">
+                    <span className="w-8 h-8 rounded-full bg-cyan-50 text-cyan-600 font-bold text-sm flex items-center justify-center shrink-0">{i + 1}</span>
+                    <span className="text-gray-800 font-medium">{step}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
           </div>
 
           <div className="text-center mt-12">
@@ -593,6 +622,54 @@ export default function Home() {
               Start Hiring Now
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
+          </div>
+        </div>
+      </section>
+
+      {/* INDUSTRIES */}
+      <section className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-14">
+            <span className="text-cyan-600 font-semibold text-sm uppercase tracking-[0.2em]">Industries</span>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mt-4 mb-4">
+              Built for Every Industry
+            </h2>
+          </div>
+          <div className="flex flex-wrap justify-center gap-3">
+            {industries.map((ind) => (
+              <Link key={ind} to="/industries">
+                <span className="px-5 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-800 font-medium hover:border-cyan-500/40 hover:bg-cyan-50 transition-all inline-block">
+                  {ind}
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* PORTFOLIO */}
+      <section className="py-24 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-14">
+            <span className="text-cyan-600 font-semibold text-sm uppercase tracking-[0.2em]">Portfolio</span>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mt-4 mb-4">
+              What We're Building
+            </h2>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {portfolio.map((p) => (
+              <div
+                key={p.title}
+                className={`p-6 rounded-2xl border transition-all ${
+                  p.comingSoon
+                    ? "bg-white/50 border-dashed border-gray-300"
+                    : "bg-white border-gray-200 hover:border-cyan-500/30 hover:shadow-lg"
+                }`}
+              >
+                <h3 className="text-lg font-bold text-gray-900 mb-2">{p.title}</h3>
+                <p className="text-sm text-gray-600">{p.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>

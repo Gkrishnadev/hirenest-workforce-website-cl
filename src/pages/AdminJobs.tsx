@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { supabase } from "../lib/supabase";
+import { addRecord } from "../lib/db";
 import SEO from "../components/SEO";
 
 export default function AdminJobs() {
@@ -15,17 +15,13 @@ export default function AdminJobs() {
     e.preventDefault();
     setLoading(true);
 
-    const { error } = await supabase.from("jobs").insert([
-      {
+    try {
+      await addRecord("jobs", {
         title: form.title,
         location: form.location,
         description: form.description,
-      },
-    ]);
+      });
 
-    if (error) {
-      alert("Error posting job ❌");
-    } else {
       alert("Job posted successfully 🚀");
 
       setForm({
@@ -33,6 +29,9 @@ export default function AdminJobs() {
         location: "",
         description: "",
       });
+    } catch (err) {
+      console.error(err);
+      alert("Error posting job ❌");
     }
 
     setLoading(false);

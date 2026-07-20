@@ -1,6 +1,6 @@
 import { useSearch } from "@tanstack/react-router";
 import { useState } from "react";
-import { supabase } from "../lib/supabase";
+import { addRecord, uploadFile } from "../lib/db";
 import { sendEmail } from "../lib/api";
 
 export default function Apply() {
@@ -27,42 +27,30 @@ export default function Apply() {
       // ✅ 1. UPLOAD RESUME
       // =====================================================
       if (resume) {
-        const filePath = `${Date.now()}-${resume.name}`;
+        const filePath = `resumes/${Date.now()}-${resume.name}`;
 
-        const { error: uploadError } = await supabase.storage
-          .from("Resumes")
-          .upload(filePath, resume);
-
-        if (uploadError) {
+        try {
+          resumeUrl = await uploadFile(filePath, resume);
+        } catch (uploadError) {
           console.error(uploadError);
           alert("Resume upload failed ❌");
           setLoading(false);
           return;
         }
-
-        const { data } = supabase.storage
-          .from("Resumes")
-          .getPublicUrl(filePath);
-
-        resumeUrl = data.publicUrl;
       }
 
       // =====================================================
-      // ✅ 2. SAVE TO DB (FIXED: added await)
+      // ✅ 2. SAVE TO DB
       // =====================================================
-      const { error: dbError } = await supabase
-        .from("job_applications")
-        .insert([
-          {
-            name: form.name,
-            email: form.email,
-            phone: form.phone,
-            role: role,
-            resume_url: resumeUrl,
-          },
-        ]);
-
-      if (dbError) {
+      try {
+        await addRecord("job_applications", {
+          name: form.name,
+          email: form.email,
+          phone: form.phone,
+          role: role,
+          resume_url: resumeUrl,
+        });
+      } catch (dbError) {
         console.error(dbError);
         alert("Error saving application ❌");
         setLoading(false);
