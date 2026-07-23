@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Bell, Loader2, LogOut, ShieldCheck } from "lucide-react";
 import { listRecords, type VendorApplication, type PartnerApplication, type RequirementSubmission, type ContactForm } from "../lib/db";
+import { useAdminAuth } from "../lib/useAdminAuth";
+import { createElement } from "react";
 
 function formatDate(dateStr: string): string {
   return new Date(dateStr).toLocaleDateString("en-IN", {
@@ -29,7 +31,11 @@ function LoadingSpinner() {
 }
 
 export default function Admin() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { user, loading: authLoading, login, logout } = useAdminAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
+  const [loginSubmitting, setLoginSubmitting] = useState(false);
   const [vendors, setVendors] = useState<VendorApplication[]>([]);
   const [partners, setPartners] = useState<PartnerApplication[]>([]);
   const [requirements, setRequirements] = useState<RequirementSubmission[]>([]);
@@ -60,7 +66,7 @@ export default function Admin() {
     setLoading(false);
   };
 
-  useEffect(() => { if (isLoggedIn) fetchData(); }, [isLoggedIn]);
+  useEffect(() => { if (user) fetchData(); }, [user]);
 
   const markAllSeen = () => {
     const counts = { vendors: vendors.length, partners: partners.length, requirements: requirements.length, messages: messages.length };
@@ -84,26 +90,38 @@ export default function Admin() {
   // Recommended fix: wire this up to Firebase Authentication (email/password
   // or Google sign-in) and restrict Firestore reads on these collections to
   // signed-in admins via firestore.rules (see firestore.rules in this repo).
-  if (!isLoggedIn) {
-    return (
-      <div className="min-h-screen flex items-center justify-center" style={bgStyle}>
-        <div className="rounded-2xl p-10 text-center max-w-sm w-full mx-4" style={cardStyle}>
-          <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-6" style={{ backgroundColor: "oklch(var(--electric) / 0.15)" }}>
-            <ShieldCheck className="w-7 h-7" style={{ color: "oklch(var(--electric))" }} />
-          </div>
-          <h1 className="text-2xl font-bold text-white mb-2">Admin Login</h1>
-          <p className="text-sm mb-8" style={{ color: "oklch(0.65 0.03 258)" }}>Access the HireNest admin dashboard.</p>
-          <button
-            type="button"
-            onClick={() => setIsLoggedIn(true)}
-            className="w-full font-semibold text-white py-3 rounded-xl transition hover:opacity-90"
-            style={{ backgroundColor: "oklch(var(--electric))" }}
-          >
-            Login to Dashboard
-          </button>
-        </div>
-      </div>
-    );
+if (authLoading) {
+  return createElement("div", { className: "min-h-screen flex items-center justify-center", style: bgStyle }, createElement(Loader2, { className: "w-8 h-8 animate-spin", style: { color: "oklch(var(--electric))" } }));
+}
+
+  if (!user) {
+    const handleLogin = async (e: any) => {
+      e.preventDefault();
+      setLoginError("");
+      setLoginSubmitting(true);
+      try {
+        await login(email, password);
+      } catch (err: any) {
+        setLoginError("Invalid email or password.");
+      }
+      setLoginSubmitting(false);
+    };
+
+    return createElement("div", { className: "min-h-screen flex items-center justify-center", style: bgStyle },
+                         createElement("div", { className: "rounded-2xl p-10 text-center max-w-sm w-full mx-4", style: cardStyle },
+                                       createElement("div", { className: "w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-6", style: { backgroundColor: "oklch(var(--electric) / 0.15)" } },
+                                                     createElement(ShieldCheck, { className: "w-7 h-7", style: { color: "oklch(var(--electric))" } })
+                                                     ),
+                                       createElement("h1", { className: "text-2xl font-bold text-white mb-2" }, "Admin Login"),
+                                       createElement("p", { className: "text-sm mb-8", style: { color: "oklch(0.65 0.03 258)" } }, "Access the HireNest admin dashboard."),
+                                       createElement("form", { onSubmit: handleLogin, className: "text-left space-y-4" },
+                                                     createElement("input", { type: "email", placeholder: "Email", value: email, onChange: (e: any) => setEmail(e.target.value), required: true, className: "w-full p-3 rounded-md text-white bg-transparent border", style: { borderColor: "oklch(0.3 0.04 258)" } }),
+                                                     createElement("input", { type: "password", placeholder: "Password", value: password, onChange: (e: any) => setPassword(e.target.value), required: true, className: "w-full p-3 rounded-md text-white bg-transparent border", style: { borderColor: "oklch(0.3 0.04 258)" } }),
+                                                     loginError ? createElement("p", { className: "text-sm", style: { color: "oklch(0.7 0.2 25)" } }, loginError) : null,
+                                                     createElement("button", { type: "submit", disabled: loginSubmitting, className: "w-full font-semibold text-white py-3 rounded-xl transition hover:opacity-90", style: { backgroundColor: "oklch(var(--electric))" } }, loginSubmitting ? "Signing in..." : "Login to Dashboard")
+                                                     )
+                                       )
+                         );
   }
 
   return (
@@ -113,7 +131,7 @@ export default function Admin() {
           <ShieldCheck className="w-6 h-6" style={{ color: "oklch(var(--electric))" }} />
           <span className="text-white font-bold text-lg">HireNest Admin</span>
         </div>
-        <button type="button" onClick={() => setIsLoggedIn(false)} className="flex items-center gap-2 text-gray-300 hover:text-white text-sm transition">
+        <button type="button" onClick={() => logout()} className="flex items-center gap-2 text-gray-300 hover:text-white text-sm transition">
           <LogOut className="w-4 h-4" /> Logout
         </button>
       </header>
