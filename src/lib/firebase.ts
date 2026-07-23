@@ -1,6 +1,7 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+import { getAuth } from "firebase/auth";
 
 // All values come from Vite env vars — see .env.example.
 // Get the exact values from Firebase Console > Project settings >
@@ -25,3 +26,4 @@ export const firebaseApp = getApps().length ? getApp() : initializeApp(firebaseC
 
 export const db = getFirestore(firebaseApp, FIRESTORE_DATABASE_ID);
 export const storage = getStorage(firebaseApp);
+export const auth = getAuth(firebaseApp);
