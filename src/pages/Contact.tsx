@@ -9,7 +9,13 @@ import {
   Phone,
 } from "lucide-react";
 import { toast } from "sonner";
-import { addRecord, queueEmail } from "../lib/db";
+import { addRecord } from "../lib/db";
+import emailjs from "@emailjs/browser";
+
+const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID as string;
+const EMAILJS_CONTACT_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_CONTACT_TEMPLATE_ID as string;
+const EMAILJS_AUTOREPLY_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_AUTOREPLY_TEMPLATE_ID as string;
+const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY as string;
 
 export default function Contact() {
   const [form, setForm] = useState({
@@ -50,17 +56,35 @@ ${form.message}
     try {
       await addRecord("contact_forms", payload);
 
-      try {
-        await queueEmail({
-          to:
-            (import.meta.env.VITE_NOTIFICATION_EMAIL as string) ||
-            "gopal@hirenestworkforce.com",
-          subject: `HireNest — New Contact Form Message (${intent})`,
-          text: `Name: ${form.name}\nEmail: ${form.email}\nCompany: ${form.company}\nLooking for: ${intent}\n\nMessage:\n${form.message}`,
-        });
-      } catch (err) {
-        console.error("Email failed:", err);
-      }
+try {
+          // Alert email to the HireNest team ("Contact Us" EmailJS template)
+          await emailjs.send(
+                      EMAILJS_SERVICE_ID,
+                      EMAILJS_CONTACT_TEMPLATE_ID,
+            {
+                          title: intent,
+                          name: form.name,
+                          email: form.email,
+                          subject: `New Contact Form Message (${intent})`,
+                          message: `Company: ${form.company}\nLooking for: ${intent}\n\nMessage:\n${form.message}`,
+            },
+                      EMAILJS_PUBLIC_KEY
+                    );
+
+          // Auto-reply email back to the person who submitted the form
+          await emailjs.send(
+                      EMAILJS_SERVICE_ID,
+                      EMAILJS_AUTOREPLY_TEMPLATE_ID,
+            {
+                          title: intent,
+                          name: form.name,
+                          email: form.email,
+            },
+                      EMAILJS_PUBLIC_KEY
+                    );
+} catch (err) {
+          console.error("Email failed:", err);
+}
 
       setSuccess(true);
       toast.success("Message sent! We'll be in touch within 24 hours.");
