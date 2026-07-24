@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut, type User } from "firebase/auth";
+import { onAuthStateChanged, signInWithEmailAndPassword, signInWithRedirect, getRedirectResult, GoogleAuthProvider, signOut, type User } from "firebase/auth";
 import { auth } from "./firebase";
 
 // Only accounts on this email domain may access the admin area.
@@ -13,6 +13,20 @@ function isAllowedAdminEmail(email: string | null | undefined): boolean {
 export function useAdminAuth() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [googleError, setGoogleError] = useState("");
+
+useEffect(() => {
+  getRedirectResult(auth)
+  .then((result) => {
+    if (result && !isAllowedAdminEmail(result.user.email)) {
+      signOut(auth);
+      setGoogleError("Access restricted to HireNest admins only.");
+    }
+  })
+  .catch((err: any) => {
+    setGoogleError(err && err.message ? err.message : "Google sign-in failed.");
+  });
+}, []);
 
 useEffect(() => {
   const unsubscribe = onAuthStateChanged(auth, (u) => {
@@ -38,17 +52,13 @@ const login = async (email: string, password: string) => {
 };
 
 const loginWithGoogle = async () => {
+  setGoogleError("");
   const provider = new GoogleAuthProvider();
   provider.setCustomParameters({ hd: ALLOWED_ADMIN_DOMAIN });
-  const result = await signInWithPopup(auth, provider);
-  if (!isAllowedAdminEmail(result.user.email)) {
-    await signOut(auth);
-    throw new Error("Access restricted to HireNest admins only.");
-  }
-  return result;
+  await signInWithRedirect(auth, provider);
 };
 
 const logout = () => signOut(auth);
 
-return { user, loading, login, loginWithGoogle, logout };
+return { user, loading, login, loginWithGoogle, logout, googleError };
 }
