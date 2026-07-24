@@ -4,7 +4,7 @@ import SEO from "../components/SEO";
 import { useAdminAuth } from "../lib/useAdminAuth";
 
 export default function AdminJobs() {
-  const { user, loading: authLoading, login, loginWithGoogle } = useAdminAuth();
+  const { user, loading: authLoading, login, loginWithGoogle, googleError } = useAdminAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
@@ -63,10 +63,12 @@ const handleGoogleLogin = async () => {
   try {
     await loginWithGoogle();
   } catch (err: any) {
-    setLoginError(err && err.message === "Access restricted to HireNest admins only." ? err.message : "Google sign-in failed.");
+    setLoginError(err && err.message ? err.message : "Google sign-in failed.");
+    setGoogleSubmitting(false);
   }
-  setGoogleSubmitting(false);
 };
+
+const displayError = loginError || googleError;
 
 if (authLoading) {
   return createElement("div", { className: "pt-[72px] p-6" }, createElement("p", null, "Loading..."));
@@ -79,7 +81,7 @@ if (!user) {
                        createElement("form", { onSubmit: handleLogin, className: "space-y-4" },
                                      createElement("input", { type: "email", placeholder: "Email", className: "w-full p-3 border rounded-md", value: email, onChange: (e: any) => setEmail(e.target.value), required: true }),
                                      createElement("input", { type: "password", placeholder: "Password", className: "w-full p-3 border rounded-md", value: password, onChange: (e: any) => setPassword(e.target.value), required: true }),
-                                     loginError ? createElement("p", { className: "text-red-600 text-sm" }, loginError) : null,
+                                     displayError ? createElement("p", { className: "text-red-600 text-sm" }, displayError) : null,
                                      createElement("button", { type: "submit", disabled: loginSubmitting, className: "w-full px-6 py-3 bg-green-600 text-white rounded-md" }, loginSubmitting ? "Signing in..." : "Login")
                                      ),
                        createElement("div", { className: "flex items-center gap-3 my-4" },
@@ -94,7 +96,7 @@ if (!user) {
                          className: "w-full flex items-center justify-center gap-2 px-6 py-3 border rounded-md bg-white text-gray-700 font-medium"
                        },
                                      createElement("img", { src: "https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg", alt: "", className: "w-5 h-5" }),
-                                     googleSubmitting ? "Signing in..." : "Sign in with Google"
+                                     googleSubmitting ? "Redirecting..." : "Sign in with Google"
                                      )
                        );
 }
