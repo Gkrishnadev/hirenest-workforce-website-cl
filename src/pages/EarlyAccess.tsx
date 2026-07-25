@@ -1,3 +1,4 @@
+import SEO from "../components/SEO";
 import { useState, useEffect, useCallback } from "react";
 import { addRecord, findByField, queueEmail } from "../lib/db";
 import { validateEmail, isRoleBasedEmail } from "../utils/emailValidation";
@@ -222,6 +223,7 @@ export default function EarlyAccess() {
       <Layout>
         <div className="fixed inset-0 bg-slate-950 z-50 overflow-y-auto">
           <div className="min-h-screen flex items-center justify-center p-6">
+      <SEO title="Early Access | HireNest OS" description="Get exclusive early access to our upcoming technology platforms and IT management tools at HireNest Workforce." path="/early-access" />
             <div className="max-w-lg w-full text-center">
               <button onClick={closeForm} className="absolute top-6 right-6 text-gray-400 hover:text-white">
                 <XCircle className="w-8 h-8" />
