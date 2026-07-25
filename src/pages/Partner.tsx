@@ -1,3 +1,4 @@
+import SEO from "../components/SEO";
 import { useState } from "react";
 import { 
   CheckCircle2, 
@@ -172,6 +173,7 @@ export default function Partner() {
 
   return (
     <div className="pt-[72px] bg-slate-950 min-h-screen">
+      <SEO title="Technology Partnerships | HireNest Workforce" description="Become a strategic technology partner with HireNest Workforce to co-create digital solutions and expand your IT service capabilities." path="/partner" />
 
       {/* HERO */}
       <section 
