@@ -28,6 +28,7 @@ import HireDevelopers from "./pages/HireDevelopers";
 import EarlyAccess from "./pages/EarlyAccess";
 import Industries from "./pages/Industries";
 import TechnologyStack from "./pages/TechnologyStack";
+import ITConsulting from "./pages/ITConsulting";
 
 // ================= ROOT ROUTE WITH HEADER/FOOTER =================
 
@@ -148,6 +149,12 @@ const technologyStackRoute = createRoute({
   component: TechnologyStack,
 });
 
+const itConsultingRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/it-consulting",
+  component: ITConsulting,
+});
+
 // ================= ROUTE TREE =================
 
 const routeTree = rootRoute.addChildren([
@@ -168,6 +175,7 @@ const routeTree = rootRoute.addChildren([
   earlyAccessRoute,
   industriesRoute,
   technologyStackRoute,
+   itConsultingRoute, 
 ]);
 
 const router = createRouter({ routeTree });
