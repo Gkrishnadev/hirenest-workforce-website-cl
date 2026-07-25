@@ -34,11 +34,7 @@ export default function Careers() {
     <div className="pt-[72px]">
 
       {/* SEO */}
-      <SEO
-        title="Careers at HireNest Workforce | We're Hiring 🚀"
-        description="Explore open positions at HireNest Workforce."
-        path="/careers"
-      />
+      <SEO title="Careers in IT & Software Development | HireNest Workforce" description="Join our team of technology experts. Explore exciting career opportunities in software engineering, IT consulting, and project management." path="/careers" />
 
       {/* HERO */}
       <section className="py-20 text-center bg-gray-900">
