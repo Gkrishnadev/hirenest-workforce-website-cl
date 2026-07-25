@@ -9,15 +9,27 @@
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.hirenestworkforce.com/software-development</loc>
-    <priority>0.9</priority>
-  </url>
-  <url>
     <loc>https://www.hirenestworkforce.com/services</loc>
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://www.hirenestworkforce.com/industries</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.hirenestworkforce.com/technology-stack</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.hirenestworkforce.com/vendor-network</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://www.hirenestworkforce.com/vendors</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.hirenestworkforce.com/hire-developers-india</loc>
     <priority>0.8</priority>
   </url>
   <url>
@@ -29,7 +41,19 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.hirenestworkforce.com/partner</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.hirenestworkforce.com/careers</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.hirenestworkforce.com/contact</loc>
     <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.hirenestworkforce.com/early-access</loc>
+    <priority>0.6</priority>
   </url>
 </urlset>
