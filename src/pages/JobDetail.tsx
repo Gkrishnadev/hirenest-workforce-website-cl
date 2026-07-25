@@ -1,3 +1,4 @@
+import SEO from "../components/SEO";
 import { useParams, useNavigate } from "@tanstack/react-router";
 
 export default function JobDetail() {
@@ -31,6 +32,7 @@ Requirements:
 
   return (
     <div className="pt-[72px] p-6 max-w-3xl mx-auto">
+      <SEO title="Job Details | HireNest Workforce" description="View job requirements and apply for open positions at HireNest Workforce." path="/jobs" />
 
       <h1 className="text-3xl font-bold mb-4">
         {job.title}
