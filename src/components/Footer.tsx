@@ -1,4 +1,4 @@
-// src/components/Footer.jsx
+// src/components/Footer.tsx
 import { Link } from "@tanstack/react-router";
 import { Mail, Phone, MapPin, Linkedin } from "lucide-react";
 
@@ -52,6 +52,7 @@ export default function Footer() {
               Technology Services
             </h4>
             <ul className="space-y-3">
+              <li><Link to="/it-consulting" className="text-sm text-gray-400 hover:text-white transition-colors">IT Consulting</Link></li>
               <li><Link to="/services" className="text-sm text-gray-400 hover:text-white transition-colors">Software Development</Link></li>
               <li><Link to="/services" className="text-sm text-gray-400 hover:text-white transition-colors">AI Solutions</Link></li>
               <li><Link to="/technology-stack" className="text-sm text-gray-400 hover:text-white transition-colors">Technology Stack</Link></li>
