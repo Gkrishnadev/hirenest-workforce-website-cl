@@ -28,11 +28,7 @@ const consultingServices = [
 export default function ITConsulting() {
   return (
     <div className="min-h-screen bg-[#0B0F1A]">
-      <SEO
-        title="IT Consulting & Technology Advisory India — HireNest Workforce"
-        description="HireNest Workforce offers premier IT consulting services, guiding businesses through digital transformation, cloud migrations, and scalable IT infrastructure."
-        path="/it-consulting"
-      />
+      <SEO title="IT Consulting & Technology Advisory Services India | HireNest Workforce" description="Expert IT consulting, cloud strategy, and digital transformation advisory services. HireNest Workforce helps modernize your IT infrastructure." path="/it-consulting" />
 
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 overflow-hidden">
@@ -138,6 +134,93 @@ export default function ITConsulting() {
             </div>
           </div>
         </div>
+      </section>
+
+      
+      {/* FAQ Section */}
+      <section className="py-20 bg-[#0B0F1A]">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-white">
+              Frequently Asked Questions
+            </h2>
+          </div>
+          
+          <div className="space-y-6">
+            <div className="bg-white/5 border border-white/10 p-6 rounded-2xl">
+              <h3 className="text-xl font-semibold text-white mb-3">What does an IT consulting firm do?</h3>
+              <p className="text-gray-400">
+                An IT consulting firm helps organizations align their technology strategy with business goals. At HireNest Workforce, we assess your current infrastructure, identify inefficiencies, design scalable solutions (like cloud migrations or digital transformations), and guide the execution to ensure long-term ROI.
+              </p>
+            </div>
+            
+            <div className="bg-white/5 border border-white/10 p-6 rounded-2xl">
+              <h3 className="text-xl font-semibold text-white mb-3">How much does IT consulting cost in India?</h3>
+              <p className="text-gray-400">
+                IT consulting costs in India vary significantly based on the scope, complexity, and duration of the engagement. We offer flexible engagement models, including fixed-bid for specific projects and time-and-materials for ongoing advisory, ensuring cost-effectiveness without compromising quality.
+              </p>
+            </div>
+            
+            <div className="bg-white/5 border border-white/10 p-6 rounded-2xl">
+              <h3 className="text-xl font-semibold text-white mb-3">What IT consulting services does HireNest Workforce provide?</h3>
+              <p className="text-gray-400">
+                HireNest Workforce offers software development strategy, digital transformation roadmaps, cloud infrastructure planning, cybersecurity audits, and managed IT solutions to modernize your operations.
+              </p>
+            </div>
+            
+            <div className="bg-white/5 border border-white/10 p-6 rounded-2xl">
+              <h3 className="text-xl font-semibold text-white mb-3">What industries does HireNest Workforce serve?</h3>
+              <p className="text-gray-400">
+                We serve a wide range of industries including healthcare, finance, retail, and manufacturing, providing tailored IT consulting and technology solutions to meet industry-specific compliance and operational challenges.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* FAQ Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": [
+                {
+                  "@type": "Question",
+                  "name": "What does an IT consulting firm do?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "An IT consulting firm helps organizations align their technology strategy with business goals. At HireNest Workforce, we assess your current infrastructure, identify inefficiencies, design scalable solutions (like cloud migrations or digital transformations), and guide the execution to ensure long-term ROI."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "How much does IT consulting cost in India?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "IT consulting costs in India vary significantly based on the scope, complexity, and duration of the engagement. We offer flexible engagement models, including fixed-bid for specific projects and time-and-materials for ongoing advisory, ensuring cost-effectiveness without compromising quality."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What IT consulting services does HireNest Workforce provide?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "HireNest Workforce offers software development strategy, digital transformation roadmaps, cloud infrastructure planning, cybersecurity audits, and managed IT solutions to modernize your operations."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What industries does HireNest Workforce serve?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "We serve a wide range of industries including healthcare, finance, retail, and manufacturing, providing tailored IT consulting and technology solutions to meet industry-specific compliance and operational challenges."
+                  }
+                }
+              ]
+            })
+          }}
+        />
       </section>
 
       {/* CTA Section */}
