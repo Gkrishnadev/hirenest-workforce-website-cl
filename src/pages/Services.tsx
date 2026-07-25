@@ -78,11 +78,7 @@ const whyHireNest = [
 export default function Services() {
   return (
     <div className="min-h-screen bg-[#0B0F1A]">
-      <SEO
-        title="Services | Staffing, Software Development & AI Solutions — HireNest Workforce"
-        description="HireNest Workforce delivers workforce solutions and technology solutions — staffing, custom software development, and AI solutions under one partner."
-        path="/services"
-      />
+      <SEO title="Software Development & IT Managed Services | HireNest Workforce" description="Explore our technology services, including custom software development, AI solutions, and managed IT services tailored for your business needs." path="/services" />
 
       {/* Hero - Premium Dark */}
       <section className="relative pt-32 pb-20 overflow-hidden">
