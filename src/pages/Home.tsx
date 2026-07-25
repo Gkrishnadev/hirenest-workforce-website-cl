@@ -1,4 +1,5 @@
 // src/pages/Home.jsx
+import SEO from "../components/SEO";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { 
   ArrowRight,
@@ -156,6 +157,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#0B0F1A] text-white font-sans selection:bg-cyan-500/30">
+      <SEO title="HireNest Workforce | IT Consulting & Technology Services India" description="HireNest Workforce is a premier IT consulting and technology services company in India, offering software development, digital transformation, and managed IT solutions." path="/" />
       
       {/* HERO SECTION - HireNest Workforce Primary */}
       <section className="relative min-h-screen flex items-center overflow-hidden pt-20">
