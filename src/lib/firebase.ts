@@ -22,8 +22,27 @@ const FIRESTORE_DATABASE_ID =
   (import.meta.env.VITE_FIREBASE_DATABASE_ID as string) ||
   "hirenestwebsiteleads";
 
-export const firebaseApp = getApps().length ? getApp() : initializeApp(firebaseConfig);
+let app, dbInstance, storageInstance, authInstance;
 
-export const db = getFirestore(firebaseApp, FIRESTORE_DATABASE_ID);
-export const storage = getStorage(firebaseApp);
-export const auth = getAuth(firebaseApp);
+if (firebaseConfig.apiKey && firebaseConfig.apiKey !== 'undefined' && firebaseConfig.apiKey !== 'null' && firebaseConfig.apiKey !== '') {
+  app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+  dbInstance = getFirestore(app, FIRESTORE_DATABASE_ID);
+  storageInstance = getStorage(app);
+  authInstance = getAuth(app);
+} else {
+  console.warn("Firebase API Key is missing. Firebase services are disabled.");
+  // Mock implementations to avoid crashing when imported
+  app = {} as any;
+  dbInstance = {} as any;
+  storageInstance = {} as any;
+  authInstance = {
+    onAuthStateChanged: () => () => {},
+    signOut: async () => {},
+    currentUser: null,
+  } as any;
+}
+
+export const firebaseApp = app;
+export const db = dbInstance;
+export const storage = storageInstance;
+export const auth = authInstance;
