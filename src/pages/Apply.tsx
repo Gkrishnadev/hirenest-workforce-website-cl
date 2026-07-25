@@ -1,3 +1,4 @@
+import SEO from "../components/SEO";
 import { useSearch } from "@tanstack/react-router";
 import { useState } from "react";
 import { addRecord, uploadFile } from "../lib/db";
@@ -117,6 +118,7 @@ export default function Apply() {
 
   return (
     <div className="pt-[72px] p-6 max-w-xl mx-auto">
+      <SEO title="Apply Now | HireNest Workforce" description="Apply for IT and software development positions at HireNest Workforce." path="/apply" />
       <h1 className="text-3xl font-bold mb-6">
         Apply for {role}
       </h1>
