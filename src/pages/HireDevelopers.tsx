@@ -36,11 +36,7 @@ const benefits = [
 export default function HireDevelopers() {
   return (
     <div className="min-h-screen bg-[#0B0F1A]">
-      <SEO
-        title="Hire Developers in India | IT Staffing Company | HireNest Workforce"
-        description="Hire developers in India including React, Angular, Node.js, Java, DevOps, AI/ML, SAP, Salesforce and more Niche IT Hiring. HireNest is a leading IT staffing company in India delivering top tech talent fast."
-        path="/hire-developers-india"
-      />
+      <SEO title="Hire Dedicated Developers in India | HireNest Workforce" description="Scale your engineering team. Hire pre-vetted, dedicated software developers and IT professionals from India through HireNest Workforce." path="/hire-developers-india" />
 
       {/* Hero - Premium Dark */}
       <section className="relative pt-32 pb-20 overflow-hidden">
