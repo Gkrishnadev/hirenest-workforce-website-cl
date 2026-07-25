@@ -1,3 +1,4 @@
+import SEO from "../components/SEO";
 import { useState, useEffect } from "react";
 import { Bell, Loader2, LogOut, ShieldCheck } from "lucide-react";
 import { listRecords, type VendorApplication, type PartnerApplication, type RequirementSubmission, type ContactForm } from "../lib/db";
@@ -126,6 +127,7 @@ if (authLoading) {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "oklch(0.12 0.03 258)" }}>
+      <SEO title="Admin Dashboard | HireNest Workforce" description="HireNest Workforce Administration Dashboard." path="/admin" />
       <header className="sticky top-0 z-40 px-6 py-4 flex items-center justify-between" style={{ backgroundColor: "oklch(var(--navy))", borderBottom: "1px solid oklch(0.25 0.05 258)" }}>
         <div className="flex items-center gap-3">
           <ShieldCheck className="w-6 h-6" style={{ color: "oklch(var(--electric))" }} />
