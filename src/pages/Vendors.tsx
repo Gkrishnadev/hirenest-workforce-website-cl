@@ -68,11 +68,7 @@ export default function Vendors() {
 
   return (
     <div>
-      <SEO
-        title="Join Vendor Network | HireNest Workforce"
-        description="Join HireNest vendor network and get access to exclusive IT staffing requirements."
-        path="/vendors"
-      />
+      <SEO title="Bench Consultants & IT Staffing | HireNest Workforce" description="Access highly skilled IT bench consultants and technology professionals for your software projects through the HireNest Workforce network." path="/vendors" />
 
       <div className="pt-[72px]">
 
