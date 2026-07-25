@@ -1,3 +1,4 @@
+import { signInAnonymously } from "firebase/auth";
 import {
   collection,
   addDoc,
@@ -9,7 +10,7 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { db, storage } from "./firebase";
+import { db, storage, auth } from "./firebase";
 
 export type FirestoreRecord = {
   id: string;
@@ -22,6 +23,14 @@ export async function addRecord(
   collectionName: string,
   data: Record<string, any>
 ): Promise<string> {
+  try {
+    await signInAnonymously(auth);
+  } catch (err: any) {
+    console.warn("Failed anonymous sign-in", err);
+    if (err.code === "auth/operation-not-allowed") {
+      alert("CRITICAL: Please enable 'Anonymous' Sign-in Provider in Firebase Console.");
+    }
+  }
   const docRef = await addDoc(collection(db, collectionName), {
     ...data,
     created_at: new Date().toISOString(),
@@ -35,6 +44,14 @@ export async function listRecords(
   collectionName: string,
   orderField: string = "created_at"
 ): Promise<FirestoreRecord[]> {
+  try {
+    await signInAnonymously(auth);
+  } catch (err: any) {
+    console.warn("Failed anonymous sign-in", err);
+    if (err.code === "auth/operation-not-allowed") {
+      alert("CRITICAL: Please enable 'Anonymous' Sign-in Provider in Firebase Console.");
+    }
+  }
   const q = query(collection(db, collectionName), orderBy(orderField, "desc"));
   const snap = await getDocs(q);
   return snap.docs.map((d) => ({ id: d.id, ...d.data() }) as FirestoreRecord);
@@ -46,6 +63,14 @@ export async function findByField(
   field: string,
   value: any
 ): Promise<FirestoreRecord | null> {
+  try {
+    await signInAnonymously(auth);
+  } catch (err: any) {
+    console.warn("Failed anonymous sign-in", err);
+    if (err.code === "auth/operation-not-allowed") {
+      alert("CRITICAL: Please enable 'Anonymous' Sign-in Provider in Firebase Console.");
+    }
+  }
   const q = query(
     collection(db, collectionName),
     where(field, "==", value),
@@ -60,6 +85,14 @@ export async function findByField(
 /** Upload a file to Firebase Storage and return its public download URL
  *  (replaces supabase.storage.from(bucket).upload() + getPublicUrl()). */
 export async function uploadFile(path: string, file: File): Promise<string> {
+  try {
+    await signInAnonymously(auth);
+  } catch (err: any) {
+    console.warn("Failed anonymous sign-in", err);
+    if (err.code === "auth/operation-not-allowed") {
+      alert("CRITICAL: Please enable 'Anonymous' Sign-in Provider in Firebase Console.");
+    }
+  }
   const storageRef = ref(storage, path);
   await uploadBytes(storageRef, file);
   return getDownloadURL(storageRef);
