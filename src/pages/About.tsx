@@ -1,4 +1,5 @@
 // src/pages/About.tsx - HireNest Workforce Primary Positioning
+import SEO from "../components/SEO";
 import { Link } from "@tanstack/react-router";
 import { 
   Cpu, 
@@ -86,6 +87,7 @@ export default function About() {
 
   return (
     <div className="min-h-screen bg-[#0B0F1A] text-white overflow-hidden">
+      <SEO title="About Us | IT Consulting & Technology Leaders India | HireNest Workforce" description="Learn about HireNest Workforce, a leading IT consulting and technology solutions provider in India. Discover our mission to drive digital transformation." path="/about" />
       
       {/* HERO: HireNest Workforce Primary */}
       <section className="relative pt-32 pb-20">
