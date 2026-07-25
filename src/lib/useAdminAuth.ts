@@ -1,64 +1,81 @@
 import { useEffect, useState } from "react";
-import { onAuthStateChanged, signInWithEmailAndPassword, signInWithRedirect, getRedirectResult, GoogleAuthProvider, signOut, type User } from "firebase/auth";
-import { auth } from "./firebase";
+import emailjs from "@emailjs/browser";
 
-// Only accounts on this email domain may access the admin area.
-const ALLOWED_ADMIN_DOMAIN = "hirenestworkforce.com";
-
-function isAllowedAdminEmail(email: string | null | undefined): boolean {
-  if (!email) return false;
-  return email.toLowerCase().endsWith("@" + ALLOWED_ADMIN_DOMAIN);
-}
+const ALLOWED_ADMIN_EMAIL = "gopal@hirenestworkforce.com";
+const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID as string;
+const EMAILJS_CONTACT_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_CONTACT_TEMPLATE_ID as string;
+const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY as string;
 
 export function useAdminAuth() {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<{ email: string } | null>(null);
   const [loading, setLoading] = useState(true);
-  const [googleError, setGoogleError] = useState("");
 
-useEffect(() => {
-  getRedirectResult(auth)
-  .then((result) => {
-    if (result && !isAllowedAdminEmail(result.user.email)) {
-      signOut(auth);
-      setGoogleError("Access restricted to HireNest admins only.");
+  useEffect(() => {
+    const isAuth = localStorage.getItem("hirenest_admin_auth");
+    if (isAuth === "true") {
+      setUser({ email: ALLOWED_ADMIN_EMAIL });
     }
-  })
-  .catch((err: any) => {
-    setGoogleError(err && err.message ? err.message : "Google sign-in failed.");
-  });
-}, []);
-
-useEffect(() => {
-  const unsubscribe = onAuthStateChanged(auth, (u) => {
-    if (u && !isAllowedAdminEmail(u.email)) {
-      signOut(auth);
-      setUser(null);
-      setLoading(false);
-      return;
-    }
-    setUser(u);
     setLoading(false);
-  });
-  return unsubscribe;
-}, []);
+  }, []);
 
-const login = async (email: string, password: string) => {
-  const result = await signInWithEmailAndPassword(auth, email, password);
-  if (!isAllowedAdminEmail(result.user.email)) {
-    await signOut(auth);
-    throw new Error("Access restricted to HireNest admins only.");
-  }
-  return result;
-};
+  const sendOTP = async (email: string) => {
+    if (email.toLowerCase() !== ALLOWED_ADMIN_EMAIL.toLowerCase()) {
+      throw new Error("Unauthorized email address.");
+    }
+    
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    localStorage.setItem("hirenest_admin_otp", otp);
+    localStorage.setItem("hirenest_admin_otp_expiry", (Date.now() + 10 * 60 * 1000).toString()); // 10 mins
+    
+    await emailjs.send(
+      EMAILJS_SERVICE_ID,
+      EMAILJS_CONTACT_TEMPLATE_ID,
+      {
+        title: "Admin Login OTP",
+        name: "HireNest Admin",
+        email: ALLOWED_ADMIN_EMAIL,
+        subject: "Your HireNest Admin Login OTP",
+        message: `Your One-Time Password for admin login is: ${otp}\nThis code will expire in 10 minutes.`,
+      },
+      EMAILJS_PUBLIC_KEY
+    );
+    
+    return true;
+  };
+  
+  const verifyOTP = async (email: string, otp: string) => {
+    if (email.toLowerCase() !== ALLOWED_ADMIN_EMAIL.toLowerCase()) {
+      throw new Error("Unauthorized email address.");
+    }
+    
+    const savedOtp = localStorage.getItem("hirenest_admin_otp");
+    const expiry = localStorage.getItem("hirenest_admin_otp_expiry");
+    
+    if (!savedOtp || !expiry) {
+      throw new Error("No OTP requested or OTP expired.");
+    }
+    
+    if (Date.now() > parseInt(expiry)) {
+      localStorage.removeItem("hirenest_admin_otp");
+      localStorage.removeItem("hirenest_admin_otp_expiry");
+      throw new Error("OTP expired. Please request a new one.");
+    }
+    
+    if (otp !== savedOtp) {
+      throw new Error("Invalid OTP code.");
+    }
+    
+    localStorage.setItem("hirenest_admin_auth", "true");
+    localStorage.removeItem("hirenest_admin_otp");
+    localStorage.removeItem("hirenest_admin_otp_expiry");
+    setUser({ email: ALLOWED_ADMIN_EMAIL });
+    return true;
+  };
 
-const loginWithGoogle = async () => {
-  setGoogleError("");
-  const provider = new GoogleAuthProvider();
-  provider.setCustomParameters({ hd: ALLOWED_ADMIN_DOMAIN });
-  await signInWithRedirect(auth, provider);
-};
+  const logout = () => {
+    localStorage.removeItem("hirenest_admin_auth");
+    setUser(null);
+  };
 
-const logout = () => signOut(auth);
-
-return { user, loading, login, loginWithGoogle, logout, googleError };
+  return { user, loading, sendOTP, verifyOTP, logout, googleError: "" };
 }
