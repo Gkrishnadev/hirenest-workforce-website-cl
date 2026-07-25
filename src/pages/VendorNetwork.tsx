@@ -95,11 +95,7 @@ export default function VendorNetwork() {
   return (
     <div>
       {/* ✅ SEO */}
-      <SEO
-        title="Join Vendor Network | HireNest Workforce"
-        description="Join HireNest vendor network and access IT staffing requirements across India. Collaborate with top companies and grow your staffing business."
-        path="/vendor-network"
-      />
+      <SEO title="Join Our Vendor Network | HireNest Workforce" description="Partner with HireNest Workforce. We collaborate with trusted IT service providers and agencies to deliver exceptional technology solutions." path="/vendor-network" />
 
       <div className="pt-[72px]">
         {/* 🔥 HERO */}
