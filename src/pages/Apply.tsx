@@ -1,3 +1,5 @@
+import { signInAnonymously } from "firebase/auth";
+import { auth } from "../lib/firebase";
 import SEO from "../components/SEO";
 import { useSearch } from "@tanstack/react-router";
 import { useState } from "react";
@@ -22,6 +24,15 @@ export default function Apply() {
     setLoading(true);
 
     let resumeUrl = "";
+
+    try {
+      await signInAnonymously(auth);
+    } catch (err: any) {
+      console.warn("Failed to sign in anonymously. Upload may fail:", err);
+      if (err.code === "auth/operation-not-allowed") {
+        alert("CRITICAL: Please enable 'Anonymous' Sign-in Provider in Firebase Console.");
+      }
+    }
 
     try {
       // =====================================================
