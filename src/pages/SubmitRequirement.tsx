@@ -77,11 +77,7 @@ Contact Person: ${form.contactName}
 
   return (
     <div>
-      <SEO
-        title="Submit IT Requirement | HireNest Workforce"
-        description="Submit your IT staffing requirements and get matched with verified vendors across India within 24 hours."
-        path="/submit-requirement"
-      />
+      <SEO title="Submit IT Project Requirement | HireNest Workforce" description="Submit your software development or IT consulting project requirements and our experts will design a customized technology solution." path="/submit-requirement" />
 
       <div className="pt-[72px]">
 
