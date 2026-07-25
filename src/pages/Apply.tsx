@@ -1,4 +1,3 @@
-import { signInAnonymously } from "firebase/auth";
 import { auth } from "../lib/firebase";
 import SEO from "../components/SEO";
 import { useSearch } from "@tanstack/react-router";
@@ -25,21 +24,14 @@ export default function Apply() {
 
     let resumeUrl = "";
 
-    try {
-      await signInAnonymously(auth);
-    } catch (err: any) {
-      console.warn("Failed to sign in anonymously. Upload may fail:", err);
-      if (err.code === "auth/operation-not-allowed") {
-        alert("CRITICAL: Please enable 'Anonymous' Sign-in Provider in Firebase Console.");
-      }
-    }
+    
 
     try {
       // =====================================================
       // ✅ 1. UPLOAD RESUME
       // =====================================================
       if (resume) {
-        const filePath = `resumes/${Date.now()}-${resume.name}`;
+        const filePath = `Website leads/${Date.now()}-${resume.name}`;
 
         try {
           resumeUrl = await uploadFile(filePath, resume);
