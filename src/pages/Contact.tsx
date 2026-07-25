@@ -99,11 +99,7 @@ try {
 
   return (
     <div className="min-h-screen bg-[#0B0F1A]">
-      <SEO
-        title="Contact HireNest Workforce | IT Staffing Support"
-        description="Contact HireNest Workforce for IT staffing, vendor partnerships, and hiring solutions. Get response within 24 hours."
-        path="/contact"
-      />
+      <SEO title="Contact Us | HireNest Workforce IT Consulting" description="Get in touch with HireNest Workforce for expert IT consulting, software development, and technology advisory services in Hyderabad, India." path="/contact" />
 
       {/* Hero - Premium Dark */}
       <section className="relative pt-32 pb-20 overflow-hidden">
