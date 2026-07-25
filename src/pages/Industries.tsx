@@ -30,11 +30,7 @@ const industries = [
 export default function Industries() {
   return (
     <div className="min-h-screen bg-[#0B0F1A]">
-      <SEO
-        title="Industries We Serve | HireNest Workforce"
-        description="HireNest Workforce delivers staffing, software development, and AI solutions across Healthcare, Banking, Retail, Manufacturing, FinTech, EdTech, Logistics, and more."
-        path="/industries"
-      />
+      <SEO title="Industries We Serve | IT Consulting Solutions | HireNest Workforce" description="We provide specialized IT consulting and software development services for industries including healthcare, finance, retail, and manufacturing." path="/industries" />
 
       <section className="relative pt-32 pb-20 overflow-hidden">
         <div className="absolute inset-0 bg-[#0B0F1A]">
