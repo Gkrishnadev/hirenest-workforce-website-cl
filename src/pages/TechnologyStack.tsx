@@ -28,11 +28,7 @@ const stackGroups = [
 export default function TechnologyStack() {
   return (
     <div className="min-h-screen bg-[#0B0F1A]">
-      <SEO
-        title="Technology Stack | HireNest Workforce"
-        description="The technology stack HireNest Workforce builds with — React, Angular, Node.js, .NET, Python, Java, Flutter, Firebase, AWS, Azure, Google Cloud, OpenAI, Gemini, LangChain, Docker, Kubernetes, PostgreSQL, MongoDB, Redis."
-        path="/technology-stack"
-      />
+      <SEO title="Our Technology Stack | Modern IT Solutions | HireNest Workforce" description="Discover the modern technologies and frameworks we use to build scalable cloud solutions, web applications, and enterprise software." path="/technology-stack" />
 
       <section className="relative pt-32 pb-20 overflow-hidden">
         <div className="absolute inset-0 bg-[#0B0F1A]">
