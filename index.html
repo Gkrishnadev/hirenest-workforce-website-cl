@@ -6,38 +6,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- ================= TITLE ================= -->
-    <title>HireNest Workforce | IT Staffing & Vendor Network India</title>
+    <title>HireNest Workforce | IT Consulting, Services & Staffing in India</title>
 
     <!-- ================= SEO ================= -->
     <meta
       name="description"
-      content="HireNest Workforce connects companies with top IT developers, staffing vendors, and bench consultants across India. Hire faster with trusted talent."
+      content="HireNest Workforce is a premier IT consulting and services company in India. We provide software development, digital transformation, managed IT services, and elite IT staffing solutions."
     />
 
     <meta
       name="keywords"
-      content="IT staffing India, hire developers India, vendor network, bench sales, staffing Hyderabad, IT recruitment agency India"
+      content="IT consulting India, IT services company, software development, digital transformation, managed IT services, IT staffing India, hire developers India"
     />
 
     <meta name="author" content="HireNest Workforce" />
+    
+    <!-- Canonical link prevents duplicate content issues between www and non-www -->
+    <link rel="canonical" href="https://hirenestworkforce.com/" />
 
     <!-- ================= OPEN GRAPH (SOCIAL SHARING) ================= -->
-    <meta property="og:title" content="HireNest Workforce | IT Staffing India" />
+    <meta property="og:title" content="HireNest Workforce | IT Consulting & Services India" />
     <meta
       property="og:description"
-      content="Hire top developers and access India's growing vendor network with HireNest Workforce."
+      content="Premier IT consulting, software development, and staffing solutions for digital transformation."
     />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://hirenestworkforce.com" />
+    <meta property="og:url" content="https://hirenestworkforce.com/" />
     <meta property="og:image" content="https://hirenestworkforce.com/og-image.png" />
+    <meta property="og:site_name" content="HireNest Workforce" />
 
     <!-- ================= TWITTER ================= -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="HireNest Workforce" />
+    <meta name="twitter:title" content="HireNest Workforce | IT Consulting & Services" />
     <meta
       name="twitter:description"
-      content="Top IT staffing and vendor network platform in India."
+      content="Premier IT consulting, software development, and staffing solutions for digital transformation."
     />
+    <!-- Make sure you have this image uploaded in your public directory -->
+    <meta name="twitter:image" content="https://hirenestworkforce.com/og-image.png" />
 
     <!-- ================= FAVICON ================= -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -53,6 +59,60 @@
 
     <!-- ================= THEME COLOR ================= -->
     <meta name="theme-color" content="#0f172a" />
+
+    <!-- ================= STRUCTURED DATA (JSON-LD) ================= -->
+    <!-- This is what tells AI Engines and Google exactly who you are -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://hirenestworkforce.com/#organization",
+            "name": "HireNest Workforce",
+            "url": "https://hirenestworkforce.com/",
+            "logo": "https://hirenestworkforce.com/Logo.png",
+            "description": "Premier IT consulting, services, and staffing company based in India, specializing in software development, digital transformation, and vendor network solutions.",
+            "foundingDate": "2026",
+            "contactPoint": {
+              "@type": "ContactPoint",
+              "contactType": "customer support",
+              "email": "info@hirenestworkforce.com"
+            }
+          },
+          {
+            "@type": "LocalBusiness",
+            "@id": "https://hirenestworkforce.com/#localbusiness",
+            "name": "HireNest Workforce",
+            "image": "https://hirenestworkforce.com/og-image.png",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Hyderabad",
+              "addressCountry": "IN"
+            },
+            "url": "https://hirenestworkforce.com/"
+          },
+          {
+            "@type": "Service",
+            "@id": "https://hirenestworkforce.com/#it-consulting",
+            "name": "IT Consulting & Services",
+            "provider": {
+              "@id": "https://hirenestworkforce.com/#organization"
+            },
+            "description": "Expert IT consulting services including digital transformation, managed IT services, and software development."
+          },
+          {
+            "@type": "Service",
+            "@id": "https://hirenestworkforce.com/#it-staffing",
+            "name": "IT Staffing Solutions",
+            "provider": {
+              "@id": "https://hirenestworkforce.com/#organization"
+            },
+            "description": "Connecting companies with top IT developers, staffing vendors, and bench consultants across India."
+          }
+        ]
+      }
+    </script>
   </head>
 
   <body>
