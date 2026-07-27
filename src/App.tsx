@@ -14,6 +14,7 @@ import JobDetail from "./pages/JobDetail";
 import Careers from "./pages/Careers";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
+import CustomCursor from "./components/CustomCursor";
 import AdminJobs from "./pages/AdminJobs";
 import About from "./pages/About";
 import Admin from "./pages/Admin";
@@ -35,6 +36,7 @@ import ITConsulting from "./pages/ITConsulting";
 const rootRoute = createRootRoute({
   component: () => (
     <div className="min-h-screen flex flex-col bg-[#0B0F1A]">
+      <CustomCursor />
       <Header />
       <main className="flex-1">
         <Outlet />
@@ -175,7 +177,7 @@ const routeTree = rootRoute.addChildren([
   earlyAccessRoute,
   industriesRoute,
   technologyStackRoute,
-   itConsultingRoute, 
+  itConsultingRoute,
 ]);
 
 const router = createRouter({ routeTree });

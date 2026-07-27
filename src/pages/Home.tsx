@@ -196,10 +196,10 @@ export default function Home() {
               </div>
 
               <div className="space-y-2">
-                <div className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.05] tracking-tight">
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.05] tracking-tight">
                   Building <TextLoop className="text-blue-400" interval={2500}>{["Teams.", "Careers.", "Startups.", "Enterprises."]}</TextLoop><br />
                   Building <TextLoop className="text-cyan-400" interval={2500}>{["Technology.", "Teams.", "Futures.", "Solutions."]}</TextLoop>
-                </div>
+                </h1>
                 <p className="text-2xl sm:text-3xl lg:text-4xl text-gray-400 font-light">
                   Your Trusted Technology Workforce Partner
                 </p>
