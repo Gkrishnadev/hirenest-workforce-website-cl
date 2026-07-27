@@ -11,12 +11,13 @@
   --electric: 0.65 0.25 260;
   --electric-light: 0.75 0.18 260;
 
-  --surface: 0.98 0.01 255;
-  --background: 1 0 0;
-  --foreground: 0.20 0.04 260;
-  --border: 0.85 0.02 255;
+  /* Premium Dark Theme */
+  --surface: 0.18 0.02 260;     /* Darker surface */
+  --background: 0.12 0.02 260;  /* Very dark background */
+  --foreground: 0.98 0.01 260;  /* Off-white text */
+  --border: 0.25 0.02 260;      /* Subtle dark borders */
 
-  --text-muted: 0.55 0.02 255;
+  --text-muted: 0.75 0.02 260;  /* Muted light text */
 
   --radius: 0.75rem;
 }
@@ -141,4 +142,14 @@ input, textarea, select {
 /* Fix scroll position when clicking menu */
 section {
   scroll-margin-top: 80px;
+}
+
+/* Hide default cursor on desktop for custom cursor */
+@media (pointer: fine) {
+  body {
+    cursor: none;
+  }
+  a, button, input, textarea, select {
+    cursor: none;
+  }
 }
