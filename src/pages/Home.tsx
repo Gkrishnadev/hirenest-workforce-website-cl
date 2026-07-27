@@ -26,6 +26,11 @@ import {
   Zap
 } from "lucide-react";
 import { useState, useEffect } from "react";
+import { InView } from "../components/ui/in-view";
+import { TextEffect } from "../components/ui/text-effect";
+import { Tilt } from "../components/ui/tilt";
+import { TextLoop } from "../components/ui/text-loop";
+import { BorderBeam } from "../components/ui/border-beam";
 
 // Capabilities - What HireNest Workforce delivers (powered by OS)
 const workforceCapabilities = [
@@ -109,21 +114,27 @@ const testimonials = [
     name: "Sarah Chen",
     title: "VP of Engineering",
     company: "Arcline AI",
-    metric: "60% faster hiring"
+    metric: "60% faster hiring",
+    image: "https://i.pravatar.cc/150?u=sarah",
+    logo: "https://ui-avatars.com/api/?name=Arcline+AI&background=0D8ABC&color=fff&rounded=true&bold=true"
   },
   {
     quote: "Finally, a staffing partner that treats vendors as partners. Qualified reqs, transparent process, all powered by their HireNest OS platform.",
     name: "Marcus O'Brien",
     title: "CEO",
     company: "NovaStaff Solutions",
-    metric: "3x submission rate"
+    metric: "3x submission rate",
+    image: "https://i.pravatar.cc/150?u=marcus",
+    logo: "https://ui-avatars.com/api/?name=NovaStaff&background=10B981&color=fff&rounded=true&bold=true"
   },
   {
     quote: "The AI matching is scary good. HireNest Workforce suggested candidates we would have missed entirely. Their OS truly delivers.",
     name: "Priya Nair",
     title: "Head of Talent",
     company: "MedCore Health",
-    metric: "94% interview conversion"
+    metric: "94% interview conversion",
+    image: "https://i.pravatar.cc/150?u=priya",
+    logo: "https://ui-avatars.com/api/?name=MedCore&background=F43F5E&color=fff&rounded=true&bold=true"
   }
 ];
 
@@ -185,17 +196,20 @@ export default function Home() {
               </div>
 
               <div className="space-y-2">
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.05] tracking-tight">
-                  Building Teams.<br />Building Technology.
-                </h1>
+                <div className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.05] tracking-tight">
+                  Building <TextLoop className="text-blue-400" interval={2500}>{["Teams.", "Careers.", "Startups.", "Enterprises."]}</TextLoop><br />
+                  Building <TextLoop className="text-cyan-400" interval={2500}>{["Technology.", "Teams.", "Futures.", "Solutions."]}</TextLoop>
+                </div>
                 <p className="text-2xl sm:text-3xl lg:text-4xl text-gray-400 font-light">
                   Your Trusted Technology Workforce Partner
                 </p>
               </div>
 
-              <p className="text-xl text-gray-400 leading-relaxed max-w-xl">
-                We help organizations hire exceptional talent, build scalable software, and accelerate digital transformation through AI-powered solutions.
-              </p>
+              <InView variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } }} transition={{ duration: 0.5, delay: 0.8 }}>
+                <p className="text-xl text-gray-400 leading-relaxed max-w-xl">
+                  We help organizations hire exceptional talent, build scalable software, and accelerate digital transformation through AI-powered solutions.
+                </p>
+              </InView>
 
               {/* OS Badge */}
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10">
@@ -204,30 +218,27 @@ export default function Home() {
               </div>
 
               <div className="flex flex-col sm:flex-row flex-wrap gap-4">
-                <button
-                  onClick={() => navigate({ to: "/hire-developers-india" })}
+                <Link to={"/hire-developers-india"}
                   className="group relative px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl font-semibold text-white shadow-2xl shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all duration-300 hover:-translate-y-1 overflow-hidden flex items-center justify-center gap-3"
                 >
                   <Sparkles className="w-5 h-5" />
                   <span>Hire Talent</span>
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </button>
+                </Link>
 
-                <button
-                  onClick={() => navigate({ to: "/services" })}
+                <Link to={"/services"}
                   className="px-8 py-4 rounded-2xl font-semibold text-white border-2 border-white/20 hover:bg-white/10 hover:border-white/40 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 flex items-center justify-center gap-2"
                 >
                   <Code2 className="w-5 h-5" />
                   <span>Build Software</span>
-                </button>
+                </Link>
 
-                <button
-                  onClick={() => navigate({ to: "/contact" })}
+                <Link to={"/contact"}
                   className="px-8 py-4 rounded-2xl font-semibold text-white border-2 border-white/20 hover:bg-white/10 hover:border-white/40 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 flex items-center justify-center gap-2"
                 >
                   <Play className="w-5 h-5" />
                   <span>Book a Consultation</span>
-                </button>
+                </Link>
               </div>
 
               {/* Trust Bar */}
@@ -255,8 +266,9 @@ export default function Home() {
             </div>
 
             {/* Right: Dashboard Preview */}
-            <div className="relative hidden lg:block">
-              <div className="absolute -inset-8 bg-gradient-to-r from-cyan-500/20 to-purple-600/20 rounded-[3rem] blur-3xl animate-pulse" />
+            <div className="relative hidden lg:block group perspective-1000">
+            <Tilt className="w-full h-full" tiltMaxAngleX={5} tiltMaxAngleY={5}>
+              <div className="absolute -inset-8 bg-gradient-to-r from-cyan-500/30 to-purple-600/30 rounded-[3rem] blur-3xl animate-pulse group-hover:blur-2xl transition-all duration-700" />
               
               <div className="relative bg-[#0f1623]/90 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl overflow-hidden">
                 {/* Window Header */}
@@ -279,7 +291,11 @@ export default function Home() {
                       { label: "Candidates", val: "48", trend: "+12" },
                       { label: "Match Score", val: "94%", trend: "+2%" }
                     ].map((stat) => (
-                      <div key={stat.label} className="bg-white/5 rounded-xl p-4 border border-white/5">
+                      <div key={stat.label} className="group/stat relative bg-white/5 rounded-xl p-4 border border-white/5 hover:bg-white/10 hover:-translate-y-1 transition-all cursor-default">
+                        {/* Tooltip */}
+                        <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover/stat:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                          Updated just now
+                        </div>
                         <div className="text-2xl font-bold text-cyan-400">{stat.val}</div>
                         <div className="flex items-center justify-between mt-1">
                           <span className="text-[10px] text-gray-500 uppercase">{stat.label}</span>
@@ -297,7 +313,11 @@ export default function Home() {
                       { action: "Vendor submission", detail: "NovaStaff • ML Engineer", time: "5m ago", type: "submit" },
                       { action: "Interview scheduled", detail: "TechCorp • DevOps Lead", time: "12m ago", type: "interview" }
                     ].map((item, i) => (
-                      <div key={i} className="flex items-center gap-3 p-3 rounded-lg bg-white/5 border border-white/5 hover:border-cyan-500/30 transition-colors">
+                      <div key={i} className="group/activity flex items-center gap-3 p-3 rounded-lg bg-white/5 border border-white/5 hover:border-cyan-500/30 hover:bg-cyan-500/5 transition-all hover:translate-x-2 cursor-pointer">
+                        {/* Tooltip */}
+                        <div className="absolute right-4 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover/activity:opacity-100 transition-opacity pointer-events-none z-10">
+                          Click to view details
+                        </div>
                         <div className={`w-2 h-2 rounded-full ${
                           item.type === 'match' ? 'bg-green-500' : 
                           item.type === 'submit' ? 'bg-blue-500' : 'bg-purple-500'
@@ -306,7 +326,7 @@ export default function Home() {
                           <div className="text-sm text-white font-medium">{item.action}</div>
                           <div className="text-xs text-gray-500">{item.detail}</div>
                         </div>
-                        <div className="text-xs text-gray-600">{item.time}</div>
+                        <div className="text-xs text-gray-400">{item.time}</div>
                       </div>
                     ))}
                   </div>
@@ -326,6 +346,7 @@ export default function Home() {
                   </div>
                 </div>
               </div>
+            </Tilt>
             </div>
           </div>
         </div>
@@ -334,7 +355,7 @@ export default function Home() {
       </section>
 
       {/* TRACTION BAR */}
-      <section className="py-16 bg-white border-y border-gray-100">
+      <section className="py-16 bg-[#131A2B] border-y border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {traction.map((stat) => (
@@ -350,15 +371,15 @@ export default function Home() {
       </section>
 
       {/* WHAT WE DO - HireNest Workforce Introduction */}
-      <section className="py-24 bg-gray-50">
+      <section className="py-24 bg-[#0B0F1A]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <span className="text-cyan-600 font-semibold text-sm uppercase tracking-[0.2em]">About Us</span>
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mt-4 mb-4">
+            <span className="text-cyan-400 font-semibold text-sm uppercase tracking-[0.2em]">About Us</span>
+            <h2 className="text-4xl md:text-5xl font-bold text-white mt-4 mb-4">
               Not Your Typical<br />
               <span className="text-gray-500">Staffing Agency</span>
             </h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            <p className="text-lg text-gray-400 max-w-3xl mx-auto">
               HireNest Workforce is a technology-first workforce solutions provider. While others rely on outdated processes, we leverage our proprietary <strong>HireNest OS</strong> platform to deliver candidates that don't just fit the job description—they fit your culture and drive results.
             </p>
             <p className="text-gray-500 mt-4">
@@ -369,24 +390,26 @@ export default function Home() {
       </section>
 
       {/* WORKFORCE CAPABILITIES - Powered by OS */}
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-[#131A2B]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <span className="text-cyan-600 font-semibold text-sm uppercase tracking-[0.2em]">Our Services</span>
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mt-4 mb-4">
+            <span className="text-cyan-400 font-semibold text-sm uppercase tracking-[0.2em]">Our Services</span>
+            <h2 className="text-4xl md:text-5xl font-bold text-white mt-4 mb-4">
               Comprehensive Talent Solutions<br />
               <span className="text-gray-500">Powered by HireNest OS</span>
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg text-gray-400 max-w-2xl mx-auto">
               Everything you need to hire faster, smarter, and better—delivered through our intelligent platform.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
-            {workforceCapabilities.map((cap) => (
+            {workforceCapabilities.map((cap, i) => (
+              <InView key={cap.title} variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} transition={{ duration: 0.5, delay: i * 0.1 }}>
+                <Tilt>
               <div
                 key={cap.title}
-                className="group relative p-8 bg-gray-50 rounded-2xl border border-gray-200 hover:border-transparent transition-all duration-500 overflow-hidden"
+                className="group relative p-8 bg-[#0B0F1A] rounded-2xl border border-white/10 hover:border-transparent transition-all duration-500 overflow-hidden"
               >
                 <div className={`absolute inset-0 bg-gradient-to-br ${cap.color} opacity-0 group-hover:opacity-5 transition-opacity duration-500`} />
                 
@@ -397,11 +420,11 @@ export default function Home() {
 
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-3">
-                      <h3 className="text-2xl font-bold text-gray-900 group-hover:text-cyan-600 transition-colors">
+                      <h3 className="text-2xl font-bold text-white group-hover:text-cyan-400 transition-colors">
                         {cap.title}
                       </h3>
                     </div>
-                    <p className="text-gray-600 leading-relaxed mb-4">{cap.desc}</p>
+                    <p className="text-gray-400 leading-relaxed mb-4">{cap.desc}</p>
                     
                     <div className="flex items-center gap-2">
                       <span className="text-3xl font-bold bg-gradient-to-br from-cyan-600 to-blue-600 bg-clip-text text-transparent">
@@ -412,29 +435,31 @@ export default function Home() {
                   </div>
                 </div>
               </div>
+                </Tilt>
+              </InView>
             ))}
           </div>
         </div>
       </section>
 
       {/* THE HIRENEST OS ADVANTAGE */}
-      <section className="py-24 bg-gray-50">
+      <section className="py-24 bg-[#0B0F1A]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div className="space-y-8">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/30">
-                <Cpu className="w-4 h-4 text-cyan-600" />
-                <span className="text-cyan-600 text-sm font-semibold tracking-wide uppercase">Our Secret Weapon</span>
+                <Cpu className="w-4 h-4 text-cyan-400" />
+                <span className="text-cyan-400 text-sm font-semibold tracking-wide uppercase">Our Secret Weapon</span>
               </div>
 
-              <h2 className="text-4xl lg:text-5xl font-bold leading-tight text-gray-900">
+              <h2 className="text-4xl lg:text-5xl font-bold leading-tight text-white">
                 Powered by<br />
                 <span className="bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">
                   HireNest OS
                 </span>
               </h2>
 
-              <p className="text-xl text-gray-600 leading-relaxed">
+              <p className="text-xl text-gray-400 leading-relaxed">
                 What makes us different? Our proprietary operating system. While competitors juggle spreadsheets and email chains, HireNest OS unifies your entire hiring pipeline—vendors, candidates, and analytics—in one intelligent platform.
               </p>
 
@@ -445,25 +470,25 @@ export default function Home() {
                   { icon: Layers, text: "Unified pipeline visibility" },
                   { icon: Zap, text: "Automated interview scheduling" }
                 ].map((item, i) => (
-                  <div key={i} className="flex items-center gap-4 p-4 rounded-xl bg-white border border-gray-200">
-                    <item.icon className="w-6 h-6 text-cyan-600" />
-                    <span className="text-gray-700">{item.text}</span>
+                  <div key={i} className="flex items-center gap-4 p-4 rounded-xl bg-[#131A2B] border border-white/10">
+                    <item.icon className="w-6 h-6 text-cyan-400" />
+                    <span className="text-gray-300">{item.text}</span>
                   </div>
                 ))}
               </div>
 
-              <button
-                onClick={() => navigate({ to: "/about" })}
+              <Link to={"/about"}
                 className="group inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl font-semibold text-white hover:shadow-2xl hover:shadow-cyan-500/30 transition-all"
               >
                 Learn More About HireNest OS
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </button>
+              </Link>
             </div>
 
             <div className="relative">
               <div className="absolute -inset-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-[2rem] opacity-20 blur-2xl" />
-              <div className="relative bg-white rounded-3xl border border-gray-200 p-8 shadow-2xl">
+              <div className="relative bg-[#131A2B] rounded-3xl border border-white/10 p-8 shadow-2xl overflow-hidden">
+                  <BorderBeam size={250} duration={12} delay={9} />
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-3">
                     <div className="flex gap-2">
@@ -476,9 +501,9 @@ export default function Home() {
                 </div>
 
                 <div className="space-y-4">
-                  <div className="p-4 rounded-lg bg-gray-50 border border-gray-200">
+                  <div className="p-4 rounded-lg bg-[#0B0F1A] border border-white/10">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="font-semibold text-gray-900">AI Matching Engine</span>
+                      <span className="font-semibold text-white">AI Matching Engine</span>
                       <span className="text-xs text-green-600 bg-green-100 px-2 py-1 rounded-full">Active</span>
                     </div>
                     <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
@@ -487,14 +512,14 @@ export default function Home() {
                     <p className="text-xs text-gray-500 mt-2">94% match accuracy across 500+ placements</p>
                   </div>
 
-                  <div className="p-4 rounded-lg bg-gray-50 border border-gray-200">
+                  <div className="p-4 rounded-lg bg-[#0B0F1A] border border-white/10">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="font-semibold text-gray-900">Vendor Network</span>
-                      <span className="text-xs text-cyan-600 bg-cyan-100 px-2 py-1 rounded-full">50+ Partners</span>
+                      <span className="font-semibold text-white">Vendor Network</span>
+                      <span className="text-xs text-cyan-400 bg-cyan-100 px-2 py-1 rounded-full">50+ Partners</span>
                     </div>
                     <div className="flex gap-2 mt-2">
                       {['Tech', 'Finance', 'Health', 'Retail'].map((tag) => (
-                        <span key={tag} className="text-xs bg-white border border-gray-200 px-2 py-1 rounded text-gray-600">
+                        <span key={tag} className="text-xs bg-[#131A2B] border border-white/10 px-2 py-1 rounded text-gray-400">
                           {tag}
                         </span>
                       ))}
@@ -503,10 +528,10 @@ export default function Home() {
 
                   <div className="p-4 rounded-lg bg-gradient-to-r from-cyan-50 to-blue-50 border border-cyan-200">
                     <div className="flex items-start gap-3">
-                      <Sparkles className="w-5 h-5 text-cyan-600 mt-0.5" />
+                      <Sparkles className="w-5 h-5 text-cyan-400 mt-0.5" />
                       <div>
-                        <div className="text-sm text-gray-900 font-medium">Smart Recommendation</div>
-                        <div className="text-xs text-gray-600 mt-1">
+                        <div className="text-sm text-white font-medium">Smart Recommendation</div>
+                        <div className="text-xs text-gray-400 mt-1">
                           Based on your hiring velocity, we recommend adding 2 senior backend engineers to your pipeline.
                         </div>
                       </div>
@@ -520,25 +545,27 @@ export default function Home() {
       </section>
 
       {/* WHO WE SERVE */}
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-[#131A2B]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <span className="text-cyan-600 font-semibold text-sm uppercase tracking-[0.2em]">Who We Serve</span>
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mt-4 mb-4">
+            <span className="text-cyan-400 font-semibold text-sm uppercase tracking-[0.2em]">Who We Serve</span>
+            <h2 className="text-4xl md:text-5xl font-bold text-white mt-4 mb-4">
               One Platform. Three Perspectives.
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg text-gray-400 max-w-2xl mx-auto">
               HireNest OS serves everyone in the HireNest Workforce ecosystem.
             </p>
           </div>
 
           <div className="grid lg:grid-cols-3 gap-8">
-            {whoWeServe.map((iface) => (
+            {whoWeServe.map((iface, i) => (
+              <InView key={iface.title} variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }} transition={{ duration: 0.5, delay: i * 0.15 }}>
+                <Tilt rotation={5} scale={1.03}>
               <div
                 key={iface.title}
-                className="group relative p-8 rounded-3xl bg-gray-50 border border-gray-200 hover:border-cyan-500/30 hover:shadow-2xl hover:shadow-cyan-500/10 transition-all duration-500 hover:-translate-y-2"
+                className="group relative p-8 rounded-3xl bg-[#0B0F1A] border border-white/10 hover:border-cyan-500/30 hover:shadow-2xl hover:shadow-cyan-500/10 transition-all duration-500 hover:-translate-y-2"
               >
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-600 text-xs font-semibold uppercase tracking-wider mb-6">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-400 text-xs font-semibold uppercase tracking-wider mb-6">
                   {iface.subtitle}
                 </div>
 
@@ -546,115 +573,121 @@ export default function Home() {
                   <iface.icon className="w-7 h-7 text-white" />
                 </div>
 
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">{iface.title}</h3>
-                <p className="text-gray-600 leading-relaxed mb-6">{iface.desc}</p>
+                <h3 className="text-2xl font-bold text-white mb-3">{iface.title}</h3>
+                <p className="text-gray-400 leading-relaxed mb-6">{iface.desc}</p>
 
                 <ul className="space-y-2 mb-8">
                   {iface.features.map((feature, i) => (
-                    <li key={i} className="flex items-center gap-2 text-sm text-gray-600">
+                    <li key={i} className="flex items-center gap-2 text-sm text-gray-400">
                       <CheckCircle2 className="w-4 h-4 text-cyan-500" />
                       {feature}
                     </li>
                   ))}
                 </ul>
 
-                <button
-                  onClick={() => navigate({ to: iface.href })}
-                  className="w-full py-3 rounded-xl font-semibold text-cyan-600 border-2 border-cyan-500/30 hover:bg-cyan-500 hover:text-white hover:border-cyan-500 transition-all flex items-center justify-center gap-2 group"
+                <Link to={iface.href}
+                  className="w-full py-3 rounded-xl font-semibold text-cyan-400 border-2 border-cyan-500/30 hover:bg-cyan-500 hover:text-white hover:border-cyan-500 transition-all flex items-center justify-center gap-2 group"
                 >
                   {iface.cta}
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </button>
+                </Link>
               </div>
+                </Tilt>
+              </InView>
             ))}
           </div>
         </div>
       </section>
 
       {/* HOW IT WORKS - Dual Process */}
-      <section className="py-24 bg-gray-50">
+      <section className="py-24 bg-[#0B0F1A]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <span className="text-cyan-600 font-semibold text-sm uppercase tracking-[0.2em]">Process</span>
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mt-4 mb-4">
+            <span className="text-cyan-400 font-semibold text-sm uppercase tracking-[0.2em]">Process</span>
+            <h2 className="text-4xl md:text-5xl font-bold text-white mt-4 mb-4">
               Two Tracks, One Partner
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg text-gray-400 max-w-2xl mx-auto">
               Whether you need people or product, our process is built for speed and clarity.
             </p>
           </div>
 
           <div className="grid lg:grid-cols-2 gap-10">
             {/* Staffing track */}
-            <div className="p-8 bg-white rounded-3xl border border-gray-200">
-              <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-                <Users className="w-5 h-5 text-cyan-600" /> Staffing
+            <div className="p-8 bg-[#131A2B] rounded-3xl border border-white/10">
+              <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                <Users className="w-5 h-5 text-cyan-400" /> Staffing
               </h3>
               <ol className="space-y-4">
                 {["Requirement", "Candidate Screening", "Interview", "Deployment"].map((step, i) => (
-                  <li key={step} className="flex items-center gap-4">
-                    <span className="w-8 h-8 rounded-full bg-cyan-50 text-cyan-600 font-bold text-sm flex items-center justify-center shrink-0">{i + 1}</span>
-                    <span className="text-gray-800 font-medium">{step}</span>
+                  <InView key={step} variants={{ hidden: { opacity: 0, x: -10 }, visible: { opacity: 1, x: 0 } }} transition={{ duration: 0.3, delay: i * 0.1 }}>
+                  <li className="flex items-center gap-4">
+                    <span className="w-8 h-8 rounded-full bg-cyan-900/20 text-cyan-400 font-bold text-sm flex items-center justify-center shrink-0">{i + 1}</span>
+                    <span className="text-gray-200 font-medium">{step}</span>
                   </li>
+                  </InView>
                 ))}
               </ol>
             </div>
 
             {/* Software development track */}
-            <div className="p-8 bg-white rounded-3xl border border-gray-200">
-              <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-                <Code2 className="w-5 h-5 text-cyan-600" /> Software Development
+            <div className="p-8 bg-[#131A2B] rounded-3xl border border-white/10">
+              <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                <Code2 className="w-5 h-5 text-cyan-400" /> Software Development
               </h3>
               <ol className="space-y-4">
                 {["Discovery", "Planning", "Design", "Development", "Testing", "Deployment", "Support"].map((step, i) => (
-                  <li key={step} className="flex items-center gap-4">
-                    <span className="w-8 h-8 rounded-full bg-cyan-50 text-cyan-600 font-bold text-sm flex items-center justify-center shrink-0">{i + 1}</span>
-                    <span className="text-gray-800 font-medium">{step}</span>
+                  <InView key={step} variants={{ hidden: { opacity: 0, x: -10 }, visible: { opacity: 1, x: 0 } }} transition={{ duration: 0.3, delay: i * 0.1 }}>
+                  <li className="flex items-center gap-4">
+                    <span className="w-8 h-8 rounded-full bg-cyan-900/20 text-cyan-400 font-bold text-sm flex items-center justify-center shrink-0">{i + 1}</span>
+                    <span className="text-gray-200 font-medium">{step}</span>
                   </li>
+                  </InView>
                 ))}
               </ol>
             </div>
           </div>
 
           <div className="text-center mt-12">
-            <button
-              onClick={() => navigate({ to: "/early-access" })}
+            <Link to={"/early-access"}
               className="group inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl font-semibold text-white hover:shadow-2xl hover:shadow-cyan-500/30 transition-all"
             >
               Start Hiring Now
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </button>
+            </Link>
           </div>
         </div>
       </section>
 
       {/* INDUSTRIES */}
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-[#131A2B]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
-            <span className="text-cyan-600 font-semibold text-sm uppercase tracking-[0.2em]">Industries</span>
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mt-4 mb-4">
+            <span className="text-cyan-400 font-semibold text-sm uppercase tracking-[0.2em]">Industries</span>
+            <h2 className="text-4xl md:text-5xl font-bold text-white mt-4 mb-4">
               Built for Every Industry
             </h2>
           </div>
           <div className="flex flex-wrap justify-center gap-3">
-            {industries.map((ind) => (
-              <Link key={ind} to="/industries">
-                <span className="px-5 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-800 font-medium hover:border-cyan-500/40 hover:bg-cyan-50 transition-all inline-block">
+            {industries.map((ind, i) => (
+              <InView key={ind} variants={{ hidden: { opacity: 0, scale: 0.9 }, visible: { opacity: 1, scale: 1 } }} transition={{ duration: 0.3, delay: i * 0.05 }}>
+              <Link to="/industries">
+                <span className="px-5 py-3 rounded-xl bg-[#0B0F1A] border border-white/10 text-gray-200 font-medium hover:border-cyan-500/40 hover:bg-cyan-900/20 hover:-translate-y-1 hover:shadow-lg transition-all inline-block cursor-pointer">
                   {ind}
                 </span>
               </Link>
+              </InView>
             ))}
           </div>
         </div>
       </section>
 
       {/* PORTFOLIO */}
-      <section className="py-24 bg-gray-50">
+      <section className="py-24 bg-[#0B0F1A]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
-            <span className="text-cyan-600 font-semibold text-sm uppercase tracking-[0.2em]">Portfolio</span>
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mt-4 mb-4">
+            <span className="text-cyan-400 font-semibold text-sm uppercase tracking-[0.2em]">Portfolio</span>
+            <h2 className="text-4xl md:text-5xl font-bold text-white mt-4 mb-4">
               What We're Building
             </h2>
           </div>
@@ -664,12 +697,12 @@ export default function Home() {
                 key={p.title}
                 className={`p-6 rounded-2xl border transition-all ${
                   p.comingSoon
-                    ? "bg-white/50 border-dashed border-gray-300"
-                    : "bg-white border-gray-200 hover:border-cyan-500/30 hover:shadow-lg"
+                    ? "bg-white/50 border-dashed border-white/20"
+                    : "bg-[#131A2B] border-white/10 hover:border-cyan-500/30 hover:shadow-lg"
                 }`}
               >
-                <h3 className="text-lg font-bold text-gray-900 mb-2">{p.title}</h3>
-                <p className="text-sm text-gray-600">{p.desc}</p>
+                <h3 className="text-lg font-bold text-white mb-2">{p.title}</h3>
+                <p className="text-sm text-gray-400">{p.desc}</p>
               </div>
             ))}
           </div>
@@ -677,42 +710,75 @@ export default function Home() {
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-[#131A2B]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <span className="text-cyan-600 font-semibold text-sm uppercase tracking-[0.2em]">Testimonials</span>
-            <h2 className="text-4xl font-bold text-gray-900 mt-4 mb-4">
+            <span className="text-cyan-400 font-semibold text-sm uppercase tracking-[0.2em]">Testimonials</span>
+            <h2 className="text-4xl font-bold text-white mt-4 mb-4">
               Trusted by 50+ Companies as of now!
             </h2>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
-            {testimonials.map((t) => (
+            {testimonials.map((t, i) => (
+              <InView key={t.name} variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} transition={{ duration: 0.5, delay: i * 0.15 }}>
+                <Tilt>
               <div
-                key={t.name}
-                className="group p-8 bg-gray-50 rounded-2xl border border-gray-200 hover:border-cyan-500/30 hover:shadow-xl transition-all duration-500"
+                className="group p-8 bg-[#0B0F1A] rounded-2xl border border-white/10 hover:border-cyan-500/30 hover:shadow-xl transition-all duration-500"
               >
-                <div className="flex items-center gap-2 mb-6">
-                  <div className="px-3 py-1 rounded-full bg-green-500/10 text-green-600 text-xs font-semibold">
+                <div className="flex items-center justify-between mb-6">
+                  <div className="px-3 py-1 rounded-full bg-green-500/10 text-green-400 text-xs font-semibold">
                     {t.metric}
                   </div>
+                  <img src={t.logo} alt={t.company} className="h-8 w-auto opacity-80" />
                 </div>
 
-                <p className="text-gray-700 mb-8 leading-relaxed text-lg">
+                <p className="text-gray-300 mb-8 leading-relaxed text-lg">
                   "{t.quote}"
                 </p>
 
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-white font-bold">
-                    {t.name.split(' ').map(n => n[0]).join('')}
-                  </div>
+                  <img src={t.image} alt={t.name} className="w-12 h-12 rounded-full object-cover border-2 border-white/10" />
                   <div>
-                    <div className="font-bold text-gray-900">{t.name}</div>
+                    <div className="font-bold text-white">{t.name}</div>
                     <div className="text-sm text-gray-500">{t.title}, {t.company}</div>
                   </div>
                 </div>
               </div>
+                </Tilt>
+              </InView>
             ))}
+          </div>
+        </div>
+      </section>
+
+      
+      {/* FAQ SECTION */}
+      <section className="py-24 bg-[#0B0F1A] border-t border-white/5">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <span className="text-cyan-400 font-semibold text-sm uppercase tracking-[0.2em]">FAQ</span>
+            <h2 className="text-4xl font-bold text-white mt-4 mb-4">
+              Frequently Asked Questions
+            </h2>
+          </div>
+          <div className="space-y-6">
+            <div className="bg-[#131A2B] p-6 rounded-2xl border border-white/10">
+              <h3 className="text-xl font-bold text-white mb-3">How fast can you deploy a developer?</h3>
+              <p className="text-gray-400">With our pre-vetted bench resources and vendor network, we can typically deploy skilled developers within 24 to 48 hours for most standard tech stacks.</p>
+            </div>
+            <div className="bg-[#131A2B] p-6 rounded-2xl border border-white/10">
+              <h3 className="text-xl font-bold text-white mb-3">Do you offer C2C / contract staffing?</h3>
+              <p className="text-gray-400">Yes, we specialize in Corp-to-Corp (C2C), contract, and contract-to-hire staffing models to give you the flexibility your team needs.</p>
+            </div>
+            <div className="bg-[#131A2B] p-6 rounded-2xl border border-white/10">
+              <h3 className="text-xl font-bold text-white mb-3">Which tech stacks do you cover?</h3>
+              <p className="text-gray-400">We cover a wide range of technologies including React, Node.js, Python, Java, Spring Boot, AWS, Azure, DevOps, and Machine Learning.</p>
+            </div>
+            <div className="bg-[#131A2B] p-6 rounded-2xl border border-white/10">
+              <h3 className="text-xl font-bold text-white mb-3">Which cities or regions do you serve?</h3>
+              <p className="text-gray-400">While we are headquartered in Hyderabad, our vendor network and talent pool span across all major IT hubs in India, supporting both remote and on-site requirements.</p>
+            </div>
           </div>
         </div>
       </section>
@@ -730,21 +796,19 @@ export default function Home() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button
-              onClick={() => navigate({ to: "/early-access" })}
+            <Link to={"/early-access"}
               className="group px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl text-white font-semibold text-lg hover:shadow-2xl hover:shadow-cyan-500/40 transition-all hover:-translate-y-1 flex items-center justify-center gap-3"
             >
               <Rocket className="w-6 h-6" />
               Start Hiring with HireNest
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </button>
-            <button
-              onClick={() => navigate({ to: "/vendor-network" })}
+            </Link>
+            <Link to={"/vendor-network"}
               className="px-8 py-4 rounded-2xl font-semibold text-lg text-white border-2 border-white/20 hover:bg-white/10 hover:border-white/40 transition-all hover:-translate-y-1 flex items-center justify-center gap-3"
             >
               <Network className="w-6 h-6" />
               Join as Vendor Partner
-            </button>
+            </Link>
           </div>
 
           <p className="mt-8 text-sm text-gray-500">
