@@ -11,14 +11,14 @@ export const schema = {
       "url": "https://www.hirenestworkforce.com/",
       "logo": "https://www.hirenestworkforce.com/logo.png",
       "description": "AI-powered workforce solutions company delivering IT staffing, recruitment, software development and HireNest OS.",
-      "email": "partnerships@hirenestworkforce.com",
+      "email": "info@hirenestworkforce.com",
       "sameAs": [
         "https://www.linkedin.com/company/hirenestworkforce"
       ],
       "contactPoint": {
         "@type": "ContactPoint",
         "contactType": "sales",
-        "email": "partnerships@hirenestworkforce.com"
+        "email": "info@hirenestworkforce.com"
       }
     },
     {
@@ -55,11 +55,15 @@ export const schema = {
       },
       "areaServed": "India",
       "serviceType": [
-        "IT Staffing",
-        "Contract Staffing",
-        "Permanent Recruitment",
-        "Software Development",
-        "AI Solutions"
+  "IT Staffing",
+  "Contract Staffing",
+  "Permanent Recruitment",
+  "IT Consulting",
+  "Software Development",
+  "AI Solutions",
+  "Vendor Collaboration",
+  "Hire Developers",
+  "Technology Consulting"
       ]
     },
     {
@@ -80,7 +84,9 @@ export const schema = {
         {"@type":"Offer","itemOffered":{"@type":"Service","name":"Contract Staffing"}},
         {"@type":"Offer","itemOffered":{"@type":"Service","name":"Permanent Recruitment"}},
         {"@type":"Offer","itemOffered":{"@type":"Service","name":"Software Development"}},
-        {"@type":"Offer","itemOffered":{"@type":"Service","name":"AI Solutions"}}
+        {"@type":"Offer","itemOffered":{"@type":"Service","name":"AI Solutions"}},
+            {"@type":"Offer","itemOffered":{"@type":"Service","name":"Vendor Collaboration"}},
+            {"@type":"Offer","itemOffered":{"@type":"Service","name":"Hire Developers"}}
       ]
     },
     {
@@ -100,7 +106,7 @@ export const schema = {
           "name":"What is HireNest Workforce?",
           "acceptedAnswer":{
             "@type":"Answer",
-            "text":"HireNest Workforce provides AI-powered staffing, recruitment and software development services."
+            "text":"HireNest Workforce provides AI-powered IT staffing, contract staffing, permanent recruitment, software development, IT consulting, AI solutions, and workforce automation through its proprietary HireNest OS platform."
           }
         },
         {
