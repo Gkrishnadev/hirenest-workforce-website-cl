@@ -1,4 +1,29 @@
+# HireNest Workforce
+# https://www.hirenestworkforce.com
+
 User-agent: *
 Allow: /
 
-Sitemap: https://hirenestworkforce.com/sitemap.xml
+# OpenAI
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+# Anthropic
+User-agent: ClaudeBot
+Allow: /
+
+# Google AI
+User-agent: Google-Extended
+Allow: /
+
+# Common AI Crawlers
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+Sitemap: https://www.hirenestworkforce.com/sitemap.xml
