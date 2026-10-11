@@ -1,6 +1,15 @@
 import SEO from "../components/SEO";
 import { useState } from "react";
-import { CheckCircle2, Loader2 } from "lucide-react";
+import {
+  CheckCircle2,
+  Loader2,
+  Building2,
+  User,
+  Mail,
+  Phone,
+  Code2,
+  Users,
+} from "lucide-react";
 import { toast } from "sonner";
 import { addRecord } from "../lib/db";
 import { sendFormEmails } from "../lib/sendFormEmails";
@@ -81,99 +90,182 @@ export default function Vendors() {
     }
   };
 
+  const inputClass =
+    "w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 transition-colors";
+
   return (
-    <div>
+    <div className="min-h-screen bg-[#0B0F1A]">
       <SEO
         title="Bench Consultants & IT Staffing | HireNest Workforce"
         description="Access highly skilled IT bench consultants and technology professionals for your software projects through the HireNest Workforce network."
         path="/vendors"
       />
 
-      <div className="pt-[72px]">
-        <section className="py-20 text-center bg-gradient-to-br from-[#0B0F1A] to-[#111827] text-white">
-          <h1 className="text-4xl font-bold mb-4">Join Vendor Network</h1>
-          <p className="text-white/80">Collaborate with top companies 🚀</p>
-        </section>
+      {/* Hero */}
+      <section className="relative pt-32 pb-16 overflow-hidden">
+        <div className="absolute inset-0 bg-[#0B0F1A]">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(6,182,212,0.15),_transparent_50%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(59,130,246,0.1),_transparent_50%)]" />
+        </div>
 
-        <section className="py-24 bg-gray-50">
-          <div className="max-w-5xl mx-auto px-4">
-            <div className="bg-white p-8 rounded-xl shadow-sm border">
-              {submitted ? (
-                <div className="text-center py-10">
-                  <CheckCircle2 className="mx-auto mb-4 text-green-500" size={40} />
-                  <h3 className="text-xl font-semibold">Application Submitted!</h3>
-                  <p className="text-gray-500 mt-2">
-                    We'll get back to you within 24 hours.
-                  </p>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/30 mb-6">
+            <span className="text-cyan-400 text-sm font-semibold tracking-wide uppercase">
+              Vendor Network
+            </span>
+          </div>
+
+          <h1 className="text-5xl font-bold text-white mb-6">Join Vendor Network</h1>
+          <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+            Share your bench, get matched with enterprise requirements, and grow with 120+ verified
+            partners.
+          </p>
+        </div>
+      </section>
+
+      {/* Form */}
+      <section className="py-16 pb-24">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+          {submitted ? (
+            <div className="bg-green-500/10 border border-green-500/30 rounded-2xl p-10 text-center">
+              <CheckCircle2 className="w-14 h-14 mx-auto mb-4 text-green-400" />
+              <h3 className="font-bold text-white text-xl mb-2">Application Submitted!</h3>
+              <p className="text-gray-400">
+                We'll review your profile and reach out within 24 hours.
+              </p>
+            </div>
+          ) : (
+            <form
+              onSubmit={handleSubmit}
+              className="space-y-5 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8"
+            >
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Company Name *
+                </label>
+                <div className="relative">
+                  <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                   <input
                     required
-                    placeholder="Company Name *"
+                    placeholder="Your staffing company"
                     value={form.companyName}
                     onChange={(e) => setForm({ ...form, companyName: e.target.value })}
-                    className="w-full p-3 border rounded-md"
+                    className={`${inputClass} pl-10`}
                   />
+                </div>
+              </div>
 
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Contact Person *
+                </label>
+                <div className="relative">
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                   <input
                     required
-                    placeholder="Contact Person *"
+                    placeholder="Full name"
                     value={form.contactPerson}
                     onChange={(e) => setForm({ ...form, contactPerson: e.target.value })}
-                    className="w-full p-3 border rounded-md"
+                    className={`${inputClass} pl-10`}
                   />
+                </div>
+              </div>
 
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Email *</label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                   <input
                     required
                     type="email"
-                    placeholder="Email *"
+                    placeholder="you@company.com"
                     value={form.email}
                     onChange={(e) => setForm({ ...form, email: e.target.value })}
-                    className="w-full p-3 border rounded-md"
+                    className={`${inputClass} pl-10`}
                   />
+                </div>
+              </div>
 
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Phone</label>
+                <div className="relative">
+                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                   <input
-                    placeholder="Phone"
+                    placeholder="+91 XXXXX XXXXX"
                     value={form.phone}
                     onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                    className="w-full p-3 border rounded-md"
+                    className={`${inputClass} pl-10`}
                   />
+                </div>
+              </div>
 
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Technologies / Services
+                </label>
+                <div className="relative">
+                  <Code2 className="absolute left-3 top-3 w-4 h-4 text-gray-500" />
                   <textarea
-                    placeholder="Technologies"
+                    rows={3}
+                    placeholder="e.g. React, Java, Salesforce, Cloud..."
                     value={form.technologies}
                     onChange={(e) => setForm({ ...form, technologies: e.target.value })}
-                    className="w-full p-3 border rounded-md"
+                    className={`${inputClass} pl-10 resize-none`}
                   />
+                </div>
+              </div>
 
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Bench Size</label>
+                <div className="relative">
+                  <Users className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                   <select
                     value={form.benchSize}
                     onChange={(e) => setForm({ ...form, benchSize: e.target.value })}
-                    className="w-full p-3 border rounded-md"
+                    className={`${inputClass} pl-10 appearance-none`}
                   >
-                    <option value="">Bench Size</option>
-                    <option value="1-5">1–5</option>
-                    <option value="6-15">6–15</option>
-                    <option value="16-30">16–30</option>
-                    <option value="30-50">30–50</option>
-                    <option value="50+">50+</option>
+                    <option value="" className="bg-[#0B0F1A]">
+                      Select bench size
+                    </option>
+                    <option value="1-5" className="bg-[#0B0F1A]">
+                      1–5
+                    </option>
+                    <option value="6-15" className="bg-[#0B0F1A]">
+                      6–15
+                    </option>
+                    <option value="16-30" className="bg-[#0B0F1A]">
+                      16–30
+                    </option>
+                    <option value="30-50" className="bg-[#0B0F1A]">
+                      30–50
+                    </option>
+                    <option value="50+" className="bg-[#0B0F1A]">
+                      50+
+                    </option>
                   </select>
+                </div>
+              </div>
 
-                  <button
-                    type="submit"
-                    disabled={submitting}
-                    className="w-full py-3 bg-blue-600 text-white rounded-md flex justify-center gap-2 disabled:opacity-50"
-                  >
-                    {submitting && <Loader2 className="animate-spin" size={18} />}
-                    {submitting ? "Submitting..." : "Apply Now"}
-                  </button>
-                </form>
-              )}
-            </div>
-          </div>
-        </section>
-      </div>
+              <button
+                type="submit"
+                disabled={submitting}
+                className="w-full flex items-center justify-center gap-2 py-4 rounded-xl text-white font-semibold bg-gradient-to-r from-cyan-500 to-blue-600 hover:shadow-lg hover:shadow-cyan-500/25 transition-all disabled:opacity-50"
+              >
+                {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
+                {submitting ? "Submitting..." : "Apply Now"}
+              </button>
+
+              <p className="text-xs text-gray-500 text-center">
+                By applying you agree to our{" "}
+                <a href="/privacy" className="text-cyan-400 hover:underline">
+                  Privacy Policy
+                </a>
+                .
+              </p>
+            </form>
+          )}
+        </div>
+      </section>
     </div>
   );
 }
